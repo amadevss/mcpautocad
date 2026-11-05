@@ -35,9 +35,11 @@ Cifras medidas (v1.7.0, tokens ≈ caracteres/4):
 
 - [ ] Pruebas con AutoCAD real (lista de pasos en el README / entrega).
 - [ ] Firma de código del `.exe` (quita el aviso de SmartScreen). Opciones: certificado OV/EV o Azure Trusted Signing.
-- [ ] Icono propio (`instalador/icono.ico`, la receta ya lo usa si existe).
-- [ ] Extensión `.mcpb` de Claude Desktop (instalación con doble clic desde Claude, con configuración de usuario
-      en su propio formulario). Puede reutilizar `iniciar.py`.
+- [x] Icono propio (`scripts/generar_icono.py`): `.exe`, instalador, panel y extensión.
+- [x] Extensión `.mcpb` de Claude Desktop (tipo `binary`, solo Windows) con el mismo `.exe` dentro. Su formulario
+      (modo como texto, paquetes y 3D como casillas) llega por variables `MCPAUTOCAD_*`. El formato no admite
+      listas desplegables ni enlazar al panel.
+- [ ] Probar la extensión `.mcpb` en Claude Desktop real (instalar, configurar, desactivar/activar).
 
 ## Fase 2: panel avanzado
 

@@ -15,10 +15,10 @@ from . import configuracion
 def preparar_entorno(cfg: dict | None = None) -> dict[str, str]:
     """Pone las variables de entorno según la configuración y las devuelve.
 
-    La configuración del panel siempre manda, para que lo que ve el usuario
-    sea lo que ve Claude.
+    La configuración del panel (o la del formulario de la extensión .mcpb)
+    siempre manda, para que lo que ve el usuario sea lo que ve Claude.
     """
-    cfg = configuracion.cargar() if cfg is None else cfg
+    cfg = configuracion.cargar_para_servidor() if cfg is None else cfg
     variables = configuracion.variables_entorno(cfg)
     os.environ.update(variables)
     return variables

@@ -26,6 +26,13 @@ No necesitas instalar Python: va incluido.
    - Se abre el **panel** en tu navegador.
 5. Abre AutoCAD y después abre Claude Desktop.
 
+**Como extensión de Claude Desktop (.mcpb):** descarga `MCP-AutoCAD-x.y.z.mcpb` y haz doble clic (o arrástralo a
+Claude Desktop → Configuración → Extensiones) y pulsa **Instalar**. La configuración se elige en el propio
+formulario de la extensión (ver abajo). No hace falta el instalador.
+
+> Usa **una sola** de las dos formas (instalador o extensión). Si usas las dos, Claude verá las herramientas
+> repetidas.
+
 **Sin instalar (portátil):** descomprime `MCP-AutoCAD-portatil-x.y.z.zip` en una carpeta fija (por ejemplo
 `C:\MCP-AutoCAD`), haz doble clic en `mcpautocad.exe` y pulsa **Conectar con Claude Desktop** en el panel.
 
@@ -65,10 +72,20 @@ Al pulsar **Guardar**, **reinicia Claude Desktop** (Salir desde la bandeja y vol
 **Seguridad:** los comandos peligrosos del original (LISP y comandos arbitrarios) están siempre desactivados
 (`DANGEROUS_COMMANDS_ENABLED=false`).
 
+### Configurar la extensión .mcpb
+
+En Claude Desktop → Configuración → Extensiones → **AutoCAD** → *Configurar*:
+
+- **Modo**: escribe `ligero`, `completo` o `busqueda` (si escribes otra cosa se usa `ligero`).
+- **Paquetes y 3D**: casillas de sí/no.
+
+Después de cambiarla, desactiva y vuelve a activar la extensión. El formulario de extensiones de Claude no
+admite listas desplegables, por eso el modo se escribe.
+
 ## 4. Desinstalar
 
 *Configuración de Windows → Aplicaciones → MCP AutoCAD → Desinstalar*. También se quita de Claude Desktop
-sin tocar tus otros servidores MCP.
+sin tocar tus otros servidores MCP. La extensión .mcpb se quita desde Claude Desktop → Configuración → Extensiones.
 
 ## 5. Problemas frecuentes
 
@@ -100,6 +117,9 @@ mcpautocad/
   catalogo.py       estimación de herramientas y tokens (datos en catalogo.json)
   __main__.py       mcpautocad [panel|servidor|registrar|quitar]
 scripts/medir_tokens.py   regenera catalogo.json midiendo el servidor real
+scripts/generar_icono.py  genera instalador/icono.png, icono.ico y mcpautocad/icono.png
+scripts/empaquetar_mcpb.py crea la extensión .mcpb (usa @anthropic-ai/mcpb)
+mcpb/manifest.json        manifiesto de la extensión (la versión se pone al empaquetar)
 mcpautocad.spec           receta de PyInstaller
 construir.ps1             construye el .exe y el instalador en Windows
 instalador/mcpautocad.iss instalador de Inno Setup
@@ -114,6 +134,10 @@ instalador/mcpautocad.iss instalador de Inno Setup
 | 3D | `ENABLE_3D=true/false` |
 | Motor | `AUTOCAD_MCP_BACKEND=com` (por defecto; `"motor": "ezdxf"` en config.json para trabajar sin AutoCAD) |
 | Siempre | `DANGEROUS_COMMANDS_ENABLED=false` |
+
+Con la extensión .mcpb, la configuración llega en variables `MCPAUTOCAD_MODO`, `MCPAUTOCAD_MECANICA`,
+`MCPAUTOCAD_ARQUITECTURA`, `MCPAUTOCAD_PID`, `MCPAUTOCAD_PLANTA`, `MCPAUTOCAD_CONFIGURACION` y `MCPAUTOCAD_3D`
+(con `MCPAUTOCAD_ORIGEN=mcpb`) y sustituye a `config.json`.
 
 ### Probar en cualquier sistema (sin AutoCAD)
 
@@ -145,13 +169,14 @@ python scripts/medir_tokens.py
 
 ### Construir el .exe
 
-En Windows con Python 3.11+ (y [Inno Setup 6](https://jrsoftware.org/isinfo.php) para el instalador):
+En Windows con Python 3.11+ ([Inno Setup 6](https://jrsoftware.org/isinfo.php) para el instalador y Node.js
+para la extensión .mcpb):
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File construir.ps1
 ```
 
-Deja el instalador y el `.zip` portátil en la carpeta `salida`.
+Deja el instalador, el `.zip` portátil y la extensión `.mcpb` en la carpeta `salida`.
 
 ### GitHub Actions
 

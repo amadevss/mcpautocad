@@ -26,7 +26,7 @@ mcpautocad = "mcpautocad.__main__:main"
 packages = ["mcpautocad"]
 
 [tool.setuptools.package-data]
-mcpautocad = ["catalogo.json", "panel.html"]
+mcpautocad = ["catalogo.json", "panel.html", "icono.png"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

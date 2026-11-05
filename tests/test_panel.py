@@ -29,6 +29,8 @@ def pedir(url, ruta, cuerpo=None, cabeceras=None):
 def test_pagina_y_estado(url):
     codigo, html = pedir(url, "/")
     assert codigo == 200 and "Panel MCP AutoCAD".encode() in html
+    codigo, png = pedir(url, "/icono.png")
+    assert codigo == 200 and png.startswith(b"\x89PNG")
     estado = json.loads(pedir(url, "/api/estado")[1])
     assert estado["config"] == configuracion.POR_DEFECTO
     assert estado["claude"]["registrado"] is False

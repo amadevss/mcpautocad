@@ -28,6 +28,16 @@ PAQUETES = {
 #: Motores: "com" = AutoCAD real (Windows), "ezdxf" = sin AutoCAD, "auto" = el que haya.
 MOTORES = ("com", "ezdxf", "auto")
 
+#: Otras formas de escribir el modo (la extensión .mcpb lo pide como texto libre).
+ALIAS_MODO = {
+    "búsqueda": "busqueda", "buscar": "busqueda", "search": "busqueda",
+    "lean": "ligero", "liviano": "ligero",
+    "full": "completo", "todo": "completo", "todas": "completo",
+}
+
+#: Variables que rellena la extensión .mcpb desde su formulario (ver mcpb/manifest.json).
+ORIGEN_MCPB = "mcpb"
+
 POR_DEFECTO: dict = {
     "modo": "ligero",
     "paquetes": list(PAQUETES),
@@ -55,6 +65,7 @@ def normalizar(datos: dict | None) -> dict:
     cfg = dict(POR_DEFECTO)
 
     modo = str(datos.get("modo", cfg["modo"])).lower().strip()
+    modo = ALIAS_MODO.get(modo, modo)
     cfg["modo"] = modo if modo in MODOS else POR_DEFECTO["modo"]
 
     paquetes = datos.get("paquetes", cfg["paquetes"])
@@ -99,3 +110,32 @@ def variables_entorno(cfg: dict) -> dict[str, str]:
         "ENABLE_3D": "true" if cfg["3d"] else "false",
         "DANGEROUS_COMMANDS_ENABLED": "false",
     }
+
+
+def _si(valor: str | None, defecto: bool) -> bool:
+    if valor is None or not valor.strip() or valor.strip().startswith("${"):
+        return defecto  # sin valor (o sin sustituir): el valor por defecto
+    return valor.strip().lower() in ("true", "1", "si", "sí", "yes")
+
+
+def desde_entorno(entorno: dict[str, str] | None = None) -> dict:
+    """Configuración que llega en variables MCPAUTOCAD_* (la pone la extensión .mcpb).
+
+    MCPAUTOCAD_MODO, MCPAUTOCAD_MECANICA, MCPAUTOCAD_ARQUITECTURA, MCPAUTOCAD_PID,
+    MCPAUTOCAD_PLANTA, MCPAUTOCAD_CONFIGURACION, MCPAUTOCAD_3D y MCPAUTOCAD_MOTOR.
+    """
+    entorno = os.environ if entorno is None else entorno
+    modo = entorno.get("MCPAUTOCAD_MODO", "")
+    return normalizar({
+        "modo": modo if modo.strip() and not modo.startswith("${") else POR_DEFECTO["modo"],
+        "paquetes": [p for p in PAQUETES if _si(entorno.get(f"MCPAUTOCAD_{p.upper()}"), True)],
+        "3d": _si(entorno.get("MCPAUTOCAD_3D"), False),
+        "motor": entorno.get("MCPAUTOCAD_MOTOR") or POR_DEFECTO["motor"],
+    })
+
+
+def cargar_para_servidor() -> dict:
+    """La que usa el servidor: la de la extensión .mcpb si viene de ahí; si no, config.json."""
+    if os.environ.get("MCPAUTOCAD_ORIGEN", "").strip().lower() == ORIGEN_MCPB:
+        return desde_entorno()
+    return cargar()

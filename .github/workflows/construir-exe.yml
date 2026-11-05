@@ -21,6 +21,8 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install -e ".[dev]"
       - run: python -m pytest -q
+      - name: Validar el manifiesto de la extensión .mcpb
+        run: npx -y @anthropic-ai/mcpb@2.1.2 validate mcpb/manifest.json
 
   windows:
     name: Construir en Windows
@@ -30,6 +32,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
 
       - name: Versión
         id: version
@@ -59,7 +64,7 @@ jobs:
           python -m pip install pytest
           python -m pytest -q
           $env:MCPAUTOCAD_EXE = "$PWD\dist\mcpautocad\mcpautocad.exe"
-          python -m pytest -q tests/test_servidor.py
+          python -m pytest -q tests/test_servidor.py tests/test_mcpb.py
 
       - name: Subir artefacto
         uses: actions/upload-artifact@v4

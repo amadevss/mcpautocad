@@ -79,6 +79,9 @@ class Manejador(BaseHTTPRequestHandler):
         if self.path in ("/", "/index.html"):
             html = resources.files(__package__).joinpath("panel.html").read_bytes()
             return self._responder(200, html, "text/html; charset=utf-8")
+        if self.path == "/icono.png":
+            png = resources.files(__package__).joinpath("icono.png").read_bytes()
+            return self._responder(200, png, "image/png")
         if self.path == "/api/estado":
             return self._json(estado())
         self._json({"error": "No encontrado"}, 404)
