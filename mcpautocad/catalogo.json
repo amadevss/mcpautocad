@@ -1,0 +1,1746 @@
+{
+ "version_original": "1.7.0",
+ "caracteres_por_token": 4,
+ "busqueda": {
+  "herramientas": 3,
+  "tokens": 547
+ },
+ "herramientas": [
+  {
+   "nombre": "analysis_bounding_box",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 157
+  },
+  {
+   "nombre": "analysis_entity_stats",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 203
+  },
+  {
+   "nombre": "analysis_find_in_region",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 458
+  },
+  {
+   "nombre": "analysis_layer_stats",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 162
+  },
+  {
+   "nombre": "analysis_list_properties",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 250
+  },
+  {
+   "nombre": "analysis_measure_area",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 341
+  },
+  {
+   "nombre": "analysis_measure_distance",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 232
+  },
+  {
+   "nombre": "analysis_measure_entity",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 489
+  },
+  {
+   "nombre": "analysis_select_by_layer",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 452
+  },
+  {
+   "nombre": "analysis_select_by_type",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 438
+  },
+  {
+   "nombre": "arch_catalogue_insert",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 458
+  },
+  {
+   "nombre": "arch_catalogue_list",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 399
+  },
+  {
+   "nombre": "arch_dimension_chains",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 553
+  },
+  {
+   "nombre": "arch_grid",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 560
+  },
+  {
+   "nombre": "arch_opening",
+   "paquete": "arquitectura",
+   "ligero": true,
+   "3d": false,
+   "tokens": 753
+  },
+  {
+   "nombre": "arch_plan_from_spec",
+   "paquete": "arquitectura",
+   "ligero": true,
+   "3d": false,
+   "tokens": 666
+  },
+  {
+   "nombre": "arch_room",
+   "paquete": "arquitectura",
+   "ligero": true,
+   "3d": false,
+   "tokens": 636
+  },
+  {
+   "nombre": "arch_rooms_detect",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 625
+  },
+  {
+   "nombre": "arch_schedule",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 530
+  },
+  {
+   "nombre": "arch_stair",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 646
+  },
+  {
+   "nombre": "arch_symbol",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 564
+  },
+  {
+   "nombre": "arch_wall",
+   "paquete": "arquitectura",
+   "ligero": true,
+   "3d": false,
+   "tokens": 607
+  },
+  {
+   "nombre": "balloon_add",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 513
+  },
+  {
+   "nombre": "batch_plot",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 494
+  },
+  {
+   "nombre": "block_create_from_entities",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 385
+  },
+  {
+   "nombre": "block_define",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 670
+  },
+  {
+   "nombre": "block_explode",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 514
+  },
+  {
+   "nombre": "block_find_references",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 420
+  },
+  {
+   "nombre": "block_get_attributes",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 214
+  },
+  {
+   "nombre": "block_insert",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 429
+  },
+  {
+   "nombre": "block_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 370
+  },
+  {
+   "nombre": "block_set_attributes",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 335
+  },
+  {
+   "nombre": "bom_extract",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 533
+  },
+  {
+   "nombre": "bom_table",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 598
+  },
+  {
+   "nombre": "boundary_from_entities",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 266
+  },
+  {
+   "nombre": "boundary_trace",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 351
+  },
+  {
+   "nombre": "cable_takeoff",
+   "paquete": "planta",
+   "ligero": false,
+   "3d": false,
+   "tokens": 1021
+  },
+  {
+   "nombre": "cad_batch",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 1482
+  },
+  {
+   "nombre": "centre_marks",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 528
+  },
+  {
+   "nombre": "construction_clear",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 220
+  },
+  {
+   "nombre": "construction_xline",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 279
+  },
+  {
+   "nombre": "data_extract",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 383
+  },
+  {
+   "nombre": "datum_feature",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 328
+  },
+  {
+   "nombre": "dimension_aligned",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 305
+  },
+  {
+   "nombre": "dimension_angular",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 347
+  },
+  {
+   "nombre": "dimension_auto",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 328
+  },
+  {
+   "nombre": "dimension_diameter",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 486
+  },
+  {
+   "nombre": "dimension_linear",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 579
+  },
+  {
+   "nombre": "dimension_radius",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 486
+  },
+  {
+   "nombre": "dimstyle_create",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 609
+  },
+  {
+   "nombre": "dimstyle_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 298
+  },
+  {
+   "nombre": "dimstyle_modify",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 437
+  },
+  {
+   "nombre": "dimstyle_set_current",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 281
+  },
+  {
+   "nombre": "document_activate",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 296
+  },
+  {
+   "nombre": "document_close",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 404
+  },
+  {
+   "nombre": "document_list",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 290
+  },
+  {
+   "nombre": "drawing_apply_iso_layers",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 285
+  },
+  {
+   "nombre": "drawing_apply_standard",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 463
+  },
+  {
+   "nombre": "drawing_audit",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 241
+  },
+  {
+   "nombre": "drawing_close",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 262
+  },
+  {
+   "nombre": "drawing_critique",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 638
+  },
+  {
+   "nombre": "drawing_deliver",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 799
+  },
+  {
+   "nombre": "drawing_diff",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 901
+  },
+  {
+   "nombre": "drawing_export_dwg",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 373
+  },
+  {
+   "nombre": "drawing_export_dxf",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 245
+  },
+  {
+   "nombre": "drawing_export_pdf",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 228
+  },
+  {
+   "nombre": "drawing_finalize",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 1117
+  },
+  {
+   "nombre": "drawing_info",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 276
+  },
+  {
+   "nombre": "drawing_new",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 546
+  },
+  {
+   "nombre": "drawing_open",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 260
+  },
+  {
+   "nombre": "drawing_plan",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 708
+  },
+  {
+   "nombre": "drawing_preflight",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 644
+  },
+  {
+   "nombre": "drawing_properties_get",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 295
+  },
+  {
+   "nombre": "drawing_properties_set",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 822
+  },
+  {
+   "nombre": "drawing_purge",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 156
+  },
+  {
+   "nombre": "drawing_redo",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 202
+  },
+  {
+   "nombre": "drawing_refine",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 609
+  },
+  {
+   "nombre": "drawing_save",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 177
+  },
+  {
+   "nombre": "drawing_save_as",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 267
+  },
+  {
+   "nombre": "drawing_scale_check",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 786
+  },
+  {
+   "nombre": "drawing_settings",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 927
+  },
+  {
+   "nombre": "drawing_template_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 300
+  },
+  {
+   "nombre": "drawing_template_save",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 445
+  },
+  {
+   "nombre": "drawing_topology_check",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 654
+  },
+  {
+   "nombre": "drawing_understand",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 774
+  },
+  {
+   "nombre": "drawing_undo",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 258
+  },
+  {
+   "nombre": "drawing_verify_requirements",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 1259
+  },
+  {
+   "nombre": "entity_array_polar",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 508
+  },
+  {
+   "nombre": "entity_array_rectangular",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 516
+  },
+  {
+   "nombre": "entity_batch_create",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 337
+  },
+  {
+   "nombre": "entity_batch_modify",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 307
+  },
+  {
+   "nombre": "entity_chamfer",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 327
+  },
+  {
+   "nombre": "entity_change_space",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 420
+  },
+  {
+   "nombre": "entity_copy",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 237
+  },
+  {
+   "nombre": "entity_create_arc",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 318
+  },
+  {
+   "nombre": "entity_create_block_ref",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 394
+  },
+  {
+   "nombre": "entity_create_circle",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 255
+  },
+  {
+   "nombre": "entity_create_ellipse",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 333
+  },
+  {
+   "nombre": "entity_create_hatch",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 344
+  },
+  {
+   "nombre": "entity_create_line",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 364
+  },
+  {
+   "nombre": "entity_create_mtext",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 360
+  },
+  {
+   "nombre": "entity_create_point",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 231
+  },
+  {
+   "nombre": "entity_create_polyline",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 299
+  },
+  {
+   "nombre": "entity_create_rectangle",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 298
+  },
+  {
+   "nombre": "entity_create_revcloud",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 328
+  },
+  {
+   "nombre": "entity_create_spline",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 253
+  },
+  {
+   "nombre": "entity_create_table",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 410
+  },
+  {
+   "nombre": "entity_create_text",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 305
+  },
+  {
+   "nombre": "entity_create_wipeout",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 252
+  },
+  {
+   "nombre": "entity_delete",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 166
+  },
+  {
+   "nombre": "entity_delete_many",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 199
+  },
+  {
+   "nombre": "entity_edit_geometry",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 511
+  },
+  {
+   "nombre": "entity_edit_text",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 332
+  },
+  {
+   "nombre": "entity_extend",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 323
+  },
+  {
+   "nombre": "entity_fillet",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 295
+  },
+  {
+   "nombre": "entity_get",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 397
+  },
+  {
+   "nombre": "entity_get_xdata",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 217
+  },
+  {
+   "nombre": "entity_list",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 640
+  },
+  {
+   "nombre": "entity_mirror",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 289
+  },
+  {
+   "nombre": "entity_move",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 232
+  },
+  {
+   "nombre": "entity_offset",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 294
+  },
+  {
+   "nombre": "entity_rotate",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 246
+  },
+  {
+   "nombre": "entity_scale",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 237
+  },
+  {
+   "nombre": "entity_select_smart",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 475
+  },
+  {
+   "nombre": "entity_set_properties",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 392
+  },
+  {
+   "nombre": "entity_set_xdata",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 269
+  },
+  {
+   "nombre": "entity_trim",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 319
+  },
+  {
+   "nombre": "gd_frame",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 540
+  },
+  {
+   "nombre": "gear_draw_helical_front_view",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 518
+  },
+  {
+   "nombre": "gear_draw_section_aa",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 290
+  },
+  {
+   "nombre": "gear_draw_spur_front_view",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 320
+  },
+  {
+   "nombre": "hatch_add_boundary",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 394
+  },
+  {
+   "nombre": "hatch_edit",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 382
+  },
+  {
+   "nombre": "hatch_material",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 708
+  },
+  {
+   "nombre": "hatch_set_gradient",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 370
+  },
+  {
+   "nombre": "image_attach",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 358
+  },
+  {
+   "nombre": "keyway_draw_keyed_bore",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 286
+  },
+  {
+   "nombre": "keyway_draw_section",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 262
+  },
+  {
+   "nombre": "layer_create",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 251
+  },
+  {
+   "nombre": "layer_delete",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 178
+  },
+  {
+   "nombre": "layer_freeze",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 162
+  },
+  {
+   "nombre": "layer_hide",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 160
+  },
+  {
+   "nombre": "layer_isolate",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 179
+  },
+  {
+   "nombre": "layer_list",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 374
+  },
+  {
+   "nombre": "layer_lock",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 160
+  },
+  {
+   "nombre": "layer_modify",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 270
+  },
+  {
+   "nombre": "layer_set_current",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 179
+  },
+  {
+   "nombre": "layer_show",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 150
+  },
+  {
+   "nombre": "layer_state_delete",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 202
+  },
+  {
+   "nombre": "layer_state_list",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 186
+  },
+  {
+   "nombre": "layer_state_restore",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 430
+  },
+  {
+   "nombre": "layer_state_save",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 370
+  },
+  {
+   "nombre": "layer_thaw",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 152
+  },
+  {
+   "nombre": "layer_unlock",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 154
+  },
+  {
+   "nombre": "layout_copy",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 275
+  },
+  {
+   "nombre": "layout_create",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 168
+  },
+  {
+   "nombre": "layout_delete",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 232
+  },
+  {
+   "nombre": "layout_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 152
+  },
+  {
+   "nombre": "layout_rename",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 209
+  },
+  {
+   "nombre": "layout_set_current",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 170
+  },
+  {
+   "nombre": "leader_create_mleader",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 299
+  },
+  {
+   "nombre": "linetype_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 182
+  },
+  {
+   "nombre": "linetype_load",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 385
+  },
+  {
+   "nombre": "mech_dimension_part",
+   "paquete": "mecanica",
+   "ligero": true,
+   "3d": false,
+   "tokens": 689
+  },
+  {
+   "nombre": "mech_hole_pattern",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 639
+  },
+  {
+   "nombre": "mech_part_draw",
+   "paquete": "mecanica",
+   "ligero": true,
+   "3d": false,
+   "tokens": 762
+  },
+  {
+   "nombre": "mech_part_from_spec",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 361
+  },
+  {
+   "nombre": "mech_part_inspect",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 309
+  },
+  {
+   "nombre": "mech_view_add",
+   "paquete": "mecanica",
+   "ligero": true,
+   "3d": false,
+   "tokens": 681
+  },
+  {
+   "nombre": "mleaderstyle_create",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 424
+  },
+  {
+   "nombre": "mleaderstyle_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 248
+  },
+  {
+   "nombre": "page_setup_apply",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 659
+  },
+  {
+   "nombre": "page_setup_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 340
+  },
+  {
+   "nombre": "pid_equipment_list",
+   "paquete": "pid",
+   "ligero": false,
+   "3d": false,
+   "tokens": 392
+  },
+  {
+   "nombre": "pid_from_spec",
+   "paquete": "pid",
+   "ligero": false,
+   "3d": false,
+   "tokens": 751
+  },
+  {
+   "nombre": "pid_graph",
+   "paquete": "pid",
+   "ligero": true,
+   "3d": false,
+   "tokens": 672
+  },
+  {
+   "nombre": "pid_instrument_index",
+   "paquete": "pid",
+   "ligero": false,
+   "3d": false,
+   "tokens": 464
+  },
+  {
+   "nombre": "pid_line_draw",
+   "paquete": "pid",
+   "ligero": true,
+   "3d": false,
+   "tokens": 868
+  },
+  {
+   "nombre": "pid_line_list",
+   "paquete": "pid",
+   "ligero": false,
+   "3d": false,
+   "tokens": 435
+  },
+  {
+   "nombre": "pid_symbol_insert",
+   "paquete": "pid",
+   "ligero": true,
+   "3d": false,
+   "tokens": 812
+  },
+  {
+   "nombre": "pid_symbol_list",
+   "paquete": "pid",
+   "ligero": false,
+   "3d": false,
+   "tokens": 270
+  },
+  {
+   "nombre": "pid_tag_parse",
+   "paquete": "pid",
+   "ligero": false,
+   "3d": false,
+   "tokens": 333
+  },
+  {
+   "nombre": "pipe_takeoff",
+   "paquete": "planta",
+   "ligero": false,
+   "3d": false,
+   "tokens": 1325
+  },
+  {
+   "nombre": "plot_style_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 271
+  },
+  {
+   "nombre": "point_from_snap",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 310
+  },
+  {
+   "nombre": "point_intersection",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 452
+  },
+  {
+   "nombre": "point_tangent",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 310
+  },
+  {
+   "nombre": "revision_add",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 656
+  },
+  {
+   "nombre": "section_line",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 579
+  },
+  {
+   "nombre": "selection_filter",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 361
+  },
+  {
+   "nombre": "selection_get",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 578
+  },
+  {
+   "nombre": "selection_polygon",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 282
+  },
+  {
+   "nombre": "selection_window",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 367
+  },
+  {
+   "nombre": "sheet_frame",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 554
+  },
+  {
+   "nombre": "solid_boolean",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": true,
+   "tokens": 262
+  },
+  {
+   "nombre": "solid_box",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": true,
+   "tokens": 267
+  },
+  {
+   "nombre": "solid_cylinder",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": true,
+   "tokens": 261
+  },
+  {
+   "nombre": "solid_extrude",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": true,
+   "tokens": 252
+  },
+  {
+   "nombre": "solid_revolve",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": true,
+   "tokens": 312
+  },
+  {
+   "nombre": "std_feature_draw",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 630
+  },
+  {
+   "nombre": "std_part_insert",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 583
+  },
+  {
+   "nombre": "std_part_list",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 524
+  },
+  {
+   "nombre": "surface_texture",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 800
+  },
+  {
+   "nombre": "system_about",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 158
+  },
+  {
+   "nombre": "system_capabilities",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 156
+  },
+  {
+   "nombre": "system_get_variable",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 182
+  },
+  {
+   "nombre": "system_launch",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 302
+  },
+  {
+   "nombre": "system_preferences_get",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 360
+  },
+  {
+   "nombre": "system_preferences_set",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 308
+  },
+  {
+   "nombre": "system_prompt_message",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 236
+  },
+  {
+   "nombre": "system_run_command",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 379
+  },
+  {
+   "nombre": "system_run_lisp",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 266
+  },
+  {
+   "nombre": "system_set_variable",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 330
+  },
+  {
+   "nombre": "system_status",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 329
+  },
+  {
+   "nombre": "system_variable_describe",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 481
+  },
+  {
+   "nombre": "template_apply_layers",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 243
+  },
+  {
+   "nombre": "template_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 154
+  },
+  {
+   "nombre": "text_find_replace",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 784
+  },
+  {
+   "nombre": "text_set_background",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 312
+  },
+  {
+   "nombre": "textstyle_create",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 520
+  },
+  {
+   "nombre": "textstyle_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 162
+  },
+  {
+   "nombre": "textstyle_set_current",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 227
+  },
+  {
+   "nombre": "titleblock_apply",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 732
+  },
+  {
+   "nombre": "titleblock_apply_iso_a3",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 472
+  },
+  {
+   "nombre": "transaction_begin",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 223
+  },
+  {
+   "nombre": "transaction_commit",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 183
+  },
+  {
+   "nombre": "transaction_rollback",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 233
+  },
+  {
+   "nombre": "ucs_list",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 262
+  },
+  {
+   "nombre": "ucs_restore",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 256
+  },
+  {
+   "nombre": "ucs_set",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 389
+  },
+  {
+   "nombre": "user_pick_point",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 287
+  },
+  {
+   "nombre": "user_select",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 342
+  },
+  {
+   "nombre": "validation_check",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 239
+  },
+  {
+   "nombre": "view_named_list",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 154
+  },
+  {
+   "nombre": "view_named_restore",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 365
+  },
+  {
+   "nombre": "view_named_save",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 374
+  },
+  {
+   "nombre": "view_screenshot",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 332
+  },
+  {
+   "nombre": "view_zoom_and_screenshot",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 293
+  },
+  {
+   "nombre": "view_zoom_extents",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 150
+  },
+  {
+   "nombre": "view_zoom_window",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 220
+  },
+  {
+   "nombre": "viewport_create",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 414
+  },
+  {
+   "nombre": "viewport_delete",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 248
+  },
+  {
+   "nombre": "viewport_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 265
+  },
+  {
+   "nombre": "viewport_lock",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 197
+  },
+  {
+   "nombre": "viewport_set_scale",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 260
+  },
+  {
+   "nombre": "weld_symbol",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 782
+  },
+  {
+   "nombre": "xref_attach",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 409
+  },
+  {
+   "nombre": "xref_manage",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 420
+  }
+ ]
+}

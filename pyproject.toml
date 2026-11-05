@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcpautocad"
+version = "0.1.0"
+description = "Conecta Claude Desktop con AutoCAD (usa AutoCAD MCP Pro de Umutcan Edizsalan)"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+dependencies = [
+    # Servidor original: https://github.com/U-C4N/Autocad-MCP (MIT)
+    "autocad-mcp-pro[com,pdf,office]==1.7.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+construir = ["pyinstaller>=6.10"]
+
+[project.scripts]
+mcpautocad = "mcpautocad.__main__:main"
+
+[tool.setuptools]
+packages = ["mcpautocad"]
+
+[tool.setuptools.package-data]
+mcpautocad = ["catalogo.json", "panel.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

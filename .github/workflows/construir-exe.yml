@@ -1,0 +1,76 @@
+name: Construir .exe
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write   # para adjuntar los archivos al Release en las etiquetas v*
+
+jobs:
+  pruebas-linux:
+    name: Pruebas (Linux, motor ezdxf)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m pytest -q
+
+  windows:
+    name: Construir en Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Versión
+        id: version
+        shell: pwsh
+        run: |
+          if ("${{ github.ref_type }}" -eq "tag") { $v = "${{ github.ref_name }}".TrimStart("v") }
+          else {
+            $base = (Select-String -Path pyproject.toml -Pattern '^version = "(.+)"').Matches[0].Groups[1].Value
+            $v = "$base-dev.${{ github.run_number }}"
+          }
+          "valor=$v" >> $env:GITHUB_OUTPUT
+
+      - name: Instalar Inno Setup (si falta)
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup -y --no-progress
+          }
+
+      - name: Construir
+        shell: pwsh
+        run: ./construir.ps1 -Version "${{ steps.version.outputs.valor }}"
+
+      - name: Probar el código y el .exe empaquetado (motor ezdxf)
+        shell: pwsh
+        run: |
+          python -m pip install pytest
+          python -m pytest -q
+          $env:MCPAUTOCAD_EXE = "$PWD\dist\mcpautocad\mcpautocad.exe"
+          python -m pytest -q tests/test_servidor.py
+
+      - name: Subir artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: MCP-AutoCAD-${{ steps.version.outputs.valor }}
+          path: salida/*
+          if-no-files-found: error
+
+      - name: Adjuntar al Release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: salida/*
+          generate_release_notes: true
