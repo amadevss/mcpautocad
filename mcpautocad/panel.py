@@ -14,7 +14,7 @@ import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from importlib import resources
 
-from . import __version__, VERSION_ORIGINAL, catalogo, configuracion, probar, registrar
+from . import __version__, VERSION_ORIGINAL, actualizaciones, catalogo, configuracion, probar, registrar
 
 PUERTO = 8765
 
@@ -85,6 +85,8 @@ class Manejador(BaseHTTPRequestHandler):
             return self._responder(200, png, "image/png")
         if self.path == "/api/estado":
             return self._json(estado())
+        if self.path == "/api/version":
+            return self._json(actualizaciones.comprobar())
         self._json({"error": "No encontrado"}, 404)
 
     def do_POST(self):

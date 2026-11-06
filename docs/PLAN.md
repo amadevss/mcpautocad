@@ -52,13 +52,18 @@ Cifras medidas (v1.7.0, tokens ≈ caracteres/4):
       `system_status`. Ojo: si AutoCAD está cerrado, el original lo abre (`Dispatch`), así que la prueba puede tardar.
 - [x] Sin banner ni búsqueda de actualizaciones de fastmcp al arrancar (`FASTMCP_SHOW_SERVER_BANNER`,
       `FASTMCP_CHECK_FOR_UPDATES`).
-- [ ] Comprobar desde el panel si hay una versión nueva en GitHub Releases.
-- [ ] Traducir al español las descripciones cortas del panel (las que ve Claude siguen en inglés).
+- [x] Aviso de versión nueva en el panel (`actualizaciones.py`: consulta el último Release de GitHub, guarda la
+      respuesta 6 horas y no avisa si no hay internet). En una etiqueta `v*`, el workflow comprueba que coincide con
+      `__version__`.
+- [x] Descripciones del panel en español (`traducciones.json`). Claude sigue viendo las originales en inglés. Un test
+      avisa de las herramientas nuevas sin traducir al subir de versión el original.
 
 ## Fase 3: servicio en el VPS (Docker)
 
 URL que se pega en Claude como **conector personalizado**.
 
+- Decidir si `system_run_command` y `system_run_lisp` van apagadas por defecto en el servicio: la lista de
+  bloqueo del original no es una barrera de seguridad.
 - Mismo servidor original con transporte HTTP (`--transport http`). Ojo: el original exige
   `ALLOW_REMOTE_HTTP` y `MCP_AUTH_TOKEN` para escuchar fuera de localhost; delante irá nuestra capa OAuth.
 - **OAuth 2.1** con inicio de sesión de Google (como en activecolabmcp): descubrimiento
@@ -82,7 +87,7 @@ Para que Claude (web, escritorio o móvil) dibuje en el AutoCAD del PC del usuar
 - El VPS reenvía las llamadas MCP del usuario por el WebSocket; el puente las ejecuta con el motor COM
   localmente y devuelve el resultado. Si el puente no está conectado, se usa ezdxf en la nube y Claude lo avisa.
 - Reconexión automática, latido, cola con tiempo de espera, y aviso en el panel ("Conectado al servicio").
-- Seguridad: solo conexiones salientes TLS, comandos peligrosos siempre desactivados, el usuario puede pausar
+- Seguridad: solo conexiones salientes TLS, modo sin restricciones (`DANGEROUS_COMMANDS_ENABLED`) siempre apagado y `system_run_command` / `system_run_lisp` apagadas por defecto en el puente, el usuario puede pausar
   el puente desde la bandeja del sistema.
 
 ## Decisiones tomadas

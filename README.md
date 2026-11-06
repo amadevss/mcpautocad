@@ -69,6 +69,9 @@ Puedes buscarlas por nombre o descripción y cada una muestra cuántos tokens cu
 los paquetes elegidos aparecen en gris. Una herramienta apagada no la ve Claude ni puede usarla (tampoco en el
 modo Búsqueda). `system_status` siempre queda activa.
 
+**Versión nueva:** al abrirse, el panel consulta en GitHub si hay una versión más reciente y, si la hay, muestra
+un aviso con el enlace de descarga. Solo lee la página pública de Releases y no envía datos tuyos.
+
 **Probar conexión con AutoCAD:** el botón de arriba arranca el servidor igual que Claude y le pide el estado:
 versión de AutoCAD y dibujo activo. Si AutoCAD está cerrado, la prueba lo abre, igual que hace Claude en su
 primera petición. Desde la línea de comandos: `mcpautocad.exe probar`.
@@ -78,8 +81,11 @@ Al pulsar **Guardar**, **reinicia Claude Desktop** (Salir desde la bandeja y vol
 > Las cifras de tokens son aproximadas (caracteres ÷ 4) y se midieron sobre el servidor real con
 > `scripts/medir_tokens.py`.
 
-**Seguridad:** los comandos peligrosos del original (LISP y comandos arbitrarios) están siempre desactivados
-(`DANGEROUS_COMMANDS_ENABLED=false`).
+**Seguridad:** el modo sin restricciones del original queda siempre apagado (`DANGEROUS_COMMANDS_ENABLED=false`).
+Las herramientas `system_run_command` y `system_run_lisp` (solo en los modos Completo y Búsqueda) siguen pudiendo
+ejecutar comandos y LISP de AutoCAD, pero bloquean una lista de los peligrosos (por ejemplo `ERASE`, `PURGE`,
+`SAVE`, `QUIT`, y en LISP `startapp`, `command` o borrar archivos). Según el propio original, esa lista protege de accidentes pero no es una barrera de seguridad.
+Si no las necesitas, apágalas en la sección 3 del panel.
 
 ### Configurar la extensión .mcpb
 
@@ -127,6 +133,8 @@ mcpautocad/
   registrar.py      agrega/quita la entrada "autocad" en claude_desktop_config.json
   catalogo.py       estimación de herramientas y tokens (datos en catalogo.json)
   probar.py         "Probar conexión": arranca el servidor y llama a system_status
+  actualizaciones.py  aviso de versión nueva (último Release de GitHub)
+  traducciones.json descripciones cortas en español para el panel
   __main__.py       mcpautocad [panel|servidor|registrar|quitar|probar]
 scripts/medir_tokens.py   regenera catalogo.json midiendo el servidor real
 scripts/generar_icono.py  genera los iconos (instalador/, mcpautocad/icono.png y mcpb/icon.png)
@@ -172,8 +180,9 @@ Abrir el panel en desarrollo:
 python -m mcpautocad panel
 ```
 
-Al actualizar `autocad-mcp-pro`, cambia la versión en `pyproject.toml` y en `mcpautocad/__init__.py`, y regenera
-el catálogo:
+Al actualizar `autocad-mcp-pro`, cambia `VERSION_ORIGINAL` en `mcpautocad/__init__.py` y la dependencia en
+`pyproject.toml`, regenera el catálogo y traduce en `mcpautocad/traducciones.json` las herramientas nuevas (un
+test te dirá cuáles faltan):
 
 ```bash
 python scripts/medir_tokens.py
@@ -198,7 +207,8 @@ El workflow `.github/workflows/construir-exe.yml` se ejecuta en cada push:
 2. En `windows-latest`: construye, vuelve a pasar las pruebas contra el `.exe` empaquetado y sube el resultado
    como artefacto **MCP-AutoCAD-…**.
    Para descargarlo: pestaña **Actions** → la ejecución → sección **Artifacts** (hace falta haber iniciado sesión en GitHub).
-3. Si haces push de una etiqueta `v*` (por ejemplo `v0.1.0`), adjunta los archivos a un **Release** público:
+3. Si haces push de una etiqueta `v*` (por ejemplo `v0.1.0`), adjunta los archivos a un **Release** público.
+   La etiqueta debe coincidir con la versión de `pyproject.toml` y `mcpautocad/__init__.py`; si no, el workflow falla:
 
 ```bash
 git tag v0.1.0

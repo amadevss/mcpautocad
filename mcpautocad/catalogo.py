@@ -18,6 +18,13 @@ def cargar() -> dict:
     return json.loads(resources.files(__package__).joinpath("catalogo.json").read_text(encoding="utf-8"))
 
 
+@lru_cache(maxsize=1)
+def traducciones() -> dict[str, str]:
+    """Descripciones cortas en español (traducciones.json). Claude sigue viendo las originales."""
+    datos = json.loads(resources.files(__package__).joinpath("traducciones.json").read_text(encoding="utf-8"))
+    return {k: v for k, v in datos.items() if not k.startswith("_")}
+
+
 def visibles(cfg: dict) -> list[dict]:
     """Herramientas que el servidor anunciará (en modo Búsqueda: las que Claude puede encontrar)."""
     cfg = configuracion.normalizar(cfg)
@@ -64,8 +71,10 @@ def herramientas(cfg: dict) -> list[dict]:
     cfg = configuracion.normalizar(cfg)
     incluidas = {h["nombre"] for h in visibles({**cfg, "desactivadas": []})}
     apagadas = set(cfg["desactivadas"])
+    es = traducciones()
     return [
-        {**h, "incluida": h["nombre"] in incluidas, "activa": h["nombre"] in incluidas - apagadas,
+        {**h, "descripcion": es.get(h["nombre"], h["descripcion"]), "descripcion_original": h["descripcion"],
+         "incluida": h["nombre"] in incluidas, "activa": h["nombre"] in incluidas - apagadas,
          "siempre": h["nombre"] in configuracion.SIEMPRE_ACTIVAS}
         for h in cargar()["herramientas"]
     ]

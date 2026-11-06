@@ -5,7 +5,7 @@ import urllib.request
 
 import pytest
 
-from mcpautocad import configuracion, panel, registrar
+from mcpautocad import actualizaciones, configuracion, panel, registrar
 
 
 @pytest.fixture
@@ -81,3 +81,14 @@ def test_probar_conexion(url):
     configuracion.guardar({"motor": "ezdxf"})
     r = json.loads(pedir(url, "/api/probar", {})[1])
     assert r["ok"] is True and r["motor"] == "ezdxf"
+
+
+def test_aviso_de_version_sin_internet(url, monkeypatch):
+    actualizaciones._CACHE.clear()
+
+    def sin_red(timeout):
+        raise OSError("sin internet")
+
+    monkeypatch.setattr(actualizaciones, "_ultimo_release", sin_red)
+    r = json.loads(pedir(url, "/api/version")[1])
+    assert r["hay_nueva"] is False and r["actual"]

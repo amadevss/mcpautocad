@@ -47,6 +47,15 @@ jobs:
           }
           "valor=$v" >> $env:GITHUB_OUTPUT
 
+      - name: Comprobar que la etiqueta coincide con la versión del código
+        if: github.ref_type == 'tag'
+        shell: pwsh
+        run: |
+          $codigo = (Select-String -Path mcpautocad/__init__.py -Pattern '^__version__ = "(.+)"').Matches[0].Groups[1].Value
+          if ($codigo -ne "${{ steps.version.outputs.valor }}") {
+            throw "La etiqueta es v${{ steps.version.outputs.valor }} pero el código dice $codigo. Cambia la versión en pyproject.toml y mcpautocad/__init__.py."
+          }
+
       - name: Instalar Inno Setup (si falta)
         shell: pwsh
         run: |

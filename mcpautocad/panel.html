@@ -94,6 +94,8 @@
   <h1><img src="/icono.png" alt="" width="32" height="32" style="vertical-align:-6px;margin-right:8px">Panel MCP AutoCAD</h1>
   <p class="sub">Elige qué herramientas de AutoCAD ve Claude. Menos herramientas = menos tokens gastados en cada conversación.</p>
 
+  <div id="nueva-version" class="nota" hidden style="margin:0 0 16px;font-size:15px"></div>
+
   <div id="mensaje" class="mensaje" role="status"></div>
 
   <section class="tarjeta">
@@ -133,7 +135,7 @@
     <details id="det-herr">
       <summary><h2>3. Herramientas una por una <small style="font-weight:400;color:var(--suave)">(opcional)</small></h2></summary>
       <p style="margin:10px 0 0;color:var(--suave)">Apaga herramientas concretas que no usas para ahorrar aún más.
-        Las que no trae el modo o los paquetes elegidos salen en gris. Las descripciones son las del proyecto original (en inglés).</p>
+        Las que no trae el modo o los paquetes elegidos salen en gris. Claude ve las descripciones originales en inglés; aquí están traducidas.</p>
       <div class="herr-barra">
         <input type="search" id="buscar" placeholder="Buscar por nombre o descripción…" aria-label="Buscar herramientas">
         <label><input type="checkbox" id="solo-incluidas" checked> Solo las de este modo</label>
@@ -179,6 +181,7 @@ const PAQUETES = [
 const NOMBRE_PAQUETE = Object.fromEntries(PAQUETES.map(([id, nombre]) => [id, nombre]));
 let cfg = null;
 let lista = [];
+const sinTildes = (t) => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => n.toLocaleString("es-ES");
@@ -214,7 +217,8 @@ function pintarLista() {
   const solo = $("solo-incluidas").checked;
   const apagadas = new Set(cfg.desactivadas);
   const filas = lista.filter((h) => (!solo || h.incluida)
-    && (!texto || h.nombre.includes(texto) || h.descripcion.toLowerCase().includes(texto)));
+    && (!texto || h.nombre.includes(texto) || sinTildes(h.descripcion).includes(sinTildes(texto))
+        || h.descripcion_original.toLowerCase().includes(texto)));
   const grupos = {};
   for (const h of filas) (grupos[h["3d"] ? "3d" : h.paquete] ||= []).push(h);
   $("lista-herr").innerHTML = PAQUETES.filter(([id]) => grupos[id]).map(([id, nombre]) =>
@@ -223,7 +227,7 @@ function pintarLista() {
         <input type="checkbox" data-herr="${esc(h.nombre)}" ${h.incluida && !apagadas.has(h.nombre) ? "checked" : ""}
           ${h.incluida && !h.siempre ? "" : "disabled"}>
         <div><code>${esc(h.nombre)}</code>${h.siempre ? " <small style='display:inline'>(siempre activa)</small>" : ""}
-          <small>${esc(h.descripcion)}</small></div>
+          <small title="${esc(h.descripcion_original)}">${esc(h.descripcion)}</small></div>
         <span class="tk">≈ ${fmt(h.tokens)}</span>
       </label>`).join("")).join("") || "<p>No hay herramientas que coincidan.</p>";
   document.querySelectorAll("[data-herr]").forEach((c) => c.addEventListener("change", () => {
@@ -298,6 +302,18 @@ async function iniciar() {
   document.querySelectorAll('[name="modo"]').forEach((r) => r.addEventListener("change", leer));
   pintarClaude(e.claude);
   aplicar();
+  comprobarVersion();
+}
+
+async function comprobarVersion() {
+  try {
+    const v = await api("/api/version");
+    if (!v.hay_nueva) return;
+    const caja = $("nueva-version");
+    caja.innerHTML = `<b>Hay una versión nueva: ${esc(v.ultima)}</b> (tienes la ${esc(v.actual)}).
+      <a href="${esc(v.url)}" target="_blank" rel="noopener">Descargar</a>`;
+    caja.hidden = false;
+  } catch (err) { /* sin internet: no se avisa */ }
 }
 
 async function probarAutocad() {

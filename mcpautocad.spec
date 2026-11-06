@@ -26,7 +26,7 @@ import importlib.util, os
 _templates = os.path.join(os.path.dirname(importlib.util.find_spec("server").origin), "templates")
 datas += [(_templates, "templates")]
 datas += [("mcpautocad/catalogo.json", "mcpautocad"), ("mcpautocad/panel.html", "mcpautocad"),
-          ("mcpautocad/icono.png", "mcpautocad")]
+          ("mcpautocad/icono.png", "mcpautocad"), ("mcpautocad/traducciones.json", "mcpautocad")]
 for dist in ["autocad-mcp-pro", "fastmcp", "mcp", "ezdxf", "pydantic", "matplotlib", "openpyxl", "pillow"]:
     try:
         datas += copy_metadata(dist)
