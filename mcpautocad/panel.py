@@ -14,7 +14,7 @@ import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from importlib import resources
 
-from . import __version__, VERSION_ORIGINAL, catalogo, configuracion, registrar
+from . import __version__, VERSION_ORIGINAL, catalogo, configuracion, probar, registrar
 
 PUERTO = 8765
 
@@ -39,6 +39,7 @@ def estado() -> dict:
         "estimacion": catalogo.estimar(cfg),
         "maximo": catalogo.estimar({"modo": "completo", "paquetes": list(configuracion.PAQUETES), "3d": True}),
         "presets": PRESETS,
+        "siempre_activas": sorted(configuracion.SIEMPRE_ACTIVAS),
         "claude": {
             "registrado": any(registrar.esta_registrado(r) for r in rutas),
             "rutas": [str(r) for r in rutas],
@@ -99,6 +100,10 @@ class Manejador(BaseHTTPRequestHandler):
         try:
             if self.path == "/api/estimar":
                 return self._json(catalogo.estimar(datos.get("config", {})))
+            if self.path == "/api/herramientas":
+                return self._json({"herramientas": catalogo.herramientas(datos.get("config", {}))})
+            if self.path == "/api/probar":
+                return self._json(probar.probar())
             if self.path == "/api/guardar":
                 configuracion.guardar(datos.get("config", {}))
                 return self._json({**estado(), "mensaje": "Configuración guardada. " + AVISO_REINICIO})

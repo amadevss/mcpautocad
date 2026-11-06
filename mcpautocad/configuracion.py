@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -38,11 +39,18 @@ ALIAS_MODO = {
 #: Variables que rellena la extensión .mcpb desde su formulario (ver mcpb/manifest.json).
 ORIGEN_MCPB = "mcpb"
 
+#: Herramientas que no se pueden desactivar una por una (el panel las usa para
+#: "Probar conexión" y Claude para saber el estado de AutoCAD).
+SIEMPRE_ACTIVAS = frozenset({"system_status"})
+
+_NOMBRE_HERRAMIENTA = re.compile(r"^[a-z][a-z0-9_]{0,80}$")
+
 POR_DEFECTO: dict = {
     "modo": "ligero",
     "paquetes": list(PAQUETES),
     "3d": False,
     "motor": "com",
+    "desactivadas": [],
 }
 
 
@@ -77,6 +85,18 @@ def normalizar(datos: dict | None) -> dict:
 
     motor = str(datos.get("motor", cfg["motor"])).lower().strip()
     cfg["motor"] = motor if motor in MOTORES else POR_DEFECTO["motor"]
+
+    # Herramientas apagadas una por una: nombres válidos, sin repetir, ordenados.
+    desactivadas = datos.get("desactivadas", [])
+    if isinstance(desactivadas, str):
+        desactivadas = desactivadas.split(",")
+    if not isinstance(desactivadas, list):
+        desactivadas = []
+    cfg["desactivadas"] = sorted({
+        n.strip().lower() for n in desactivadas
+        if isinstance(n, str) and _NOMBRE_HERRAMIENTA.match(n.strip().lower())
+        and n.strip().lower() not in SIEMPRE_ACTIVAS
+    })[:1000]
     return cfg
 
 
@@ -122,7 +142,8 @@ def desde_entorno(entorno: dict[str, str] | None = None) -> dict:
     """Configuración que llega en variables MCPAUTOCAD_* (la pone la extensión .mcpb).
 
     MCPAUTOCAD_MODO, MCPAUTOCAD_MECANICA, MCPAUTOCAD_ARQUITECTURA, MCPAUTOCAD_PID,
-    MCPAUTOCAD_PLANTA, MCPAUTOCAD_CONFIGURACION, MCPAUTOCAD_3D y MCPAUTOCAD_MOTOR.
+    MCPAUTOCAD_PLANTA, MCPAUTOCAD_CONFIGURACION, MCPAUTOCAD_3D, MCPAUTOCAD_MOTOR y
+    MCPAUTOCAD_DESACTIVADAS (nombres separados por comas).
     """
     entorno = os.environ if entorno is None else entorno
     modo = entorno.get("MCPAUTOCAD_MODO", "")
@@ -131,6 +152,8 @@ def desde_entorno(entorno: dict[str, str] | None = None) -> dict:
         "paquetes": [p for p in PAQUETES if _si(entorno.get(f"MCPAUTOCAD_{p.upper()}"), True)],
         "3d": _si(entorno.get("MCPAUTOCAD_3D"), False),
         "motor": entorno.get("MCPAUTOCAD_MOTOR") or POR_DEFECTO["motor"],
+        "desactivadas": "" if entorno.get("MCPAUTOCAD_DESACTIVADAS", "").startswith("${")
+        else entorno.get("MCPAUTOCAD_DESACTIVADAS", ""),
     })
 
 

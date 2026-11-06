@@ -66,3 +66,18 @@ def test_rechaza_peticiones_de_otras_webs(url):
         pedir(url, "/api/estado", cabeceras={"Host": "malicioso.example"})
     assert e.value.code == 403
     assert not registrar.rutas_claude()[0].exists()
+
+
+def test_lista_de_herramientas_y_guardar_apagadas(url):
+    r = json.loads(pedir(url, "/api/herramientas", {"config": {"modo": "ligero"}})[1])
+    assert len(r["herramientas"]) == 248
+    cfg = {"modo": "ligero", "desactivadas": ["entity_create_line"]}
+    r = json.loads(pedir(url, "/api/guardar", {"config": cfg})[1])
+    assert r["config"]["desactivadas"] == ["entity_create_line"]
+    assert r["estimacion"]["herramientas"] == 65
+
+
+def test_probar_conexion(url):
+    configuracion.guardar({"motor": "ezdxf"})
+    r = json.loads(pedir(url, "/api/probar", {})[1])
+    assert r["ok"] is True and r["motor"] == "ezdxf"

@@ -14,6 +14,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -28,6 +29,19 @@ from mcpautocad.configuracion import PAQUETES  # noqa: E402
 CARACTERES_POR_TOKEN = 4
 
 
+DESCRIPCIONES: dict[str, str] = {}
+
+
+def _resumen(texto: str | None) -> str:
+    """Primera frase de la descripción (en inglés, como la escribe el original)."""
+    texto = " ".join((texto or "").split())
+    # Corta en el primer ". " o "; " que no sea parte de "e.g." / "i.e." / "etc.".
+    fin = re.search(r"(?<!\be\.g)(?<!\bi\.e)(?<!\betc)[.;] ", texto)
+    if fin:
+        texto = texto[:fin.start()] + "."
+    return texto if len(texto) <= 160 else texto[:157].rstrip() + "..."
+
+
 async def _listar(env: dict[str, str]) -> dict[str, int]:
     entorno = {**os.environ, "AUTOCAD_MCP_BACKEND": "ezdxf", "LOG_LEVEL": "ERROR",
                "TOOL_PROFILE": "full", "TOOL_PACKS": "all", "ENABLE_3D": "false",
@@ -35,6 +49,8 @@ async def _listar(env: dict[str, str]) -> dict[str, int]:
     transporte = StdioTransport(command=sys.executable, args=["-m", "server"], env=entorno)
     async with Client(transporte) as cliente:
         herramientas = await cliente.list_tools()
+    for h in herramientas:
+        DESCRIPCIONES.setdefault(h.name, _resumen(h.description))
     return {
         h.name: len(json.dumps(h.model_dump(mode="json", exclude_none=True), ensure_ascii=False))
         for h in herramientas
@@ -76,6 +92,7 @@ def main() -> None:
                 "ligero": nombre in ligero,
                 "3d": nombre in solo_3d,
                 "tokens": round(caracteres / CARACTERES_POR_TOKEN),
+                "descripcion": DESCRIPCIONES.get(nombre, ""),
             }
             for nombre, caracteres in sorted(todas.items())
         ],

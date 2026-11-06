@@ -64,6 +64,15 @@ El panel muestra en vivo cuántas herramientas y tokens supone tu elección.
 
 **Atajos:** *Solo 2D*, *Arquitectura*, *Mecánica* y *Todo*.
 
+**Herramientas una por una (opcional):** abre la sección 3 del panel para apagar herramientas concretas.
+Puedes buscarlas por nombre o descripción y cada una muestra cuántos tokens cuesta. Las que no trae el modo o
+los paquetes elegidos aparecen en gris. Una herramienta apagada no la ve Claude ni puede usarla (tampoco en el
+modo Búsqueda). `system_status` siempre queda activa.
+
+**Probar conexión con AutoCAD:** el botón de arriba arranca el servidor igual que Claude y le pide el estado:
+versión de AutoCAD y dibujo activo. Si AutoCAD está cerrado, la prueba lo abre, igual que hace Claude en su
+primera petición. Desde la línea de comandos: `mcpautocad.exe probar`.
+
 Al pulsar **Guardar**, **reinicia Claude Desktop** (Salir desde la bandeja y volver a abrir) para aplicar los cambios.
 
 > Las cifras de tokens son aproximadas (caracteres ÷ 4) y se midieron sobre el servidor real con
@@ -78,6 +87,8 @@ En Claude Desktop → Configuración → Extensiones → **AutoCAD** → *Config
 
 - **Modo**: escribe `ligero`, `completo` o `busqueda` (si escribes otra cosa se usa `ligero`).
 - **Paquetes y 3D**: casillas de sí/no.
+- **Herramientas apagadas (avanzado)**: nombres separados por comas, por ejemplo `pid_graph, arch_stair`.
+  Los nombres están en la sección 3 del panel.
 
 Después de cambiarla, desactiva y vuelve a activar la extensión. El formulario de extensiones de Claude no
 admite listas desplegables, por eso el modo se escribe.
@@ -92,7 +103,7 @@ sin tocar tus otros servidores MCP. La extensión .mcpb se quita desde Claude De
 | Problema | Solución |
 |---|---|
 | No aparece "autocad" en Claude | Sal de Claude Desktop desde la bandeja (no basta con cerrar la ventana) y vuelve a abrirlo. En el panel, revisa que diga "Conectado". |
-| Claude dice que no encuentra AutoCAD | Abre AutoCAD **antes** de pedirle algo y deja un dibujo abierto. AutoCAD LT no sirve (no tiene la interfaz COM). |
+| Claude dice que no encuentra AutoCAD | Pulsa **Probar conexión con AutoCAD** en el panel. Si AutoCAD está cerrado, el servidor intenta abrirlo; es más rápido si ya está abierto con un dibujo. AutoCAD LT no sirve (no tiene la interfaz COM). |
 | Claude Desktop de Microsoft Store | Se detecta solo. Si no funciona, pulsa **Conectar con Claude Desktop** en el panel. |
 | Las herramientas 3D no aparecen | Activa 3D y usa el modo Completo o Búsqueda (el modo Ligero no las incluye). |
 | Ver qué pasa por dentro | Abre el registro `%APPDATA%\Claude\logs\mcp-server-autocad.log` (o Claude Desktop → Configuración → Desarrollador). |
@@ -115,7 +126,8 @@ mcpautocad/
   panel.py          panel local (http.server de la biblioteca estándar) + panel.html
   registrar.py      agrega/quita la entrada "autocad" en claude_desktop_config.json
   catalogo.py       estimación de herramientas y tokens (datos en catalogo.json)
-  __main__.py       mcpautocad [panel|servidor|registrar|quitar]
+  probar.py         "Probar conexión": arranca el servidor y llama a system_status
+  __main__.py       mcpautocad [panel|servidor|registrar|quitar|probar]
 scripts/medir_tokens.py   regenera catalogo.json midiendo el servidor real
 scripts/generar_icono.py  genera los iconos (instalador/, mcpautocad/icono.png y mcpb/icon.png)
 scripts/empaquetar_mcpb.py crea la extensión .mcpb (usa @anthropic-ai/mcpb)

@@ -19,13 +19,23 @@
   "support": "https://github.com/amadevss/mcpautocad/issues",
   "icon": "icon.png",
   "license": "MIT",
-  "keywords": ["autocad", "cad", "dibujo", "planos", "dxf", "arquitectura", "mecanica"],
+  "keywords": [
+    "autocad",
+    "cad",
+    "dibujo",
+    "planos",
+    "dxf",
+    "arquitectura",
+    "mecanica"
+  ],
   "server": {
     "type": "binary",
     "entry_point": "server/mcpautocad.exe",
     "mcp_config": {
       "command": "${__dirname}/server/mcpautocad.exe",
-      "args": ["servidor"],
+      "args": [
+        "servidor"
+      ],
       "env": {
         "MCPAUTOCAD_ORIGEN": "mcpb",
         "MCPAUTOCAD_MODO": "${user_config.modo}",
@@ -34,13 +44,16 @@
         "MCPAUTOCAD_PID": "${user_config.pid}",
         "MCPAUTOCAD_PLANTA": "${user_config.planta}",
         "MCPAUTOCAD_CONFIGURACION": "${user_config.configuracion}",
-        "MCPAUTOCAD_3D": "${user_config.tres_d}"
+        "MCPAUTOCAD_3D": "${user_config.tres_d}",
+        "MCPAUTOCAD_DESACTIVADAS": "${user_config.desactivadas}"
       }
     }
   },
   "tools_generated": true,
   "compatibility": {
-    "platforms": ["win32"]
+    "platforms": [
+      "win32"
+    ]
   },
   "user_config": {
     "modo": {
@@ -90,6 +103,13 @@
       "title": "Herramientas 3D",
       "description": "Sólidos 3D (cajas, cilindros, extrusiones). Solo en modo completo o busqueda.",
       "default": false,
+      "required": false
+    },
+    "desactivadas": {
+      "type": "string",
+      "title": "Herramientas apagadas (avanzado)",
+      "description": "Nombres de herramientas que Claude no verá, separados por comas. Ejemplo: pid_graph, arch_stair. Déjalo vacío para no apagar ninguna.",
+      "default": "",
       "required": false
     }
   }

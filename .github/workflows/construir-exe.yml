@@ -64,7 +64,7 @@ jobs:
           python -m pip install pytest
           python -m pytest -q
           $env:MCPAUTOCAD_EXE = "$PWD\dist\mcpautocad\mcpautocad.exe"
-          python -m pytest -q tests/test_servidor.py tests/test_mcpb.py
+          python -m pytest -q tests/test_servidor.py tests/test_mcpb.py tests/test_herramientas.py
 
       - name: Subir artefacto
         uses: actions/upload-artifact@v4

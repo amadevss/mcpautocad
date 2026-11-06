@@ -13,6 +13,7 @@ AYUDA = """Uso: mcpautocad [orden]
   servidor    Arranca el servidor MCP por stdio (lo usa Claude Desktop).
   registrar   Agrega este MCP a Claude Desktop.
   quitar      Quita este MCP de Claude Desktop.
+  probar      Comprueba que el servidor arranca y que AutoCAD responde.
 """
 
 
@@ -28,6 +29,10 @@ def main(argv: list[str] | None = None) -> int:
         from . import panel
 
         return panel.main(argv[1:])
+    if orden == "probar":
+        from . import probar
+
+        return probar.main()
     if orden in ("registrar", "quitar"):
         from . import registrar
 

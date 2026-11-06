@@ -22,9 +22,11 @@ def visibles(cfg: dict) -> list[dict]:
     """Herramientas que el servidor anunciará (en modo Búsqueda: las que Claude puede encontrar)."""
     cfg = configuracion.normalizar(cfg)
     paquetes = {"basico", *cfg["paquetes"]}
+    apagadas = set(cfg["desactivadas"])
     return [
         h for h in cargar()["herramientas"]
         if h["paquete"] in paquetes
+        and h["nombre"] not in apagadas
         and (cfg["3d"] or not h["3d"])
         and (cfg["modo"] != "ligero" or h["ligero"])
     ]
@@ -44,7 +46,7 @@ def estimar(cfg: dict) -> dict:
     for h in todos:
         por_paquete["3d" if h["3d"] else h["paquete"]] += 1
     if cfg["modo"] == "busqueda":
-        b = cargar()["busqueda"]
+        b = cargar()["busqueda"]  # las 3 herramientas de búsqueda cuestan lo mismo siempre
         anunciadas, tokens = b["herramientas"], b["tokens"]
     else:
         anunciadas, tokens = len(lista), sum(h["tokens"] for h in lista)
@@ -54,3 +56,16 @@ def estimar(cfg: dict) -> dict:
         "disponibles": len(lista),
         "por_paquete": por_paquete,
     }
+
+
+def herramientas(cfg: dict) -> list[dict]:
+    """Todas las herramientas, cada una con ``incluida`` (la trae este modo y
+    paquetes) y ``activa`` (incluida y no desactivada a mano)."""
+    cfg = configuracion.normalizar(cfg)
+    incluidas = {h["nombre"] for h in visibles({**cfg, "desactivadas": []})}
+    apagadas = set(cfg["desactivadas"])
+    return [
+        {**h, "incluida": h["nombre"] in incluidas, "activa": h["nombre"] in incluidas - apagadas,
+         "siempre": h["nombre"] in configuracion.SIEMPRE_ACTIVAS}
+        for h in cargar()["herramientas"]
+    ]

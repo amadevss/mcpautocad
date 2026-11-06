@@ -43,13 +43,17 @@ Cifras medidas (v1.7.0, tokens ≈ caracteres/4):
 
 ## Fase 2: panel avanzado
 
-- Activar o desactivar herramientas una por una. `catalogo.json` ya tiene cada herramienta con su paquete y sus
-  tokens. El original no tiene una variable para listas de herramientas, así que habrá que filtrar en
-  `iniciar.py`: importar `server` y quitar herramientas del objeto `mcp` (FastMCP) antes de `mcp.run()`, o
-  envolverlo con un *transform* de FastMCP. Verificar en la versión del original que se use.
-- Buscar herramientas por nombre o descripción en el panel.
-- Botón "Probar conexión con AutoCAD": llama a `system_status` y muestra versión y dibujo abierto.
-- Comprobar desde el panel si hay una versión nueva en GitHub Releases.
+- [x] Activar o desactivar herramientas una por una (`"desactivadas"` en `config.json`; en la extensión .mcpb,
+      un campo de texto con nombres separados por comas). `iniciar.py` las borra del registro de FastMCP
+      (`mcp.local_provider.remove_tool`) antes de `mcp.run()`: no se anuncian ni se pueden llamar, tampoco
+      desde `call_tool` en modo Búsqueda. `system_status` no se puede apagar.
+- [x] Buscador por nombre o descripción, con los tokens de cada herramienta (descripciones del original, en inglés).
+- [x] Botón "Probar conexión con AutoCAD" (y `mcpautocad probar`): arranca el servidor como Claude y llama a
+      `system_status`. Ojo: si AutoCAD está cerrado, el original lo abre (`Dispatch`), así que la prueba puede tardar.
+- [x] Sin banner ni búsqueda de actualizaciones de fastmcp al arrancar (`FASTMCP_SHOW_SERVER_BANNER`,
+      `FASTMCP_CHECK_FOR_UPDATES`).
+- [ ] Comprobar desde el panel si hay una versión nueva en GitHub Releases.
+- [ ] Traducir al español las descripciones cortas del panel (las que ve Claude siguen en inglés).
 
 ## Fase 3: servicio en el VPS (Docker)
 
