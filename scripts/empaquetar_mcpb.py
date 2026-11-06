@@ -28,7 +28,7 @@ def preparar(version: str, servidor: Path, carpeta: Path) -> Path:
     manifiesto["version"] = version
     (carpeta / "manifest.json").write_text(json.dumps(manifiesto, indent=2, ensure_ascii=False) + "\n",
                                            encoding="utf-8")
-    shutil.copy2(RAIZ / "instalador" / "icono.png", carpeta / "icon.png")
+    shutil.copy2(RAIZ / "mcpb" / "icon.png", carpeta / "icon.png")
     shutil.copy2(RAIZ / "LICENSE", carpeta / "LICENSE")
     shutil.copytree(servidor, carpeta / "server")
     return carpeta

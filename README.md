@@ -117,7 +117,7 @@ mcpautocad/
   catalogo.py       estimación de herramientas y tokens (datos en catalogo.json)
   __main__.py       mcpautocad [panel|servidor|registrar|quitar]
 scripts/medir_tokens.py   regenera catalogo.json midiendo el servidor real
-scripts/generar_icono.py  genera instalador/icono.png, icono.ico y mcpautocad/icono.png
+scripts/generar_icono.py  genera los iconos (instalador/, mcpautocad/icono.png y mcpb/icon.png)
 scripts/empaquetar_mcpb.py crea la extensión .mcpb (usa @anthropic-ai/mcpb)
 mcpb/manifest.json        manifiesto de la extensión (la versión se pone al empaquetar)
 mcpautocad.spec           receta de PyInstaller

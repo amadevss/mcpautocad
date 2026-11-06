@@ -1,5 +1,7 @@
 """Genera el icono de MCP AutoCAD (PNG para la extensión y el panel, ICO para el .exe).
 
+Destinos: instalador/icono.png e icono.ico, mcpautocad/icono.png y mcpb/icon.png.
+
 Diseño: cuadrado rojo redondeado con la mira de AutoCAD (cruz con caja de
 selección). Uso:  python scripts/generar_icono.py
 """
@@ -37,7 +39,7 @@ def dibujar() -> Image.Image:
 
 def main() -> None:
     img = dibujar()
-    destinos = [RAIZ / "instalador" / "icono.png", RAIZ / "mcpautocad" / "icono.png"]
+    destinos = [RAIZ / "instalador" / "icono.png", RAIZ / "mcpautocad" / "icono.png", RAIZ / "mcpb" / "icon.png"]
     for destino in destinos:
         img.resize((512, 512), Image.LANCZOS).save(destino)
     img.save(RAIZ / "instalador" / "icono.ico",
