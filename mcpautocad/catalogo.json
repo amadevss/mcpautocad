@@ -1,0 +1,1994 @@
+{
+ "version_original": "1.7.0",
+ "caracteres_por_token": 4,
+ "busqueda": {
+  "herramientas": 3,
+  "tokens": 547
+ },
+ "herramientas": [
+  {
+   "nombre": "analysis_bounding_box",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 157,
+   "descripcion": "Get the bounding box (extents) of all entities in the drawing."
+  },
+  {
+   "nombre": "analysis_entity_stats",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 203,
+   "descripcion": "Analyze the drawing and return entity counts grouped by type and by layer."
+  },
+  {
+   "nombre": "analysis_find_in_region",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 458,
+   "descripcion": "Find all entities within a rectangular region (crossing selection)."
+  },
+  {
+   "nombre": "analysis_layer_stats",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 162,
+   "descripcion": "Return detailed statistics for each layer: entity count, types present."
+  },
+  {
+   "nombre": "analysis_list_properties",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 250,
+   "descripcion": "AutoCAD's LIST: the full DXF attribute set for one handle."
+  },
+  {
+   "nombre": "analysis_measure_area",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 341,
+   "descripcion": "Area and perimeter of a polygon you supply the vertices for."
+  },
+  {
+   "nombre": "analysis_measure_distance",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 232,
+   "descripcion": "Measure the Euclidean distance between two points."
+  },
+  {
+   "nombre": "analysis_measure_entity",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 489,
+   "descripcion": "Measure something already in the drawing, by handle."
+  },
+  {
+   "nombre": "analysis_select_by_layer",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 452,
+   "descripcion": "Get all entities on a specific layer."
+  },
+  {
+   "nombre": "analysis_select_by_type",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 438,
+   "descripcion": "Get all entities of a specific type."
+  },
+  {
+   "nombre": "arch_catalogue_insert",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 458,
+   "descripcion": "Define the item's block ARCH_<NAME> once, insert it on the furniture or sanitary layer."
+  },
+  {
+   "nombre": "arch_catalogue_list",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 399,
+   "descripcion": "Catalogue rows: name, family, both labels, nominal size [w, d] in mm, block name, layer."
+  },
+  {
+   "nombre": "arch_dimension_chains",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 553,
+   "descripcion": "The three exterior chains an architectural plan carries, as real DIMENSIONs."
+  },
+  {
+   "nombre": "arch_grid",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 560,
+   "descripcion": "Axis lines on the arch grid layer (its CENTER linetype comes from the layer) and a 5 mm bubble with its label at both ends of each axis, on the symbol layer."
+  },
+  {
+   "nombre": "arch_opening",
+   "paquete": "arquitectura",
+   "ligero": true,
+   "3d": false,
+   "tokens": 753,
+   "descripcion": "A door or a window in a wall already drawn, found by its id."
+  },
+  {
+   "nombre": "arch_plan_from_spec",
+   "paquete": "arquitectura",
+   "ligero": true,
+   "3d": false,
+   "tokens": 666,
+   "descripcion": "A whole plan drawn inside one transaction: walls with their hosted doors and windows, stairs, room labels whose areas are measured off the walls just drawn,..."
+  },
+  {
+   "nombre": "arch_room",
+   "paquete": "arquitectura",
+   "ligero": true,
+   "3d": false,
+   "tokens": 636,
+   "descripcion": "Label the room around (x, y) with its name, number and MEASURED area."
+  },
+  {
+   "nombre": "arch_rooms_detect",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 625,
+   "descripcion": "Read the rooms of a plan - ours or a foreign one made of plain lines."
+  },
+  {
+   "nombre": "arch_schedule",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 530,
+   "descripcion": "Draw a door, window or room schedule as a real TABLE - a read of the drawing."
+  },
+  {
+   "nombre": "arch_stair",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 646,
+   "descripcion": "A stair in plan: every riser as a line, the outline, the walking line with its arrow."
+  },
+  {
+   "nombre": "arch_symbol",
+   "paquete": "arquitectura",
+   "ligero": false,
+   "3d": false,
+   "tokens": 564,
+   "descripcion": "Draw one architectural symbol on the arch symbol layer."
+  },
+  {
+   "nombre": "arch_wall",
+   "paquete": "arquitectura",
+   "ligero": true,
+   "3d": false,
+   "tokens": 607,
+   "descripcion": "Add walls to the plan network already on the drawing and resolve every junction."
+  },
+  {
+   "nombre": "balloon_add",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 513,
+   "descripcion": "One ISO 6433 item reference: a numbered balloon, a leader, and a dot on the item."
+  },
+  {
+   "nombre": "batch_plot",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 494,
+   "descripcion": "AutoCAD's PUBLISH for a PDF set, through `drawing_export_pdf(layout=…)`."
+  },
+  {
+   "nombre": "block_create_from_entities",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 385,
+   "descripcion": "Create a new block definition from existing entities in the drawing."
+  },
+  {
+   "nombre": "block_define",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 670,
+   "descripcion": "Create a block definition with attribute definitions from typed specs."
+  },
+  {
+   "nombre": "block_explode",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 514,
+   "descripcion": "Explode a block reference into its component entities, keeping its attribute text (the Express Tools BURST rule, on both engines)."
+  },
+  {
+   "nombre": "block_find_references",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 420,
+   "descripcion": "Find all insert references to a specific block definition."
+  },
+  {
+   "nombre": "block_get_attributes",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 214,
+   "descripcion": "Get all attribute values from a block reference as {TAG: value} dict."
+  },
+  {
+   "nombre": "block_insert",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 429,
+   "descripcion": "Insert a block and optionally set attribute values."
+  },
+  {
+   "nombre": "block_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 370,
+   "descripcion": "List all block definitions in the drawing (name, origin, attribute count, entity count)."
+  },
+  {
+   "nombre": "block_set_attributes",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 335,
+   "descripcion": "Update attribute values in a block reference."
+  },
+  {
+   "nombre": "bom_extract",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 533,
+   "descripcion": "Walk the INSERTs and return the ISO 7573 item rows."
+  },
+  {
+   "nombre": "bom_table",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 598,
+   "descripcion": "Draw the ISO 7573 item list as a real TABLE entity, 180 mm wide (the title-block width), growing upwards from directly above the title block."
+  },
+  {
+   "nombre": "boundary_from_entities",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 266,
+   "descripcion": "Chain the given entities into one closed polyline."
+  },
+  {
+   "nombre": "boundary_trace",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 351,
+   "descripcion": "AutoCAD's BOUNDARY/BPOLY: create a closed polyline around a seed point."
+  },
+  {
+   "nombre": "cable_takeoff",
+   "paquete": "planta",
+   "ligero": false,
+   "3d": false,
+   "tokens": 1021,
+   "descripcion": "A cable takeoff: one row per electrical load, the shop's cable method made repeatable."
+  },
+  {
+   "nombre": "cad_batch",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 1482,
+   "descripcion": "Execute an ordered list of tool calls in ONE round trip."
+  },
+  {
+   "nombre": "centre_marks",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 528,
+   "descripcion": "Centre marks on the CENTER layer, whose linetype carries ISO 128-23's dash pattern."
+  },
+  {
+   "nombre": "construction_clear",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 220,
+   "descripcion": "Delete every entity on the CONSTRUCTION layer."
+  },
+  {
+   "nombre": "construction_xline",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 279,
+   "descripcion": "Create an infinite construction line on the CONSTRUCTION layer."
+  },
+  {
+   "nombre": "data_extract",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 383,
+   "descripcion": "The same rows `bom_extract` returns, written to a file."
+  },
+  {
+   "nombre": "datum_feature",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 328,
+   "descripcion": "Place a datum feature symbol (filled triangle + boxed letter)."
+  },
+  {
+   "nombre": "dimension_aligned",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 305,
+   "descripcion": "Create an aligned dimension that measures the true distance between two points."
+  },
+  {
+   "nombre": "dimension_angular",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 347,
+   "descripcion": "Create an angular dimension measuring the angle between two lines from a vertex."
+  },
+  {
+   "nombre": "dimension_auto",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 328,
+   "descripcion": "Generate ISO 129 dimensions across the listed entities in the chosen style."
+  },
+  {
+   "nombre": "dimension_diameter",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 486,
+   "descripcion": "Create a diameter dimension for a circle, optionally toleranced (e.g. ⌀20 H7)."
+  },
+  {
+   "nombre": "dimension_linear",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 579,
+   "descripcion": "Create a linear dimension, optionally toleranced (ISO 129 or ISO 286 fit)."
+  },
+  {
+   "nombre": "dimension_radius",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 486,
+   "descripcion": "Create a radius dimension for a circle or arc, optionally toleranced."
+  },
+  {
+   "nombre": "dimstyle_create",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 609,
+   "descripcion": "Create a dimension style: preset values first, then `overrides`."
+  },
+  {
+   "nombre": "dimstyle_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 298,
+   "descripcion": "Every DIMSTYLE table entry with the seventeen preset variables (DIMTXT, DIMASZ, DIMEXE, DIMEXO, DIMGAP, DIMTAD, DIMTIH, DIMTOH, DIMDEC, DIMDSEP, DIMLUNIT, DI..."
+  },
+  {
+   "nombre": "dimstyle_modify",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 437,
+   "descripcion": "Change variables on an existing dimension style."
+  },
+  {
+   "nombre": "dimstyle_set_current",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 281,
+   "descripcion": "Set `$DIMSTYLE` and load the style's variables as the current DIM* settings — what a live seat's DIMSTYLE Restore does — so `dimension_*` and `dimension_auto..."
+  },
+  {
+   "nombre": "document_activate",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 296,
+   "descripcion": "Make one open document the active one."
+  },
+  {
+   "nombre": "document_close",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 404,
+   "descripcion": "Close a document and report `saved`, `discarded_changes` and the new `active`."
+  },
+  {
+   "nombre": "document_list",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 290,
+   "descripcion": "Every open document with `name`, `path`, `active`, `saved` and `entity_count`."
+  },
+  {
+   "nombre": "drawing_apply_iso_layers",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 285,
+   "descripcion": "Bootstrap a full ISO-conformant layer set with correct colors and lineweights."
+  },
+  {
+   "nombre": "drawing_apply_standard",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 463,
+   "descripcion": "One call for the common case: the standard's dimension style (created if missing, then current), its text style (created if missing, then current), the share..."
+  },
+  {
+   "nombre": "drawing_audit",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 241,
+   "descripcion": "Audit the drawing: repair every fixable structural problem, and report it."
+  },
+  {
+   "nombre": "drawing_close",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 262,
+   "descripcion": "Close the active document."
+  },
+  {
+   "nombre": "drawing_critique",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 638,
+   "descripcion": "Run premium-quality checks."
+  },
+  {
+   "nombre": "drawing_deliver",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 799,
+   "descripcion": "Create a hashed, validated delivery bundle and verify DXF save/reopen parity."
+  },
+  {
+   "nombre": "drawing_diff",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 901,
+   "descripcion": "Compare two revisions of one drawing by geometric signature (spec §10)."
+  },
+  {
+   "nombre": "drawing_export_dwg",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 373,
+   "descripcion": "Write a real DWG — not a DXF under a .dwg name."
+  },
+  {
+   "nombre": "drawing_export_dxf",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 245,
+   "descripcion": "Export the current drawing as a DXF copy."
+  },
+  {
+   "nombre": "drawing_export_pdf",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 228,
+   "descripcion": "Export the current drawing (or a paper-space layout) to PDF."
+  },
+  {
+   "nombre": "drawing_finalize",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 1117,
+   "descripcion": "Premium completion gate: runs BOTH the 8-step validator AND the premium critique focuses (iso128, layer_color, dim_overlap, untrimmed_corner, duplicate_entit..."
+  },
+  {
+   "nombre": "drawing_info",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 276,
+   "descripcion": "Get comprehensive metadata for the current drawing."
+  },
+  {
+   "nombre": "drawing_new",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 546,
+   "descripcion": "Create a new drawing, optionally from a template."
+  },
+  {
+   "nombre": "drawing_open",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 260,
+   "descripcion": "Open an existing DXF drawing file (DWG too, on the live COM backend)."
+  },
+  {
+   "nombre": "drawing_plan",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 708,
+   "descripcion": "Commit a PlanSpec before any geometry is created."
+  },
+  {
+   "nombre": "drawing_preflight",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 644,
+   "descripcion": "Validate and normalize requirements before committing a drawing plan."
+  },
+  {
+   "nombre": "drawing_properties_get",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 295,
+   "descripcion": "The DWGPROPS dialog as data: `summary` (title, subject, author, keywords, comments), `summary_available`, and `custom` ({key: value})."
+  },
+  {
+   "nombre": "drawing_properties_set",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 822,
+   "descripcion": "Write DWGPROPS fields."
+  },
+  {
+   "nombre": "drawing_purge",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 156,
+   "descripcion": "Purge all unused objects (layers, blocks, linetypes, styles) from the drawing."
+  },
+  {
+   "nombre": "drawing_redo",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 202,
+   "descripcion": "Reapply the operation you just undid."
+  },
+  {
+   "nombre": "drawing_refine",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 609,
+   "descripcion": "Run a bounded, transaction-safe critique/repair/re-critique loop."
+  },
+  {
+   "nombre": "drawing_save",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 177,
+   "descripcion": "Save the current drawing."
+  },
+  {
+   "nombre": "drawing_save_as",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 267,
+   "descripcion": "Save current drawing to a new path/format (DWG, DXF, or DWT template)."
+  },
+  {
+   "nombre": "drawing_scale_check",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 786,
+   "descripcion": "Is the drawing to scale against the reference - or a schematic whose lengths are lengths of drawn line, not of pipe? Read-only on both drawings."
+  },
+  {
+   "nombre": "drawing_settings",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 927,
+   "descripcion": "Read or change common AutoCAD drawing settings by friendly name."
+  },
+  {
+   "nombre": "drawing_template_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 300,
+   "descripcion": "The templates `drawing_new(template=<name>)` can start from."
+  },
+  {
+   "nombre": "drawing_template_save",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 445,
+   "descripcion": "AutoCAD's SAVEAS → Drawing Template, on both engines."
+  },
+  {
+   "nombre": "drawing_topology_check",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 654,
+   "descripcion": "Topology of a line network (spec §11): dangling ends, near misses (end to end and end to line within `gap`) and interior crossings (two lines of one layer cr..."
+  },
+  {
+   "nombre": "drawing_understand",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 774,
+   "descripcion": "One report on a drawing somebody else made, every claim with its evidence and a confidence."
+  },
+  {
+   "nombre": "drawing_undo",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 258,
+   "descripcion": "Undo the last drawing operation."
+  },
+  {
+   "nombre": "drawing_verify_requirements",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 1259,
+   "descripcion": "Measure source requirements on the CAD geometry and say, per requirement, pass / fail / unknown / unsupported / ambiguous - with the evidence."
+  },
+  {
+   "nombre": "entity_array_polar",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 508,
+   "descripcion": "Create a polar (circular) array of copies around a center point."
+  },
+  {
+   "nombre": "entity_array_rectangular",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 516,
+   "descripcion": "Create a rectangular array of copies."
+  },
+  {
+   "nombre": "entity_batch_create",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 337,
+   "descripcion": "Create multiple entities in a single call for better performance."
+  },
+  {
+   "nombre": "entity_batch_modify",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 307,
+   "descripcion": "Apply multiple modifications in a single call."
+  },
+  {
+   "nombre": "entity_chamfer",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 327,
+   "descripcion": "Bevel a corner with a chamfer line."
+  },
+  {
+   "nombre": "entity_change_space",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 420,
+   "descripcion": "AutoCAD's CHSPACE: move entities across spaces, rescaled by the viewport."
+  },
+  {
+   "nombre": "entity_copy",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 237,
+   "descripcion": "Copy an entity and move the copy by (dx, dy, dz)."
+  },
+  {
+   "nombre": "entity_create_arc",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 318,
+   "descripcion": "Create a circular arc."
+  },
+  {
+   "nombre": "entity_create_block_ref",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 394,
+   "descripcion": "Insert a block reference (instance of an existing block definition)."
+  },
+  {
+   "nombre": "entity_create_circle",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 255,
+   "descripcion": "Create a circle at (cx, cy) with given radius."
+  },
+  {
+   "nombre": "entity_create_ellipse",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 333,
+   "descripcion": "Create an ellipse."
+  },
+  {
+   "nombre": "entity_create_hatch",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 344,
+   "descripcion": "Create a hatch fill pattern inside a closed boundary polygon."
+  },
+  {
+   "nombre": "entity_create_line",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 364,
+   "descripcion": "Create a line from (x1,y1) to (x2,y2)."
+  },
+  {
+   "nombre": "entity_create_mtext",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 360,
+   "descripcion": "Create a multi-line text entity (MTEXT) with word-wrap at the specified width."
+  },
+  {
+   "nombre": "entity_create_point",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 231,
+   "descripcion": "Create a point marker entity at (x, y)."
+  },
+  {
+   "nombre": "entity_create_polyline",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 299,
+   "descripcion": "Create a lightweight 2D polyline through the given points."
+  },
+  {
+   "nombre": "entity_create_rectangle",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 298,
+   "descripcion": "Create a closed rectangular polyline between two corner points."
+  },
+  {
+   "nombre": "entity_create_revcloud",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 328,
+   "descripcion": "Draw a revision cloud: a polyline whose every segment carries an arc."
+  },
+  {
+   "nombre": "entity_create_spline",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 253,
+   "descripcion": "Create a NURBS spline curve passing through the specified fit points."
+  },
+  {
+   "nombre": "entity_create_table",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 410,
+   "descripcion": "Create a native COM table or an explicitly-labelled ezdxf composite table."
+  },
+  {
+   "nombre": "entity_create_text",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 305,
+   "descripcion": "Create a single-line text entity (DTEXT/TEXT)."
+  },
+  {
+   "nombre": "entity_create_wipeout",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 252,
+   "descripcion": "Create a WIPEOUT that hides drawing content behind its outline."
+  },
+  {
+   "nombre": "entity_delete",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 166,
+   "descripcion": "Permanently delete an entity by its handle."
+  },
+  {
+   "nombre": "entity_delete_many",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 199,
+   "descripcion": "Delete multiple entities in one call."
+  },
+  {
+   "nombre": "entity_edit_geometry",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 511,
+   "descripcion": "Edit the defining geometry of an existing entity in place (no delete/recreate)."
+  },
+  {
+   "nombre": "entity_edit_text",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 332,
+   "descripcion": "Edit an existing text label in place — change its content, height, or rotation."
+  },
+  {
+   "nombre": "entity_extend",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 323,
+   "descripcion": "Extend `target` to meet `boundary`."
+  },
+  {
+   "nombre": "entity_fillet",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 295,
+   "descripcion": "Round a corner with a tangent arc."
+  },
+  {
+   "nombre": "entity_get",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 397,
+   "descripcion": "Get all properties of a specific entity by its handle."
+  },
+  {
+   "nombre": "entity_get_xdata",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 217,
+   "descripcion": "Extended entity data as {app: [values]}."
+  },
+  {
+   "nombre": "entity_list",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 640,
+   "descripcion": "List entities in the drawing with optional type and layer filters."
+  },
+  {
+   "nombre": "entity_mirror",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 289,
+   "descripcion": "Mirror an entity across a line defined by two points."
+  },
+  {
+   "nombre": "entity_move",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 232,
+   "descripcion": "Move an entity by the specified displacement vector (dx, dy, dz)."
+  },
+  {
+   "nombre": "entity_offset",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 294,
+   "descripcion": "Create a parallel copy of a line, circle, or polyline at the given distance."
+  },
+  {
+   "nombre": "entity_rotate",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 246,
+   "descripcion": "Rotate an entity around a base point by the specified angle."
+  },
+  {
+   "nombre": "entity_scale",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 237,
+   "descripcion": "Scale an entity uniformly from a base point."
+  },
+  {
+   "nombre": "entity_select_smart",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 475,
+   "descripcion": "Select entities by semantic predicate instead of memorising handles."
+  },
+  {
+   "nombre": "entity_set_properties",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 392,
+   "descripcion": "Change one or more properties of an entity (layer, color, linetype, lineweight, visibility)."
+  },
+  {
+   "nombre": "entity_set_xdata",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 269,
+   "descripcion": "Replace the named app's XDATA on one entity."
+  },
+  {
+   "nombre": "entity_trim",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 319,
+   "descripcion": "Trim `target` against `cutter`, keeping the segment containing (keep_x, keep_y)."
+  },
+  {
+   "nombre": "gd_frame",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 540,
+   "descripcion": "Draw an ISO 1101 feature control frame from LINE + TEXT primitives."
+  },
+  {
+   "nombre": "gear_draw_helical_front_view",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 518,
+   "descripcion": "Deterministic helical gear front view: full involute outline (40 pts/flank), pitch/base/outer/root circles, helix symbol, optional bore + keyway."
+  },
+  {
+   "nombre": "gear_draw_section_aa",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 290,
+   "descripcion": "Deterministic side cross-section of a gear created by gear_draw_*_front_view."
+  },
+  {
+   "nombre": "gear_draw_spur_front_view",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 320,
+   "descripcion": "Deterministic spur gear front view (no helix symbol)."
+  },
+  {
+   "nombre": "hatch_add_boundary",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 394,
+   "descripcion": "Add one boundary path built from typed edges - an island inside the hatch."
+  },
+  {
+   "nombre": "hatch_edit",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 382,
+   "descripcion": "Edit an existing hatch in place."
+  },
+  {
+   "nombre": "hatch_material",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 708,
+   "descripcion": "Section-hatch a cut face with the pattern ISO 128-50 gives its material."
+  },
+  {
+   "nombre": "hatch_set_gradient",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 370,
+   "descripcion": "Fill a hatch with a gradient instead of a pattern."
+  },
+  {
+   "nombre": "image_attach",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 358,
+   "descripcion": "Attach a raster underlay at the file's own aspect ratio."
+  },
+  {
+   "nombre": "keyway_draw_keyed_bore",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 286,
+   "descripcion": "Bore + DIN 6885 keyway in front view."
+  },
+  {
+   "nombre": "keyway_draw_section",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 262,
+   "descripcion": "Side cross-section view of a keyed bore."
+  },
+  {
+   "nombre": "layer_create",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 251,
+   "descripcion": "Create a new layer with specified properties."
+  },
+  {
+   "nombre": "layer_delete",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 178,
+   "descripcion": "Delete a layer."
+  },
+  {
+   "nombre": "layer_freeze",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 162,
+   "descripcion": "Freeze a layer (makes it invisible and unselectable, faster regeneration)."
+  },
+  {
+   "nombre": "layer_hide",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 160,
+   "descripcion": "Turn off a layer (entities invisible but still processed in regeneration)."
+  },
+  {
+   "nombre": "layer_isolate",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 179,
+   "descripcion": "Hide all layers except the specified one (layer isolation)."
+  },
+  {
+   "nombre": "layer_list",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 374,
+   "descripcion": "List all layers with their properties (color, linetype, frozen, locked, visibility)."
+  },
+  {
+   "nombre": "layer_lock",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 160,
+   "descripcion": "Lock a layer (entities visible but cannot be selected or modified)."
+  },
+  {
+   "nombre": "layer_modify",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 270,
+   "descripcion": "Modify an existing layer's color, linetype, and/or lineweight."
+  },
+  {
+   "nombre": "layer_set_current",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 179,
+   "descripcion": "Set the active/current layer for new entities."
+  },
+  {
+   "nombre": "layer_show",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 150,
+   "descripcion": "Turn on a layer that was previously turned off."
+  },
+  {
+   "nombre": "layer_state_delete",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 202,
+   "descripcion": "Remove the named state's XRECORD."
+  },
+  {
+   "nombre": "layer_state_list",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 186,
+   "descripcion": "Every state under `ACADMCP_LAYERSTATES` with its description and layer count."
+  },
+  {
+   "nombre": "layer_state_restore",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 430,
+   "descripcion": "Apply a saved state to the layers that still exist."
+  },
+  {
+   "nombre": "layer_state_save",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 370,
+   "descripcion": "Snapshot every layer's on/frozen/locked/color/linetype/lineweight/plot flags plus the current layer as a named state stored in the drawing."
+  },
+  {
+   "nombre": "layer_thaw",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 152,
+   "descripcion": "Thaw a frozen layer, making it visible and selectable again."
+  },
+  {
+   "nombre": "layer_unlock",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 154,
+   "descripcion": "Unlock a layer to allow entity selection and modification."
+  },
+  {
+   "nombre": "layout_copy",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 275,
+   "descripcion": "Copy a paper-space layout: page setup, plot settings and all geometry."
+  },
+  {
+   "nombre": "layout_create",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 168,
+   "descripcion": "Create a new paper-space layout tab."
+  },
+  {
+   "nombre": "layout_delete",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 232,
+   "descripcion": "Delete a paper-space layout and every entity on it."
+  },
+  {
+   "nombre": "layout_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 152,
+   "descripcion": "List all layout tabs (Model + paper-space layouts) and the current one."
+  },
+  {
+   "nombre": "layout_rename",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 209,
+   "descripcion": "Rename a paper-space layout."
+  },
+  {
+   "nombre": "layout_set_current",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 170,
+   "descripcion": "Activate a layout tab."
+  },
+  {
+   "nombre": "leader_create_mleader",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 299,
+   "descripcion": "Create a native COM MLeader or an explicitly-labelled ezdxf composite."
+  },
+  {
+   "nombre": "linetype_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 182,
+   "descripcion": "Return the names of all linetypes currently loaded in the active drawing."
+  },
+  {
+   "nombre": "linetype_load",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 385,
+   "descripcion": "Load a single linetype safely."
+  },
+  {
+   "nombre": "mech_dimension_part",
+   "paquete": "mecanica",
+   "ligero": true,
+   "3d": false,
+   "tokens": 689,
+   "descripcion": "Every dimension the part and its features ask for, laid out without overlaps."
+  },
+  {
+   "nombre": "mech_hole_pattern",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 639,
+   "descripcion": "A hole pattern on any drawing - the part model is not required."
+  },
+  {
+   "nombre": "mech_part_draw",
+   "paquete": "mecanica",
+   "ligero": true,
+   "3d": false,
+   "tokens": 762,
+   "descripcion": "One part model - a turned profile or a plate outline plus typed features - drawn as views."
+  },
+  {
+   "nombre": "mech_part_from_spec",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 361,
+   "descripcion": "Several parts, their views and their dimensions, drawn inside one transaction."
+  },
+  {
+   "nombre": "mech_part_inspect",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 309,
+   "descripcion": "The `ACADMCP_MECH` payload a drawn part carries, decoded."
+  },
+  {
+   "nombre": "mech_view_add",
+   "paquete": "mecanica",
+   "ligero": true,
+   "3d": false,
+   "tokens": 681,
+   "descripcion": "Another view of a part already on the drawing, laid out on its projection axis."
+  },
+  {
+   "nombre": "mleaderstyle_create",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 424,
+   "descripcion": "Create a multileader style: preset values first, then `overrides`."
+  },
+  {
+   "nombre": "mleaderstyle_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 248,
+   "descripcion": "Every MLEADERSTYLE with its four values on both engines (`values_available: true`)."
+  },
+  {
+   "nombre": "page_setup_apply",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 659,
+   "descripcion": "AutoCAD's PAGESETUP as one call, on both engines."
+  },
+  {
+   "nombre": "page_setup_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 340,
+   "descripcion": "The page setup stored on each paper-space layout."
+  },
+  {
+   "nombre": "pid_equipment_list",
+   "paquete": "pid",
+   "ligero": false,
+   "3d": false,
+   "tokens": 392,
+   "descripcion": "Every equipment, valve and connector node with its ports and how many lines reach them."
+  },
+  {
+   "nombre": "pid_from_spec",
+   "paquete": "pid",
+   "ligero": false,
+   "3d": false,
+   "tokens": 751,
+   "descripcion": "Equipment, valves, instruments and connectors placed, then every line drawn port-to-port, inside one transaction: any bad item rolls the whole sheet back and..."
+  },
+  {
+   "nombre": "pid_graph",
+   "paquete": "pid",
+   "ligero": true,
+   "3d": false,
+   "tokens": 672,
+   "descripcion": "Connectivity of the drawing as it *is*, not as it was drawn."
+  },
+  {
+   "nombre": "pid_instrument_index",
+   "paquete": "pid",
+   "ligero": false,
+   "3d": false,
+   "tokens": 464,
+   "descripcion": "Every instrument bubble with its ISA-5.1 reading and what it connects to."
+  },
+  {
+   "nombre": "pid_line_draw",
+   "paquete": "pid",
+   "ligero": true,
+   "3d": false,
+   "tokens": 868,
+   "descripcion": "Connect two ports with one LWPOLYLINE on the class's layer."
+  },
+  {
+   "nombre": "pid_line_list",
+   "paquete": "pid",
+   "ligero": false,
+   "3d": false,
+   "tokens": 435,
+   "descripcion": "Every P&ID line with its number, class, size/service/spec/insulation and endpoints."
+  },
+  {
+   "nombre": "pid_symbol_insert",
+   "paquete": "pid",
+   "ligero": true,
+   "3d": false,
+   "tokens": 812,
+   "descripcion": "Insert a catalogue symbol as a real block with TAG attributes and named ports."
+  },
+  {
+   "nombre": "pid_symbol_list",
+   "paquete": "pid",
+   "ligero": false,
+   "3d": false,
+   "tokens": 270,
+   "descripcion": "The symbols `pid_symbol_insert` can place, with their ports and variant options."
+  },
+  {
+   "nombre": "pid_tag_parse",
+   "paquete": "pid",
+   "ligero": false,
+   "3d": false,
+   "tokens": 333,
+   "descripcion": "ISA-5.1-2009 Table 4.1 as a grammar: first letter, modifier, readout and output functions, trailing high/low, loop number and suffix — with the standard's de..."
+  },
+  {
+   "nombre": "pipe_takeoff",
+   "paquete": "planta",
+   "ligero": false,
+   "3d": false,
+   "tokens": 1325,
+   "descripcion": "A pipe takeoff: topology from the P&ID, lengths from the layout, rows by room x service x diameter."
+  },
+  {
+   "nombre": "plot_style_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 271,
+   "descripcion": "The ctb files AutoCAD ships (`monochrome.ctb`, `acad.ctb`, `Grayscale.ctb`, the Screening set, …) and, on the live engine, the files actually present in `Pre..."
+  },
+  {
+   "nombre": "point_from_snap",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 310,
+   "descripcion": "Compute a deterministic snap point on an entity."
+  },
+  {
+   "nombre": "point_intersection",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 452,
+   "descripcion": "Compute the intersection of two geometry entities (LINE-LINE, LINE-CIRCLE, CIRCLE-CIRCLE)."
+  },
+  {
+   "nombre": "point_tangent",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 310,
+   "descripcion": "Compute the tangent point on a circle from an external point."
+  },
+  {
+   "nombre": "revision_add",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 656,
+   "descripcion": "Append one row to the revision block, creating the block on first use."
+  },
+  {
+   "nombre": "section_line",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 579,
+   "descripcion": "Draw the cutting-plane line and hand back the plane a section view consumes."
+  },
+  {
+   "nombre": "selection_filter",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 361,
+   "descripcion": "AutoCAD's QSELECT: filter the drawing by properties."
+  },
+  {
+   "nombre": "selection_get",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 578,
+   "descripcion": "Read the entities the user pre-selected in the AutoCAD viewport (COM backend only)."
+  },
+  {
+   "nombre": "selection_polygon",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 282,
+   "descripcion": "Window or crossing selection against a polygon rather than a rectangle."
+  },
+  {
+   "nombre": "selection_window",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 367,
+   "descripcion": "AutoCAD's ssget window/crossing selection."
+  },
+  {
+   "nombre": "sheet_frame",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 554,
+   "descripcion": "ISO 5457 drawing frame for A4-A0: a 20 mm filing margin, 10 mm on the other three edges, the grid reference system and the centring/trimming marks."
+  },
+  {
+   "nombre": "solid_boolean",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": true,
+   "tokens": 262,
+   "descripcion": "Boolean-combine two native 3D solids (COM backend, opt-in)."
+  },
+  {
+   "nombre": "solid_box",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": true,
+   "tokens": 267,
+   "descripcion": "Create a native 3D solid box (COM backend, opt-in)."
+  },
+  {
+   "nombre": "solid_cylinder",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": true,
+   "tokens": 261,
+   "descripcion": "Create a native 3D solid cylinder (COM backend, opt-in)."
+  },
+  {
+   "nombre": "solid_extrude",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": true,
+   "tokens": 252,
+   "descripcion": "Extrude a closed profile into a native 3D solid (COM backend, opt-in)."
+  },
+  {
+   "nombre": "solid_revolve",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": true,
+   "tokens": 312,
+   "descripcion": "Revolve a closed profile around an axis into a native 3D solid (COM, opt-in)."
+  },
+  {
+   "nombre": "std_feature_draw",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 630,
+   "descripcion": "Add a standard feature to geometry that already exists - a foreign drawing being finished."
+  },
+  {
+   "nombre": "std_part_insert",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 583,
+   "descripcion": "Define the part's block once, insert it, and write its `std_part` XDATA."
+  },
+  {
+   "nombre": "std_part_list",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 524,
+   "descripcion": "Catalogue rows with the dimensions a drawing needs, and their provenance."
+  },
+  {
+   "nombre": "surface_texture",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 800,
+   "descripcion": "Draw the 60° surface-texture vee with its annotation in the standard positions."
+  },
+  {
+   "nombre": "system_about",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 158,
+   "descripcion": "Get detailed information about AutoCAD MCP Pro capabilities and available tools."
+  },
+  {
+   "nombre": "system_capabilities",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 156,
+   "descripcion": "Return machine-readable support modes for the active backend."
+  },
+  {
+   "nombre": "system_get_variable",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 182,
+   "descripcion": "Get an AutoCAD system variable value."
+  },
+  {
+   "nombre": "system_launch",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 302,
+   "descripcion": "Connect to the application named by `CAD_PROGID` (attach if running, launch otherwise) and report `launched`, `attached`, `version` and the active `document`."
+  },
+  {
+   "nombre": "system_preferences_get",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 360,
+   "descripcion": "The whitelisted `Preferences.*` values, enum values as names (`SaveAsType: \"ac2018_dwg\"`), with `read_only` naming the four `Files.*` paths."
+  },
+  {
+   "nombre": "system_preferences_set",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 308,
+   "descripcion": "Write one preference and report `old`, `new` and `changed`."
+  },
+  {
+   "nombre": "system_prompt_message",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 236,
+   "descripcion": "`Utility.Prompt`: tell the operator something where they are looking."
+  },
+  {
+   "nombre": "system_run_command",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 379,
+   "descripcion": "Execute an AutoCAD command string directly (COM backend only)."
+  },
+  {
+   "nombre": "system_run_lisp",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 266,
+   "descripcion": "Execute an AutoLISP expression (COM backend only)."
+  },
+  {
+   "nombre": "system_set_variable",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 330,
+   "descripcion": "Set an AutoCAD system variable (e.g. DIMSCALE, LTSCALE, MEASUREMENT)."
+  },
+  {
+   "nombre": "system_status",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 329,
+   "descripcion": "Get full status of the AutoCAD MCP Pro server and backend connection."
+  },
+  {
+   "nombre": "system_variable_describe",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 481,
+   "descripcion": "What an AutoCAD system variable means, from an authored catalogue of 90."
+  },
+  {
+   "nombre": "template_apply_layers",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 243,
+   "descripcion": "Apply a standard layer set from a predefined template."
+  },
+  {
+   "nombre": "template_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 154,
+   "descripcion": "List all available layer templates and their contents."
+  },
+  {
+   "nombre": "text_find_replace",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 784,
+   "descripcion": "Replace text in TEXT, MTEXT and block attributes (ATTRIB and ATTDEF)."
+  },
+  {
+   "nombre": "text_set_background",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 312,
+   "descripcion": "Mask what is behind an MTEXT so it stays readable over hatch or geometry."
+  },
+  {
+   "nombre": "textstyle_create",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 520,
+   "descripcion": "Create a text style."
+  },
+  {
+   "nombre": "textstyle_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 162,
+   "descripcion": "Every STYLE table entry and the one new TEXT/MTEXT will use."
+  },
+  {
+   "nombre": "textstyle_set_current",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 227,
+   "descripcion": "Set `$TEXTSTYLE`."
+  },
+  {
+   "nombre": "titleblock_apply",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 732,
+   "descripcion": "ISO 7200 title block, 180 mm wide, in the lower-right corner of any A4-A0 sheet."
+  },
+  {
+   "nombre": "titleblock_apply_iso_a3",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 472,
+   "descripcion": "ISO 7200 / A3 (420x297 mm) title block."
+  },
+  {
+   "nombre": "transaction_begin",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 223,
+   "descripcion": "Begin a transaction (undo mark)."
+  },
+  {
+   "nombre": "transaction_commit",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 183,
+   "descripcion": "Commit the current transaction."
+  },
+  {
+   "nombre": "transaction_rollback",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 233,
+   "descripcion": "Rollback the current transaction to the point of transaction_begin."
+  },
+  {
+   "nombre": "ucs_list",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 262,
+   "descripcion": "The `world` row first, then every UCS table entry with origin and unit axes, `current` on the active one."
+  },
+  {
+   "nombre": "ucs_restore",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 256,
+   "descripcion": "Live: `ActiveUCS` for a named entry."
+  },
+  {
+   "nombre": "ucs_set",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 389,
+   "descripcion": "Store a UCS table entry and make it current (AutoCAD's UCS command)."
+  },
+  {
+   "nombre": "user_pick_point",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 287,
+   "descripcion": "`Utility.GetPoint`: returns the WCS `x`, `y` (`z`) the operator clicks."
+  },
+  {
+   "nombre": "user_select",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 342,
+   "descripcion": "Returns `handles` the operator picked — one with `mode=\"single\"` (plus the `picked` point `[x, y]` in **WCS** — AutoCAD reports it in the current UCS and the..."
+  },
+  {
+   "nombre": "validation_check",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 239,
+   "descripcion": "Run quality checks on the current drawing."
+  },
+  {
+   "nombre": "view_named_list",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 154,
+   "descripcion": "Every VIEW table entry with centre, height and width."
+  },
+  {
+   "nombre": "view_named_restore",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 365,
+   "descripcion": "Live: zooms the active viewport to the saved window the way `-VIEW _R` does — VIEWCTR becomes the saved centre and VIEWSIZE the saved height (or width / disp..."
+  },
+  {
+   "nombre": "view_named_save",
+   "paquete": "configuracion",
+   "ligero": false,
+   "3d": false,
+   "tokens": 374,
+   "descripcion": "Store a VIEW table entry (AutoCAD's VIEW command)."
+  },
+  {
+   "nombre": "view_screenshot",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 332,
+   "descripcion": "Capture a screenshot of the current drawing view."
+  },
+  {
+   "nombre": "view_zoom_and_screenshot",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 293,
+   "descripcion": "Zoom to extents (or window if coordinates given), then capture a screenshot."
+  },
+  {
+   "nombre": "view_zoom_extents",
+   "paquete": "basico",
+   "ligero": true,
+   "3d": false,
+   "tokens": 150,
+   "descripcion": "Zoom to show all entities in the drawing (fit drawing in viewport)."
+  },
+  {
+   "nombre": "view_zoom_window",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 220,
+   "descripcion": "Zoom to display the specified rectangular window region."
+  },
+  {
+   "nombre": "viewport_create",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 414,
+   "descripcion": "Place a scaled model-space viewport on a paper-space layout."
+  },
+  {
+   "nombre": "viewport_delete",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 248,
+   "descripcion": "Delete a viewport."
+  },
+  {
+   "nombre": "viewport_list",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 265,
+   "descripcion": "List paper-space viewports: handle, geometry, scale and lock state."
+  },
+  {
+   "nombre": "viewport_lock",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 197,
+   "descripcion": "Lock or unlock a viewport's display scale."
+  },
+  {
+   "nombre": "viewport_set_scale",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 260,
+   "descripcion": "Rescale a viewport by adjusting its view height."
+  },
+  {
+   "nombre": "weld_symbol",
+   "paquete": "mecanica",
+   "ligero": false,
+   "3d": false,
+   "tokens": 782,
+   "descripcion": "Draw an ISO 2553 weld annotation: reference line, identification line, symbol, dimensions."
+  },
+  {
+   "nombre": "xref_attach",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 409,
+   "descripcion": "Attach an external reference and insert it once."
+  },
+  {
+   "nombre": "xref_manage",
+   "paquete": "basico",
+   "ligero": false,
+   "3d": false,
+   "tokens": 420,
+   "descripcion": "One operation on one external reference."
+  }
+ ]
+}
