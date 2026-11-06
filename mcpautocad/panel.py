@@ -37,7 +37,9 @@ def estado() -> dict:
         "config": cfg,
         "ruta_config": str(configuracion.ruta_config()),
         "estimacion": catalogo.estimar(cfg),
-        "maximo": catalogo.estimar({"modo": "completo", "paquetes": list(configuracion.PAQUETES), "3d": True}),
+        "maximo": catalogo.estimar({"modo": "completo", "paquetes": list(configuracion.PAQUETES), "3d": True,
+                                    "desactivadas": []}),
+        "apagadas_por_defecto": list(configuracion.APAGADAS_POR_DEFECTO),
         "presets": PRESETS,
         "siempre_activas": sorted(configuracion.SIEMPRE_ACTIVAS),
         "claude": {

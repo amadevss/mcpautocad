@@ -24,12 +24,14 @@ Cifras medidas (v1.7.0, tokens ≈ caracteres/4):
 
 | Configuración | Herramientas | Tokens |
 |---|---|---|
-| Completo, todos los paquetes | 243 | ~98.000 |
-| + 3D | 248 | ~99.300 |
-| Completo, solo Básico | 184 | ~67.600 |
+| Completo, todos los paquetes | 241 (243 en el original) | ~97.300 |
+| + 3D | 246 (248) | ~98.650 |
+| Completo, solo Básico | 182 (184) | ~67.000 |
 | Ligero, todos los paquetes | 66 | ~27.600 |
 | Ligero, solo Básico | 56 | ~20.400 |
 | Búsqueda | 3 | ~550 |
+
+Las cifras sin paréntesis descuentan `system_run_command` y `system_run_lisp`, que vienen apagadas por defecto.
 
 ### Pendiente de la fase 1
 
@@ -62,8 +64,7 @@ Cifras medidas (v1.7.0, tokens ≈ caracteres/4):
 
 URL que se pega en Claude como **conector personalizado**.
 
-- Decidir si `system_run_command` y `system_run_lisp` van apagadas por defecto en el servicio: la lista de
-  bloqueo del original no es una barrera de seguridad.
+- `system_run_command` y `system_run_lisp` apagadas por defecto también en el servicio (ya lo están en local).
 - Mismo servidor original con transporte HTTP (`--transport http`). Ojo: el original exige
   `ALLOW_REMOTE_HTTP` y `MCP_AUTH_TOKEN` para escuchar fuera de localhost; delante irá nuestra capa OAuth.
 - **OAuth 2.1** con inicio de sesión de Google (como en activecolabmcp): descubrimiento

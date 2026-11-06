@@ -20,11 +20,14 @@ def transporte():
     return StdioTransport(command=comando, args=args, env={**os.environ, "LOG_LEVEL": "ERROR"})
 
 
+TODAS = {"desactivadas": []}  # cifras del original tal cual, sin las apagadas por defecto
+
 CASOS = [
-    ({"modo": "completo", "paquetes": list(configuracion.PAQUETES)}, 243),
-    ({"modo": "completo", "paquetes": list(configuracion.PAQUETES), "3d": True}, 248),
-    ({"modo": "completo", "paquetes": []}, 184),
-    ({"modo": "completo", "paquetes": ["mecanica"]}, 198),
+    ({"modo": "completo", "paquetes": list(configuracion.PAQUETES), **TODAS}, 243),
+    ({"modo": "completo", "paquetes": list(configuracion.PAQUETES), "3d": True, **TODAS}, 248),
+    ({"modo": "completo", "paquetes": [], **TODAS}, 184),
+    ({"modo": "completo", "paquetes": ["mecanica"], **TODAS}, 198),
+    ({"modo": "completo"}, 241),  # por defecto: system_run_command y system_run_lisp apagadas
     ({"modo": "ligero", "paquetes": list(configuracion.PAQUETES)}, 66),
     ({"modo": "ligero", "paquetes": []}, 56),
     ({"modo": "busqueda", "paquetes": list(configuracion.PAQUETES)}, 3),

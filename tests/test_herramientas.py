@@ -22,12 +22,15 @@ def test_desactivadas_se_normalizan():
 def test_desactivadas_desde_la_extension():
     env = {"MCPAUTOCAD_DESACTIVADAS": "pid_graph, arch_stair"}
     assert configuracion.desde_entorno(env)["desactivadas"] == ["arch_stair", "pid_graph"]
+    por_defecto = ["system_run_command", "system_run_lisp"]
     sin_sustituir = {"MCPAUTOCAD_DESACTIVADAS": "${user_config.desactivadas}"}
-    assert configuracion.desde_entorno(sin_sustituir)["desactivadas"] == []
+    assert configuracion.desde_entorno(sin_sustituir)["desactivadas"] == por_defecto
+    assert configuracion.desde_entorno({})["desactivadas"] == por_defecto
+    assert configuracion.desde_entorno({"MCPAUTOCAD_DESACTIVADAS": ""})["desactivadas"] == []
 
 
 def test_estimacion_descuenta_las_apagadas():
-    base = {"modo": "completo"}
+    base = {"modo": "completo", "desactivadas": []}
     sin = catalogo.estimar(base)
     con = catalogo.estimar({**base, "desactivadas": ["pid_graph", "arch_stair"]})
     tokens = {h["nombre"]: h["tokens"] for h in catalogo.cargar()["herramientas"]}

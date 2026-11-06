@@ -43,6 +43,11 @@ ORIGEN_MCPB = "mcpb"
 #: "Probar conexión" y Claude para saber el estado de AutoCAD).
 SIEMPRE_ACTIVAS = frozenset({"system_status"})
 
+#: Apagadas por defecto: ejecutan comandos y LISP de AutoCAD. El original bloquea
+#: una lista de los peligrosos, pero avisa de que no es una barrera de seguridad.
+#: El usuario puede encenderlas en el panel (no están en el modo Ligero).
+APAGADAS_POR_DEFECTO = ("system_run_command", "system_run_lisp")
+
 _NOMBRE_HERRAMIENTA = re.compile(r"^[a-z][a-z0-9_]{0,80}$")
 
 POR_DEFECTO: dict = {
@@ -50,7 +55,7 @@ POR_DEFECTO: dict = {
     "paquetes": list(PAQUETES),
     "3d": False,
     "motor": "com",
-    "desactivadas": [],
+    "desactivadas": list(APAGADAS_POR_DEFECTO),
 }
 
 
@@ -87,7 +92,8 @@ def normalizar(datos: dict | None) -> dict:
     cfg["motor"] = motor if motor in MOTORES else POR_DEFECTO["motor"]
 
     # Herramientas apagadas una por una: nombres válidos, sin repetir, ordenados.
-    desactivadas = datos.get("desactivadas", [])
+    # Sin la clave (configuración nueva o de una versión anterior): las de por defecto.
+    desactivadas = datos.get("desactivadas", list(APAGADAS_POR_DEFECTO))
     if isinstance(desactivadas, str):
         desactivadas = desactivadas.split(",")
     if not isinstance(desactivadas, list):
@@ -152,8 +158,10 @@ def desde_entorno(entorno: dict[str, str] | None = None) -> dict:
         "paquetes": [p for p in PAQUETES if _si(entorno.get(f"MCPAUTOCAD_{p.upper()}"), True)],
         "3d": _si(entorno.get("MCPAUTOCAD_3D"), False),
         "motor": entorno.get("MCPAUTOCAD_MOTOR") or POR_DEFECTO["motor"],
-        "desactivadas": "" if entorno.get("MCPAUTOCAD_DESACTIVADAS", "").startswith("${")
-        else entorno.get("MCPAUTOCAD_DESACTIVADAS", ""),
+        # Sin la variable (o sin sustituir): las de por defecto. Vacía a propósito: ninguna.
+        "desactivadas": list(APAGADAS_POR_DEFECTO)
+        if entorno.get("MCPAUTOCAD_DESACTIVADAS") is None or entorno["MCPAUTOCAD_DESACTIVADAS"].startswith("${")
+        else entorno["MCPAUTOCAD_DESACTIVADAS"],
     })
 
 

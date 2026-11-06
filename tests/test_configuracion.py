@@ -14,7 +14,7 @@ def test_guardar_y_cargar():
     configuracion.guardar(cfg)
     leido = configuracion.cargar()
     assert leido == {"modo": "busqueda", "paquetes": ["mecanica", "pid"], "3d": True, "motor": "com",
-                     "desactivadas": []}
+                     "desactivadas": ["system_run_command", "system_run_lisp"]}
     assert json.loads(configuracion.ruta_config().read_text(encoding="utf-8")) == leido
 
 
@@ -23,7 +23,16 @@ def test_valores_invalidos_se_corrigen():
     ruta.parent.mkdir(parents=True)
     ruta.write_text(json.dumps({"modo": "turbo", "paquetes": ["inventado", "pid"], "3d": "si", "motor": "x"}))
     assert configuracion.cargar() == {"modo": "ligero", "paquetes": ["pid"], "3d": False, "motor": "com",
-                                      "desactivadas": []}
+                                      "desactivadas": ["system_run_command", "system_run_lisp"]}
+
+
+def test_comandos_y_lisp_apagados_por_defecto():
+    assert configuracion.cargar()["desactivadas"] == ["system_run_command", "system_run_lisp"]
+    # Una configuración de antes (sin la clave) también las recibe apagadas.
+    assert configuracion.normalizar({"modo": "completo"})["desactivadas"] == ["system_run_command", "system_run_lisp"]
+    # Pero si el usuario las enciende (lista vacía), se respeta.
+    configuracion.guardar({"desactivadas": []})
+    assert configuracion.cargar()["desactivadas"] == []
 
 
 def test_json_roto_no_rompe_nada():

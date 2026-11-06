@@ -139,8 +139,10 @@
       <div class="herr-barra">
         <input type="search" id="buscar" placeholder="Buscar por nombre o descripción…" aria-label="Buscar herramientas">
         <label><input type="checkbox" id="solo-incluidas" checked> Solo las de este modo</label>
-        <button id="btn-todas">Volver a activar todas</button>
+        <button id="btn-todas">Valores por defecto</button>
       </div>
+      <p class="nota" style="margin:0 0 10px">Por seguridad, <code>system_run_command</code> y <code>system_run_lisp</code>
+        (ejecutan comandos y LISP de AutoCAD) vienen apagadas. Enciéndelas solo si las necesitas.</p>
       <b id="resumen-herr"></b>
       <div id="lista-herr"></div>
     </details>
@@ -240,7 +242,7 @@ function pintarLista() {
 
 function resumenLista() {
   const n = cfg.desactivadas.length;
-  $("resumen-herr").textContent = n ? `${n} herramienta${n === 1 ? "" : "s"} apagada${n === 1 ? "" : "s"} a mano.` : "Ninguna herramienta apagada a mano.";
+  $("resumen-herr").textContent = n ? `${n} herramienta${n === 1 ? "" : "s"} apagada${n === 1 ? "" : "s"}.` : "Ninguna herramienta apagada.";
 }
 
 function aplicar() {
@@ -262,6 +264,7 @@ function leer() {
 }
 
 let maximo = 1;
+let porDefecto = [];
 async function actualizar(recargarLista = true) {
   if (recargarLista) cargarLista();
   const e = await api("/api/estimar", {config: cfg});
@@ -289,7 +292,7 @@ function pintarClaude(c) {
 async function iniciar() {
   pintarPaquetes();
   const e = await api("/api/estado");
-  cfg = e.config; maximo = e.maximo.tokens;
+  cfg = e.config; maximo = e.maximo.tokens; porDefecto = e.apagadas_por_defecto;
   $("version").textContent = e.version; $("version-original").textContent = e.version_original;
   $("ruta-config").textContent = e.ruta_config;
   $("presets").innerHTML = "<b style='align-self:center'>Atajos:</b>" + Object.entries(e.presets)
@@ -346,7 +349,7 @@ $("btn-probar").addEventListener("click", probarAutocad);
 $("det-herr").addEventListener("toggle", cargarLista);
 $("buscar").addEventListener("input", pintarLista);
 $("solo-incluidas").addEventListener("change", pintarLista);
-$("btn-todas").addEventListener("click", () => { cfg.desactivadas = []; actualizar(); });
+$("btn-todas").addEventListener("click", () => { cfg.desactivadas = [...porDefecto]; actualizar(); });
 iniciar().catch((err) => aviso("No se pudo cargar el panel: " + err.message, "error"));
 </script>
 </body>

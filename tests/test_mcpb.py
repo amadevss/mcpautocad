@@ -85,8 +85,9 @@ def test_la_extension_manda_sobre_config_json(monkeypatch):
     ({}, 66),
     ({"modo": "busqueda"}, 3),
     ({"modo": "completo", "mecanica": False, "arquitectura": False, "pid": False,
-      "planta": False, "configuracion": False}, 184),
-    ({"modo": "completo", "tres_d": True}, 248),
+      "planta": False, "configuracion": False}, 182),  # 184 menos las 2 apagadas por defecto
+    ({"modo": "completo", "tres_d": True}, 246),
+    ({"modo": "completo", "desactivadas": ""}, 243),  # el usuario borra el campo: todas
 ])
 def test_servidor_con_la_config_de_la_extension(valores, esperadas):
     async def listar():

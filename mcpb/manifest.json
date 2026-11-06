@@ -5,7 +5,7 @@
   "display_name": "AutoCAD",
   "version": "0.0.0",
   "description": "Dibuja en tu AutoCAD desde Claude: planos 2D, cotas, capas, mecánica, arquitectura, P&ID y 3D.",
-  "long_description": "Conecta Claude Desktop con el AutoCAD abierto en tu PC (Windows, AutoCAD completo, no LT).\n\nEn la configuración de la extensión eliges qué herramientas ve Claude para gastar menos tokens:\n\n- **Modo**: `ligero` (66 herramientas, ~27.600 tokens, recomendado), `completo` (243, ~98.000) o `busqueda` (3, ~550; Claude busca las demás cuando las necesita).\n- **Paquetes**: Mecánica, Arquitectura, P&ID, Planta, Configuración y 3D.\n\nDespués de cambiar la configuración, desactiva y vuelve a activar la extensión (o reinicia Claude Desktop).\n\nBasado en [AutoCAD MCP Pro](https://github.com/U-C4N/Autocad-MCP) de Umutcan Edizsalan (licencia MIT). El modo sin restricciones del original queda siempre apagado: los comandos y LISP peligrosos están bloqueados. Si no necesitas ejecutar comandos o LISP, apaga system_run_command y system_run_lisp en «Herramientas apagadas».",
+  "long_description": "Conecta Claude Desktop con el AutoCAD abierto en tu PC (Windows, AutoCAD completo, no LT).\n\nEn la configuración de la extensión eliges qué herramientas ve Claude para gastar menos tokens:\n\n- **Modo**: `ligero` (66 herramientas, ~27.600 tokens, recomendado), `completo` (241, ~97.300) o `busqueda` (3, ~550; Claude busca las demás cuando las necesita).\n- **Paquetes**: Mecánica, Arquitectura, P&ID, Planta, Configuración y 3D.\n\nDespués de cambiar la configuración, desactiva y vuelve a activar la extensión (o reinicia Claude Desktop).\n\nBasado en [AutoCAD MCP Pro](https://github.com/U-C4N/Autocad-MCP) de Umutcan Edizsalan (licencia MIT). El modo sin restricciones del original queda siempre apagado: los comandos y LISP peligrosos están bloqueados. Por seguridad, system_run_command y system_run_lisp vienen apagadas; puedes encenderlas en «Herramientas apagadas».",
   "author": {
     "name": "amadevss",
     "url": "https://github.com/amadevss"
@@ -59,7 +59,7 @@
     "modo": {
       "type": "string",
       "title": "Modo: ligero, completo o busqueda",
-      "description": "ligero = 66 herramientas (~27.600 tokens, recomendado). completo = todas (~98.000 tokens). busqueda = Claude ve 3 herramientas (~550 tokens) y busca las demás.",
+      "description": "ligero = 66 herramientas (~27.600 tokens, recomendado). completo = 241 herramientas (~97.300 tokens). busqueda = Claude ve 3 herramientas (~550 tokens) y busca las demás.",
       "default": "ligero",
       "required": false
     },
@@ -108,8 +108,8 @@
     "desactivadas": {
       "type": "string",
       "title": "Herramientas apagadas (avanzado)",
-      "description": "Nombres de herramientas que Claude no verá, separados por comas. Ejemplo: pid_graph, arch_stair. Déjalo vacío para no apagar ninguna.",
-      "default": "",
+      "description": "Nombres de herramientas que Claude no verá, separados por comas. Por seguridad vienen apagadas system_run_command y system_run_lisp (ejecutan comandos y LISP de AutoCAD); bórralas de aquí si las necesitas.",
+      "default": "system_run_command, system_run_lisp",
       "required": false
     }
   }

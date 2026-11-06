@@ -54,12 +54,14 @@ significa conversaciones más largas y más baratas.
 
 | Modo | Herramientas que ve Claude | Tokens aprox. |
 |---|---|---|
-| Completo | 243 (248 con 3D) | ~98.000 |
+| Completo | 241 (246 con 3D) | ~97.300 |
 | **Ligero** (recomendado) | 66 | ~27.600 |
 | Búsqueda | 3 (con ellas busca y usa las demás) | ~550 |
 
+El original tiene 243 herramientas (248 con 3D). Por seguridad, dos vienen apagadas; ver *Seguridad* más abajo.
+
 **Paquetes** (interruptores): Básico (siempre activo), Mecánica, Arquitectura, P&ID, Planta, Configuración y 3D.
-En el modo Completo, Básico ya trae 184 herramientas, así que apagar paquetes ahorra menos que cambiar de modo.
+En el modo Completo, Básico ya trae 182 herramientas, así que apagar paquetes ahorra menos que cambiar de modo.
 El panel muestra en vivo cuántas herramientas y tokens supone tu elección.
 
 **Atajos:** *Solo 2D*, *Arquitectura*, *Mecánica* y *Todo*.
@@ -82,10 +84,11 @@ Al pulsar **Guardar**, **reinicia Claude Desktop** (Salir desde la bandeja y vol
 > `scripts/medir_tokens.py`.
 
 **Seguridad:** el modo sin restricciones del original queda siempre apagado (`DANGEROUS_COMMANDS_ENABLED=false`).
-Las herramientas `system_run_command` y `system_run_lisp` (solo en los modos Completo y Búsqueda) siguen pudiendo
-ejecutar comandos y LISP de AutoCAD, pero bloquean una lista de los peligrosos (por ejemplo `ERASE`, `PURGE`,
-`SAVE`, `QUIT`, y en LISP `startapp`, `command` o borrar archivos). Según el propio original, esa lista protege de accidentes pero no es una barrera de seguridad.
-Si no las necesitas, apágalas en la sección 3 del panel.
+Además, `system_run_command` y `system_run_lisp`, que ejecutan comandos y LISP de AutoCAD, vienen **apagadas por
+defecto**. El original bloquea una lista de comandos peligrosos (por ejemplo `ERASE`, `PURGE`, `SAVE`, `QUIT`, y en
+LISP `startapp`, `command` o borrar archivos), pero él mismo avisa de que esa lista protege de accidentes y no es una
+barrera de seguridad. Si las necesitas, enciéndelas en la sección 3 del panel. El botón *Valores por defecto* las
+vuelve a apagar. El modo Ligero no las incluye.
 
 ### Configurar la extensión .mcpb
 
@@ -154,6 +157,7 @@ instalador/mcpautocad.iss instalador de Inno Setup
 | 3D | `ENABLE_3D=true/false` |
 | Motor | `AUTOCAD_MCP_BACKEND=com` (por defecto; `"motor": "ezdxf"` en config.json para trabajar sin AutoCAD) |
 | Siempre | `DANGEROUS_COMMANDS_ENABLED=false` |
+| Por defecto | `"desactivadas": ["system_run_command", "system_run_lisp"]` en config.json (se quitan al arrancar) |
 
 Con la extensión .mcpb, la configuración llega en variables `MCPAUTOCAD_MODO`, `MCPAUTOCAD_MECANICA`,
 `MCPAUTOCAD_ARQUITECTURA`, `MCPAUTOCAD_PID`, `MCPAUTOCAD_PLANTA`, `MCPAUTOCAD_CONFIGURACION` y `MCPAUTOCAD_3D`
