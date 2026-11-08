@@ -1,0 +1,116 @@
+{
+  "$schema": "https://raw.githubusercontent.com/modelcontextprotocol/mcpb/main/dist/mcpb-manifest-v0.3.schema.json",
+  "manifest_version": "0.3",
+  "name": "mcpautocad",
+  "display_name": "AutoCAD",
+  "version": "0.0.0",
+  "description": "Dibuja en tu AutoCAD desde Claude: planos 2D, cotas, capas, mecánica, arquitectura, P&ID y 3D.",
+  "long_description": "Conecta Claude Desktop con el AutoCAD abierto en tu PC (Windows, AutoCAD completo, no LT).\n\nEn la configuración de la extensión eliges qué herramientas ve Claude para gastar menos tokens:\n\n- **Modo**: `ligero` (66 herramientas, ~27.600 tokens, recomendado), `completo` (241, ~97.300) o `busqueda` (3, ~550; Claude busca las demás cuando las necesita).\n- **Paquetes**: Mecánica, Arquitectura, P&ID, Planta, Configuración y 3D.\n\nDespués de cambiar la configuración, desactiva y vuelve a activar la extensión (o reinicia Claude Desktop).\n\nBasado en [AutoCAD MCP Pro](https://github.com/U-C4N/Autocad-MCP) de Umutcan Edizsalan (licencia MIT). El modo sin restricciones del original queda siempre apagado: los comandos y LISP peligrosos están bloqueados. Por seguridad, system_run_command y system_run_lisp vienen apagadas; puedes encenderlas en «Herramientas apagadas».",
+  "author": {
+    "name": "amadevss",
+    "url": "https://github.com/amadevss"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amadevss/mcpautocad"
+  },
+  "homepage": "https://github.com/amadevss/mcpautocad",
+  "documentation": "https://github.com/amadevss/mcpautocad#readme",
+  "support": "https://github.com/amadevss/mcpautocad/issues",
+  "icon": "icon.png",
+  "license": "MIT",
+  "keywords": [
+    "autocad",
+    "cad",
+    "dibujo",
+    "planos",
+    "dxf",
+    "arquitectura",
+    "mecanica"
+  ],
+  "server": {
+    "type": "binary",
+    "entry_point": "server/mcpautocad.exe",
+    "mcp_config": {
+      "command": "${__dirname}/server/mcpautocad.exe",
+      "args": [
+        "servidor"
+      ],
+      "env": {
+        "MCPAUTOCAD_ORIGEN": "mcpb",
+        "MCPAUTOCAD_MODO": "${user_config.modo}",
+        "MCPAUTOCAD_MECANICA": "${user_config.mecanica}",
+        "MCPAUTOCAD_ARQUITECTURA": "${user_config.arquitectura}",
+        "MCPAUTOCAD_PID": "${user_config.pid}",
+        "MCPAUTOCAD_PLANTA": "${user_config.planta}",
+        "MCPAUTOCAD_CONFIGURACION": "${user_config.configuracion}",
+        "MCPAUTOCAD_3D": "${user_config.tres_d}",
+        "MCPAUTOCAD_DESACTIVADAS": "${user_config.desactivadas}"
+      }
+    }
+  },
+  "tools_generated": true,
+  "compatibility": {
+    "platforms": [
+      "win32"
+    ]
+  },
+  "user_config": {
+    "modo": {
+      "type": "string",
+      "title": "Modo: ligero, completo o busqueda",
+      "description": "ligero = 66 herramientas (~27.600 tokens, recomendado). completo = 241 herramientas (~97.300 tokens). busqueda = Claude ve 3 herramientas (~550 tokens) y busca las demás.",
+      "default": "ligero",
+      "required": false
+    },
+    "mecanica": {
+      "type": "boolean",
+      "title": "Paquete Mecánica",
+      "description": "Piezas y vistas mecánicas, patrones de agujeros, piezas normalizadas, soldadura y acabados.",
+      "default": true,
+      "required": false
+    },
+    "arquitectura": {
+      "type": "boolean",
+      "title": "Paquete Arquitectura",
+      "description": "Muros, vanos, escaleras, ejes, habitaciones y plantas completas.",
+      "default": true,
+      "required": false
+    },
+    "pid": {
+      "type": "boolean",
+      "title": "Paquete P&ID",
+      "description": "Símbolos, líneas e índices de diagramas de tuberías e instrumentación.",
+      "default": true,
+      "required": false
+    },
+    "planta": {
+      "type": "boolean",
+      "title": "Paquete Planta",
+      "description": "Metrados de tuberías y cables.",
+      "default": true,
+      "required": false
+    },
+    "configuracion": {
+      "type": "boolean",
+      "title": "Paquete Configuración",
+      "description": "Varios dibujos abiertos, estados de capas, SCP, vistas guardadas, variables de AutoCAD y elegir puntos u objetos en pantalla.",
+      "default": true,
+      "required": false
+    },
+    "tres_d": {
+      "type": "boolean",
+      "title": "Herramientas 3D",
+      "description": "Sólidos 3D (cajas, cilindros, extrusiones). Solo en modo completo o busqueda.",
+      "default": false,
+      "required": false
+    },
+    "desactivadas": {
+      "type": "string",
+      "title": "Herramientas apagadas (avanzado)",
+      "description": "Nombres de herramientas que Claude no verá, separados por comas. Por seguridad vienen apagadas system_run_command y system_run_lisp (ejecutan comandos y LISP de AutoCAD); bórralas de aquí si las necesitas.",
+      "default": "system_run_command, system_run_lisp",
+      "required": false
+    }
+  }
+}
