@@ -2,9 +2,9 @@
   Construye MCP AutoCAD para Windows.
 
   Resultado en la carpeta "salida":
-    - Instalar-MCP-AutoCAD-<version>.exe   instalador (si Inno Setup está instalado)
-    - MCP-AutoCAD-portatil-<version>.zip  carpeta lista para usar, sin instalar
-    - MCP-AutoCAD-<version>.mcpb          extensión de Claude Desktop (si Node.js está instalado)
+    - Instalar-MCP-AutoCAD.exe   instalador (si Inno Setup está instalado)
+    - MCP-AutoCAD-portatil.zip  carpeta lista para usar, sin instalar
+    - MCP-AutoCAD.mcpb          extensión de Claude Desktop (si Node.js está instalado)
 
   Uso:  powershell -ExecutionPolicy Bypass -File construir.ps1 [-Version 0.1.0]
   Requisitos: Python 3.11+ en el PATH. Opcionales: Inno Setup 6 (choco install innosetup)
@@ -36,7 +36,8 @@ if ($LASTEXITCODE -ne 0) { throw "El ejecutable no arranca" }
 
 Write-Host "4/5 Creando instalador y portátil..."
 New-Item -ItemType Directory -Force salida | Out-Null
-$zip = "salida\MCP-AutoCAD-portatil-$Version.zip"
+# Nombres fijos (sin versión) para que el enlace «última versión» del README no cambie.
+$zip = "salida\MCP-AutoCAD-portatil.zip"
 if (Test-Path $zip) { Remove-Item $zip }
 Compress-Archive -Path dist\mcpautocad\* -DestinationPath $zip
 

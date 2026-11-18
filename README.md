@@ -1,154 +1,213 @@
-# MCP AutoCAD para Claude
+<div align="center">
 
-Conecta **Claude Desktop** con tu **AutoCAD** en Windows. Le pides a Claude "dibuja una planta de 8 × 6 m con
-dos habitaciones" y él dibuja en tu AutoCAD.
+<img src="docs/img/banner.svg" alt="MCP AutoCAD: pídele a Claude que dibuje en tu AutoCAD" width="100%">
 
-Incluye un **panel** sencillo para elegir qué herramientas ve Claude y así gastar menos tokens.
+[![Última versión](https://img.shields.io/github/v/release/amadevss/mcpautocad?label=versi%C3%B3n&color=c8102e)](https://github.com/amadevss/mcpautocad/releases/latest)
+[![Construcción](https://github.com/amadevss/mcpautocad/actions/workflows/construir-exe.yml/badge.svg)](https://github.com/amadevss/mcpautocad/actions/workflows/construir-exe.yml)
+[![Descargas](https://img.shields.io/github/downloads/amadevss/mcpautocad/total?label=descargas&color=2d333b)](https://github.com/amadevss/mcpautocad/releases)
+[![Licencia MIT](https://img.shields.io/badge/licencia-MIT-2d333b)](LICENSE)
 
-> Se basa en el proyecto de código abierto **[AutoCAD MCP Pro](https://github.com/U-C4N/Autocad-MCP)**
-> (paquete `autocad-mcp-pro` 1.7.0), creado por **Umutcan Edizsalan**, con licencia MIT.
-> Todo el trabajo de dibujo es suyo; este proyecto lo empaqueta, lo configura y lo instala en español.
+<a href="https://github.com/amadevss/mcpautocad/releases/latest/download/Instalar-MCP-AutoCAD.exe"><img src="docs/img/boton-instalador.svg" alt="Descargar instalador para Windows" width="260"></a>
+<a href="https://github.com/amadevss/mcpautocad/releases/latest/download/MCP-AutoCAD.mcpb"><img src="docs/img/boton-extension.svg" alt="Descargar extensión .mcpb para Claude Desktop" width="260"></a>
+<a href="https://github.com/amadevss/mcpautocad/releases/latest/download/MCP-AutoCAD-portatil.zip"><img src="docs/img/boton-portatil.svg" alt="Descargar versión portátil .zip" width="260"></a>
 
----
+**[Instalar](#-instalar-en-3-pasos)** · **[El panel](#-el-panel-elige-qué-ve-claude)** · **[Problemas frecuentes](#-problemas-frecuentes)** · **[Todas las versiones](https://github.com/amadevss/mcpautocad/releases)**
 
-## 1. Instalar
+</div>
 
-**Necesitas:** Windows 10/11 (64 bits), AutoCAD (no LT) y [Claude Desktop](https://claude.ai/download).
-No necesitas instalar Python: va incluido.
+> [!NOTE]
+> **Primera versión, en pruebas.** El servidor, el panel y el instalador pasan 72 pruebas automáticas en Windows,
+> pero sin AutoCAD instalado. Si algo falla con tu AutoCAD, [abre un aviso](https://github.com/amadevss/mcpautocad/issues)
+> y adjunta el archivo `%APPDATA%\Claude\logs\mcp-server-autocad.log`.
 
-1. Cierra Claude Desktop por completo: clic derecho en su icono de la bandeja del sistema (junto al reloj) → *Salir*.
-2. Descarga `Instalar-MCP-AutoCAD-x.y.z.exe` desde la página de
-   [Releases](https://github.com/amadevss/mcpautocad/releases) (o desde GitHub Actions, ver más abajo).
-3. Ábrelo. Si Windows muestra "Windows protegió su PC", pulsa **Más información → Ejecutar de todas formas**.
-   El aviso sale porque el programa todavía no está firmado digitalmente.
-4. Sigue el asistente. No pide permisos de administrador. Al terminar:
-   - MCP AutoCAD queda **conectado con Claude Desktop** automáticamente.
-   - Se abre el **panel** en tu navegador.
-5. Abre AutoCAD y después abre Claude Desktop.
+## ✨ Qué hace
 
-**Como extensión de Claude Desktop (.mcpb):** descarga `MCP-AutoCAD-x.y.z.mcpb` y haz doble clic (o arrástralo a
-Claude Desktop → Configuración → Extensiones) y pulsa **Instalar**. La configuración se elige en el propio
-formulario de la extensión (ver abajo). No hace falta el instalador.
+Le pides a Claude con tus palabras lo que quieres dibujar y él lo dibuja en el AutoCAD abierto en tu PC: planos 2D,
+cotas, capas, bloques, piezas mecánicas, plantas de arquitectura, diagramas P&ID y sólidos 3D.
 
-> Usa **una sola** de las dos formas (instalador o extensión). Si usas las dos, Claude verá las herramientas
-> repetidas.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/como-funciona-oscuro.svg">
+  <img src="docs/img/como-funciona-claro.svg" alt="1. Le pides a Claude. 2. MCP AutoCAD traduce la petición en órdenes de AutoCAD. 3. AutoCAD dibuja en tu dibujo abierto." width="100%">
+</picture>
 
-**Sin instalar (portátil):** descomprime `MCP-AutoCAD-portatil-x.y.z.zip` en una carpeta fija (por ejemplo
-`C:\MCP-AutoCAD`), haz doble clic en `mcpautocad.exe` y pulsa **Conectar con Claude Desktop** en el panel.
+### Un ejemplo real
 
-## 2. Comprobar que funciona
+<img src="docs/img/ejemplo-plano.png" alt="Planta de 9 × 6,5 m con sala, cocina y dormitorio, con muros, puertas, ventanas, cotas y áreas" width="760">
 
-1. En Claude Desktop, abre una conversación nueva.
-2. Pulsa el botón de herramientas (el icono de controles, debajo del cuadro de texto): debe aparecer **autocad**.
-3. Escribe: *"Dime el estado de AutoCAD"* y luego *"Dibuja un rectángulo de 100 × 50 y un círculo de radio 20 en su centro"*.
+<sub>Planta dibujada con una sola herramienta del servidor (<code>arch_plan_from_spec</code>): muros con sus uniones,
+puertas, ventanas, cadenas de cotas y las áreas de cada habitación, que el servidor mide de los muros. Se generó sin
+AutoCAD, con el motor ezdxf, usando <a href="scripts/ilustraciones/plano_ejemplo.py">este script</a>.</sub>
 
-## 3. El panel: elegir herramientas y ahorrar tokens
+## 🚀 Instalar en 3 pasos
 
-Ábrelo desde **Inicio → Panel MCP AutoCAD** (o haciendo doble clic en `mcpautocad.exe`).
-Se abre en `http://localhost:8765`, solo en tu equipo.
+**Necesitas:** Windows 10/11 (64 bits), AutoCAD completo (**no LT**) y [Claude Desktop](https://claude.ai/download).
+No hace falta instalar Python: va incluido.
 
-Cada herramienta que Claude ve ocupa espacio (tokens) en **cada** conversación. Menos herramientas
-significa conversaciones más largas y más baratas.
+### 1️⃣ Descarga el instalador
 
-**Modo** (es lo que más cambia el consumo):
+<a href="https://github.com/amadevss/mcpautocad/releases/latest/download/Instalar-MCP-AutoCAD.exe"><img src="docs/img/boton-instalador.svg" alt="Descargar instalador para Windows" width="260"></a>
 
-| Modo | Herramientas que ve Claude | Tokens aprox. |
-|---|---|---|
-| Completo | 241 (246 con 3D) | ~97.300 |
-| **Ligero** (recomendado) | 66 | ~27.600 |
-| Búsqueda | 3 (con ellas busca y usa las demás) | ~550 |
+Antes de abrirlo, cierra Claude Desktop **por completo**: clic derecho en su icono junto al reloj → *Salir*.
 
-El original tiene 243 herramientas (248 con 3D). Por seguridad, dos vienen apagadas; ver *Seguridad* más abajo.
+### 2️⃣ Instálalo
 
-**Paquetes** (interruptores): Básico (siempre activo), Mecánica, Arquitectura, P&ID, Planta, Configuración y 3D.
-En el modo Completo, Básico ya trae 182 herramientas, así que apagar paquetes ahorra menos que cambiar de modo.
-El panel muestra en vivo cuántas herramientas y tokens supone tu elección.
+Ábrelo y sigue el asistente. No pide permisos de administrador.
 
-**Atajos:** *Solo 2D*, *Arquitectura*, *Mecánica* y *Todo*.
+> [!WARNING]
+> Si Windows muestra **«Windows protegió su PC»**, pulsa **Más información → Ejecutar de todas formas**.
+> Sale porque el programa todavía no está firmado digitalmente.
 
-**Herramientas una por una (opcional):** abre la sección 3 del panel para apagar herramientas concretas.
-Puedes buscarlas por nombre o descripción y cada una muestra cuántos tokens cuesta. Las que no trae el modo o
-los paquetes elegidos aparecen en gris. Una herramienta apagada no la ve Claude ni puede usarla (tampoco en el
-modo Búsqueda). `system_status` siempre queda activa.
+Al terminar, MCP AutoCAD queda **conectado con Claude Desktop** y se abre el **panel** en tu navegador. Debe
+mostrar el punto verde:
 
-**Versión nueva:** al abrirse, el panel consulta en GitHub si hay una versión más reciente y, si la hay, muestra
-un aviso con el enlace de descarga. Solo lee la página pública de Releases y no envía datos tuyos.
+<img src="docs/img/panel-claro.png" alt="Panel con el mensaje «Conectado con Claude Desktop» en verde" width="560">
 
-**Probar conexión con AutoCAD:** el botón de arriba arranca el servidor igual que Claude y le pide el estado:
-versión de AutoCAD y dibujo activo. Si AutoCAD está cerrado, la prueba lo abre, igual que hace Claude en su
-primera petición. Desde la línea de comandos: `mcpautocad.exe probar`.
+### 3️⃣ Pruébalo
 
-Al pulsar **Guardar**, **reinicia Claude Desktop** (Salir desde la bandeja y volver a abrir) para aplicar los cambios.
+1. Abre **AutoCAD** con un dibujo y después **Claude Desktop**.
+2. En una conversación nueva, el botón de herramientas (debajo del cuadro de texto) debe mostrar **autocad**.
+3. Escribe:
+   - *«Dime el estado de AutoCAD»*
+   - *«Dibuja un rectángulo de 100 × 50 y un círculo de radio 20 en su centro»*
 
-> Las cifras de tokens son aproximadas (caracteres ÷ 4) y se midieron sobre el servidor real con
-> `scripts/medir_tokens.py`.
+> [!TIP]
+> En el panel, el botón **Probar conexión con AutoCAD** te dice si AutoCAD responde, su versión y el dibujo activo.
 
-**Seguridad:** el modo sin restricciones del original queda siempre apagado (`DANGEROUS_COMMANDS_ENABLED=false`).
-Además, `system_run_command` y `system_run_lisp`, que ejecutan comandos y LISP de AutoCAD, vienen **apagadas por
-defecto**. El original bloquea una lista de comandos peligrosos (por ejemplo `ERASE`, `PURGE`, `SAVE`, `QUIT`, y en
-LISP `startapp`, `command` o borrar archivos), pero él mismo avisa de que esa lista protege de accidentes y no es una
-barrera de seguridad. Si las necesitas, enciéndelas en la sección 3 del panel. El botón *Valores por defecto* las
-vuelve a apagar. El modo Ligero no las incluye.
+<details>
+<summary><b>Otras formas de instalarlo: extensión .mcpb o versión portátil</b></summary>
 
-### Configurar la extensión .mcpb
+**Extensión de Claude Desktop (.mcpb):** descarga
+[`MCP-AutoCAD.mcpb`](https://github.com/amadevss/mcpautocad/releases/latest/download/MCP-AutoCAD.mcpb), haz doble clic
+(o arrástralo a Claude Desktop → Configuración → Extensiones) y pulsa **Instalar**. Se configura en el formulario
+de la extensión:
 
-En Claude Desktop → Configuración → Extensiones → **AutoCAD** → *Configurar*:
+- **Modo**: escribe `ligero`, `completo` o `busqueda` (si escribes otra cosa se usa `ligero`). El formulario de
+  extensiones no admite listas desplegables, por eso el modo se escribe.
+- **Paquetes y 3D**: casillas de sí o no.
+- **Herramientas apagadas (avanzado)**: nombres separados por comas. Vienen `system_run_command, system_run_lisp`
+  (ver [Seguridad](#-seguridad)).
 
-- **Modo**: escribe `ligero`, `completo` o `busqueda` (si escribes otra cosa se usa `ligero`).
-- **Paquetes y 3D**: casillas de sí/no.
-- **Herramientas apagadas (avanzado)**: nombres separados por comas, por ejemplo `pid_graph, arch_stair`.
-  Los nombres están en la sección 3 del panel.
+Después de cambiarla, desactiva y vuelve a activar la extensión.
 
-Después de cambiarla, desactiva y vuelve a activar la extensión. El formulario de extensiones de Claude no
-admite listas desplegables, por eso el modo se escribe.
+**Portátil, sin instalar:** descarga
+[`MCP-AutoCAD-portatil.zip`](https://github.com/amadevss/mcpautocad/releases/latest/download/MCP-AutoCAD-portatil.zip),
+descomprímelo en una carpeta fija (por ejemplo `C:\MCP-AutoCAD`), haz doble clic en `mcpautocad.exe` y pulsa
+**Conectar con Claude Desktop**.
 
-## 4. Desinstalar
+> [!IMPORTANT]
+> Usa **una sola** de las tres formas. Con dos a la vez, Claude verá las herramientas repetidas.
 
-*Configuración de Windows → Aplicaciones → MCP AutoCAD → Desinstalar*. También se quita de Claude Desktop
-sin tocar tus otros servidores MCP. La extensión .mcpb se quita desde Claude Desktop → Configuración → Extensiones.
+</details>
 
-## 5. Problemas frecuentes
+## 🎛️ El panel: elige qué ve Claude
+
+Cada herramienta que Claude ve ocupa espacio (tokens) en **cada** conversación. Con menos herramientas, las
+conversaciones duran más y gastan menos. Ábrelo desde **Inicio → Panel MCP AutoCAD**; funciona solo en tu equipo
+(`http://localhost:8765`).
+
+<img src="docs/img/panel-demo.gif" alt="Animación: al cambiar de modo y de atajo, el contador de tokens del panel cambia al instante" width="100%">
+
+### Modo: lo que más cambia el consumo
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/tokens-oscuro.svg">
+  <img src="docs/img/tokens-claro.svg" alt="Tokens por modo: Completo unos 97.300, Ligero unos 27.600, Búsqueda unos 550" width="100%">
+</picture>
+
+| Modo | Para qué | Herramientas | Tokens aprox. |
+|---|---|---|---|
+| **Ligero** ✅ | El día a día: dibujo 2D, cotas, capas, bloques, revisión. **Recomendado.** | 66 | ~27.600 |
+| **Búsqueda** | Gastar lo mínimo: Claude busca la herramienta que necesita cuando la necesita. | 3 (llega a 241) | ~550 |
+| **Completo** | Todas a la vista, a cambio de más tokens. | 241 (246 con 3D) | ~97.300 |
+
+### Paquetes y atajos
+
+Interruptores para **Básico** (siempre activo), **Mecánica**, **Arquitectura**, **P&ID**, **Planta**,
+**Configuración** y **3D**, más los atajos *Solo 2D*, *Arquitectura*, *Mecánica* y *Todo*. El contador de abajo
+muestra en vivo cuántas herramientas y tokens supone tu elección.
+
+### Herramientas una por una
+
+En la sección 3 puedes apagar herramientas concretas. Puedes buscarlas en español (con o sin tildes) o en inglés,
+y cada una muestra lo que cuesta. Una herramienta apagada no la ve Claude ni puede usarla.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/panel-herramientas-oscuro.png">
+  <img src="docs/img/panel-herramientas-claro.png" alt="Sección «Herramientas una por una» buscando «capa», con la descripción en español y los tokens de cada herramienta" width="640">
+</picture>
+
+> [!IMPORTANT]
+> Al pulsar **Guardar**, **reinicia Claude Desktop** (*Salir* desde la bandeja y volver a abrir) para aplicar los cambios.
+
+El panel también te avisa cuando hay una **versión nueva** en GitHub. Para eso solo lee la página pública de
+versiones, sin enviar datos tuyos.
+
+## 🔒 Seguridad
+
+- El modo sin restricciones del original queda **siempre apagado** (`DANGEROUS_COMMANDS_ENABLED=false`).
+- `system_run_command` y `system_run_lisp`, que ejecutan comandos y LISP de AutoCAD, vienen **apagadas por
+  defecto**. El original bloquea una lista de comandos peligrosos (por ejemplo `ERASE`, `PURGE`, `SAVE`, `QUIT`, y en
+  LISP `startapp`, `command` o borrar archivos), pero él mismo avisa de que esa lista protege de accidentes y no es
+  una barrera de seguridad. Si las necesitas, enciéndelas en el panel; **Valores por defecto** las vuelve a apagar.
+- El panel solo escucha en tu equipo y rechaza peticiones de otras páginas web.
+- Antes de tocar la configuración de Claude Desktop se guarda una copia (`.bak`), y tus otros servidores MCP no se tocan.
+
+## 🩺 Problemas frecuentes
 
 | Problema | Solución |
 |---|---|
-| No aparece "autocad" en Claude | Sal de Claude Desktop desde la bandeja (no basta con cerrar la ventana) y vuelve a abrirlo. En el panel, revisa que diga "Conectado". |
-| Claude dice que no encuentra AutoCAD | Pulsa **Probar conexión con AutoCAD** en el panel. Si AutoCAD está cerrado, el servidor intenta abrirlo; es más rápido si ya está abierto con un dibujo. AutoCAD LT no sirve (no tiene la interfaz COM). |
-| Claude Desktop de Microsoft Store | Se detecta solo. Si no funciona, pulsa **Conectar con Claude Desktop** en el panel. |
-| Las herramientas 3D no aparecen | Activa 3D y usa el modo Completo o Búsqueda (el modo Ligero no las incluye). |
-| Ver qué pasa por dentro | Abre el registro `%APPDATA%\Claude\logs\mcp-server-autocad.log` (o Claude Desktop → Configuración → Desarrollador). |
+| No aparece **autocad** en Claude | Sal de Claude Desktop desde la bandeja (no basta con cerrar la ventana) y vuelve a abrirlo. En el panel debe decir **Conectado**. |
+| Claude no encuentra AutoCAD | Pulsa **Probar conexión con AutoCAD**. Si AutoCAD está cerrado, el servidor intenta abrirlo (puede tardar). AutoCAD **LT no sirve**: no tiene la interfaz COM. |
+| Uso Claude Desktop de Microsoft Store | Se detecta solo. Si no, pulsa **Conectar con Claude Desktop** en el panel. |
+| No aparecen las herramientas 3D | Activa **3D** y usa el modo Completo o Búsqueda: Ligero no las incluye. |
+| Quiero ver qué pasa por dentro | Abre `%APPDATA%\Claude\logs\mcp-server-autocad.log`. |
 
-Archivos que usa el programa:
+**Desinstalar:** *Configuración de Windows → Aplicaciones → MCP AutoCAD → Desinstalar* (también se quita de Claude
+Desktop). La extensión se quita desde Claude Desktop → Configuración → Extensiones.
 
-- Configuración del panel: `%APPDATA%\mcpautocad\config.json`
-- Claude Desktop: `%APPDATA%\Claude\claude_desktop_config.json` (antes de cambiarlo se guarda una copia `.bak`).
+**Archivos que usa:** la configuración del panel está en `%APPDATA%\mcpautocad\config.json`, y la de Claude
+Desktop en `%APPDATA%\Claude\claude_desktop_config.json`.
+
+## 🙏 Créditos
+
+Todo el trabajo de dibujo es de **[AutoCAD MCP Pro](https://github.com/U-C4N/Autocad-MCP)** (paquete
+`autocad-mcp-pro` 1.7.0), creado por **Umutcan Edizsalan** con licencia MIT. Este proyecto lo empaqueta, lo
+configura y lo instala en español, sin copiar su código.
 
 ---
 
-## Para desarrolladores
+## 🛠️ Para desarrolladores
 
-### Estructura
+<details>
+<summary><b>Estructura del proyecto</b></summary>
 
 ```
 mcpautocad/
-  iniciar.py        lee config.json, pone las variables y arranca el servidor original por stdio
-  configuracion.py  leer/guardar config.json y traducirlo a variables de entorno
-  panel.py          panel local (http.server de la biblioteca estándar) + panel.html
-  registrar.py      agrega/quita la entrada "autocad" en claude_desktop_config.json
-  catalogo.py       estimación de herramientas y tokens (datos en catalogo.json)
-  probar.py         "Probar conexión": arranca el servidor y llama a system_status
+  iniciar.py          lee config.json, pone las variables y arranca el servidor original por stdio
+  configuracion.py    leer/guardar config.json y traducirlo a variables de entorno
+  panel.py            panel local (http.server de la biblioteca estándar) + panel.html
+  registrar.py        agrega/quita la entrada "autocad" en claude_desktop_config.json
+  catalogo.py         estimación de herramientas y tokens (datos en catalogo.json)
+  probar.py           "Probar conexión": arranca el servidor y llama a system_status
   actualizaciones.py  aviso de versión nueva (último Release de GitHub)
-  traducciones.json descripciones cortas en español para el panel
-  __main__.py       mcpautocad [panel|servidor|registrar|quitar|probar]
-scripts/medir_tokens.py   regenera catalogo.json midiendo el servidor real
-scripts/generar_icono.py  genera los iconos (instalador/, mcpautocad/icono.png y mcpb/icon.png)
-scripts/empaquetar_mcpb.py crea la extensión .mcpb (usa @anthropic-ai/mcpb)
-mcpb/manifest.json        manifiesto de la extensión (la versión se pone al empaquetar)
-mcpautocad.spec           receta de PyInstaller
-construir.ps1             construye el .exe y el instalador en Windows
-instalador/mcpautocad.iss instalador de Inno Setup
+  traducciones.json   descripciones cortas en español para el panel
+  __main__.py         mcpautocad [panel|servidor|registrar|quitar|probar]
+scripts/
+  medir_tokens.py     regenera catalogo.json midiendo el servidor real
+  generar_icono.py    genera los iconos (instalador/, mcpautocad/icono.png y mcpb/icon.png)
+  empaquetar_mcpb.py  crea la extensión .mcpb (usa @anthropic-ai/mcpb)
+  ilustraciones/      genera las imágenes de este README (ver abajo)
+mcpb/manifest.json    manifiesto de la extensión (la versión se pone al empaquetar)
+mcpautocad.spec       receta de PyInstaller
+construir.ps1         construye el .exe, el instalador, el .zip y el .mcpb en Windows
+instalador/           instalador de Inno Setup e iconos
+docs/                 plan del proyecto, notas de los Releases e imágenes
 ```
 
-### Variables que se pasan al servidor original
+</details>
+
+<details>
+<summary><b>Variables que se pasan al servidor original</b></summary>
 
 | Panel | Variable |
 |---|---|
@@ -160,12 +219,14 @@ instalador/mcpautocad.iss instalador de Inno Setup
 | Por defecto | `"desactivadas": ["system_run_command", "system_run_lisp"]` en config.json (se quitan al arrancar) |
 
 Con la extensión .mcpb, la configuración llega en variables `MCPAUTOCAD_MODO`, `MCPAUTOCAD_MECANICA`,
-`MCPAUTOCAD_ARQUITECTURA`, `MCPAUTOCAD_PID`, `MCPAUTOCAD_PLANTA`, `MCPAUTOCAD_CONFIGURACION` y `MCPAUTOCAD_3D`
-(con `MCPAUTOCAD_ORIGEN=mcpb`) y sustituye a `config.json`.
+`MCPAUTOCAD_ARQUITECTURA`, `MCPAUTOCAD_PID`, `MCPAUTOCAD_PLANTA`, `MCPAUTOCAD_CONFIGURACION`, `MCPAUTOCAD_3D` y
+`MCPAUTOCAD_DESACTIVADAS` (con `MCPAUTOCAD_ORIGEN=mcpb`) y sustituye a `config.json`.
 
-### Probar en cualquier sistema (sin AutoCAD)
+</details>
 
-Los tests usan el motor **ezdxf**, que no necesita AutoCAD:
+### Probar sin AutoCAD
+
+Los tests usan el motor **ezdxf**, que funciona en cualquier sistema:
 
 ```bash
 python -m pip install -e ".[dev]"
@@ -175,44 +236,55 @@ python -m pip install -e ".[dev]"
 python -m pytest -q
 ```
 
-Comprueban la configuración, las variables de entorno, el registro en un `claude_desktop_config.json` de
-prueba, el panel, y arrancan el servidor real para contar sus herramientas en cada modo y dibujar una línea.
-
 Abrir el panel en desarrollo:
 
 ```bash
 python -m mcpautocad panel
 ```
 
-Al actualizar `autocad-mcp-pro`, cambia `VERSION_ORIGINAL` en `mcpautocad/__init__.py` y la dependencia en
-`pyproject.toml`, regenera el catálogo y traduce en `mcpautocad/traducciones.json` las herramientas nuevas (un
-test te dirá cuáles faltan):
+Al actualizar `autocad-mcp-pro`:
+1. Cambia `VERSION_ORIGINAL` en `mcpautocad/__init__.py` y la dependencia en `pyproject.toml`.
+2. Regenera el catálogo:
 
 ```bash
 python scripts/medir_tokens.py
 ```
 
-### Construir el .exe
+3. Traduce en `mcpautocad/traducciones.json` las herramientas nuevas; un test te dirá cuáles faltan.
+
+### Imágenes del README
+
+```bash
+python scripts/ilustraciones/generar_svg.py
+```
+
+```bash
+python scripts/ilustraciones/plano_ejemplo.py docs/img/ejemplo-plano.png
+```
+
+```bash
+node scripts/ilustraciones/capturas_panel.js python
+```
+
+El primero genera el banner, el diagrama, la gráfica de tokens (con las cifras del catálogo real) y los botones;
+el segundo dibuja la planta de ejemplo con el servidor; el tercero abre el panel de verdad y saca las capturas y el
+GIF (necesita Node.js con Playwright y ffmpeg).
+
+### Construir y publicar
 
 En Windows con Python 3.11+ ([Inno Setup 6](https://jrsoftware.org/isinfo.php) para el instalador y Node.js
-para la extensión .mcpb):
+para la extensión):
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File construir.ps1
 ```
 
-Deja el instalador, el `.zip` portátil y la extensión `.mcpb` en la carpeta `salida`.
+Deja en `salida/` los tres archivos con nombre fijo: `Instalar-MCP-AutoCAD.exe`, `MCP-AutoCAD-portatil.zip` y
+`MCP-AutoCAD.mcpb`. Los nombres no llevan la versión para que los botones de este README apunten siempre a la última.
 
-### GitHub Actions
-
-El workflow `.github/workflows/construir-exe.yml` se ejecuta en cada push:
-
-1. Pruebas en Linux.
-2. En `windows-latest`: construye, vuelve a pasar las pruebas contra el `.exe` empaquetado y sube el resultado
-   como artefacto **MCP-AutoCAD-…**.
-   Para descargarlo: pestaña **Actions** → la ejecución → sección **Artifacts** (hace falta haber iniciado sesión en GitHub).
-3. Si haces push de una etiqueta `v*` (por ejemplo `v0.1.0`), adjunta los archivos a un **Release** público.
-   La etiqueta debe coincidir con la versión de `pyproject.toml` y `mcpautocad/__init__.py`; si no, el workflow falla:
+GitHub Actions (`.github/workflows/construir-exe.yml`) prueba en Linux y en Windows en cada push y sube los archivos
+como artefacto. Al subir una etiqueta `v*` crea el **Release** con los tres archivos y las notas de
+`docs/NOTAS_RELEASE.md`. La etiqueta debe coincidir con la versión de `pyproject.toml` y `mcpautocad/__init__.py`:
 
 ```bash
 git tag v0.1.0
@@ -222,7 +294,7 @@ git tag v0.1.0
 git push origin v0.1.0
 ```
 
-## Licencia
+## 📄 Licencia
 
 MIT. Ver [LICENSE](LICENSE), que incluye el aviso de licencia de
 [AutoCAD MCP Pro](https://github.com/U-C4N/Autocad-MCP) © 2026 Umutcan Edizsalan.
