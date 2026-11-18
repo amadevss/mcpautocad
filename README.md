@@ -283,8 +283,15 @@ Deja en `salida/` los tres archivos con nombre fijo: `Instalar-MCP-AutoCAD.exe`,
 `MCP-AutoCAD.mcpb`. Los nombres no llevan la versión para que los botones de este README apunten siempre a la última.
 
 GitHub Actions (`.github/workflows/construir-exe.yml`) prueba en Linux y en Windows en cada push y sube los archivos
-como artefacto. Al subir una etiqueta `v*` crea el **Release** con los tres archivos y las notas de
-`docs/NOTAS_RELEASE.md`. La etiqueta debe coincidir con la versión de `pyproject.toml` y `mcpautocad/__init__.py`:
+como artefacto.
+
+**Publicar una versión nueva, sin usar git:**
+1. Sube el número en `pyproject.toml` y `mcpautocad/__init__.py` (por ejemplo a `0.1.1`) y fusiónalo en `main`.
+2. Ve a **Actions → Construir .exe → Run workflow**, elige la rama `main`, marca **Publicar** y pulsa **Run workflow**.
+3. En unos 6 minutos aparece el **Release** `v0.1.1` con los tres archivos y las notas de `docs/NOTAS_RELEASE.md`,
+   y los botones de descarga de este README pasan a esa versión.
+
+También se publica al subir una etiqueta `v*`, que debe coincidir con la versión del código:
 
 ```bash
 git tag v0.1.0

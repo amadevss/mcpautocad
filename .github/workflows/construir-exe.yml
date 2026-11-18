@@ -6,9 +6,14 @@ on:
     tags: ["v*"]
   pull_request:
   workflow_dispatch:
+    inputs:
+      publicar:
+        description: "Publicar como versión nueva (crea la etiqueta v<versión del código> y el Release)"
+        type: boolean
+        default: false
 
 permissions:
-  contents: write   # para adjuntar los archivos al Release en las etiquetas v*
+  contents: write   # para crear la etiqueta y el Release y adjuntar los archivos
 
 jobs:
   pruebas-linux:
@@ -40,7 +45,9 @@ jobs:
         id: version
         shell: pwsh
         run: |
+          $codigo = (Select-String -Path mcpautocad/__init__.py -Pattern '^__version__ = "(.+)"').Matches[0].Groups[1].Value
           if ("${{ github.ref_type }}" -eq "tag") { $v = "${{ github.ref_name }}".TrimStart("v") }
+          elseif ("${{ inputs.publicar }}" -eq "true") { $v = $codigo }  # botón «Publicar versión»
           else {
             $base = (Select-String -Path pyproject.toml -Pattern '^version = "(.+)"').Matches[0].Groups[1].Value
             $v = "$base-dev.${{ github.run_number }}"
@@ -82,10 +89,15 @@ jobs:
           path: salida/*
           if-no-files-found: error
 
-      - name: Adjuntar al Release
-        if: github.ref_type == 'tag'
+      # Se publica al subir una etiqueta v*, o desde Actions → Construir .exe → Run workflow
+      # marcando «Publicar». En ese caso GitHub crea la etiqueta v<versión del código>.
+      - name: Publicar el Release
+        if: github.ref_type == 'tag' || inputs.publicar
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ steps.version.outputs.valor }}
+          target_commitish: ${{ github.sha }}
+          make_latest: true
           files: salida/*
           name: MCP AutoCAD ${{ steps.version.outputs.valor }}
           body_path: docs/NOTAS_RELEASE.md
