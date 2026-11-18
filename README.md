@@ -57,8 +57,8 @@ Antes de abrirlo, cierra Claude Desktop **por completo**: clic derecho en su ico
 > Si Windows muestra **«Windows protegió su PC»**, pulsa **Más información → Ejecutar de todas formas**.
 > Sale porque el programa todavía no está firmado digitalmente.
 
-Al terminar, MCP AutoCAD queda **conectado con Claude Desktop** y se abre el **panel** en tu navegador. Debe
-mostrar el punto verde:
+Al terminar, MCP AutoCAD queda **conectado con Claude Desktop** y se abre el **panel** en su propia ventana
+(también desde **Inicio → MCP AutoCAD** o el acceso directo del escritorio). Debe mostrar el punto verde:
 
 <img src="docs/img/panel-claro.png" alt="Panel con el mensaje «Conectado con Claude Desktop» en verde" width="560">
 
@@ -91,7 +91,7 @@ Después de cambiarla, desactiva y vuelve a activar la extensión.
 
 **Portátil, sin instalar:** descarga
 [`MCP-AutoCAD-portatil.zip`](https://github.com/amadevss/mcpautocad/releases/latest/download/MCP-AutoCAD-portatil.zip),
-descomprímelo en una carpeta fija (por ejemplo `C:\MCP-AutoCAD`), haz doble clic en `mcpautocad.exe` y pulsa
+descomprímelo en una carpeta fija (por ejemplo `C:\MCP-AutoCAD`), haz doble clic en `MCP AutoCAD.exe` y pulsa
 **Conectar con Claude Desktop**.
 
 > [!IMPORTANT]
@@ -102,8 +102,9 @@ descomprímelo en una carpeta fija (por ejemplo `C:\MCP-AutoCAD`), haz doble cli
 ## 🎛️ El panel: elige qué ve Claude
 
 Cada herramienta que Claude ve ocupa espacio (tokens) en **cada** conversación. Con menos herramientas, las
-conversaciones duran más y gastan menos. Ábrelo desde **Inicio → Panel MCP AutoCAD**; funciona solo en tu equipo
-(`http://localhost:8765`).
+conversaciones duran más y gastan menos. Ábrelo desde **Inicio → MCP AutoCAD**: se abre en su propia ventana
+(usa Microsoft Edge, que viene con Windows, sin barra de direcciones) y funciona solo en tu equipo. Al cerrar la
+ventana, el panel se cierra.
 
 <img src="docs/img/panel-demo.gif" alt="Animación: al cambiar de modo y de atajo, el contador de tokens del panel cambia al instante" width="100%">
 
@@ -154,9 +155,15 @@ versiones, sin enviar datos tuyos.
 
 ## 🩺 Problemas frecuentes
 
+> [!TIP]
+> **Empieza por el botón «Diagnóstico» del panel.** Revisa dónde guarda Claude Desktop su configuración, si MCP
+> AutoCAD está registrado, si Claude intentó arrancarlo (y con qué error) y si el servidor responde, y te dice en
+> una frase qué hacer. Con **Copiar informe** puedes mandarlo a soporte. También funciona desde una consola:
+> `mcpautocad.exe diagnostico`.
+
 | Problema | Solución |
 |---|---|
-| No aparece **autocad** en Claude | Sal de Claude Desktop desde la bandeja (no basta con cerrar la ventana) y vuelve a abrirlo. En el panel debe decir **Conectado**. |
+| No aparece **autocad** en Claude | Pulsa **Diagnóstico**. Lo más habitual: Claude Desktop no se reinició del todo (sal desde la bandeja, no basta con cerrar la ventana), o estás en la web o en otra pestaña en lugar del chat de la app instalada. |
 | Claude no encuentra AutoCAD | Pulsa **Probar conexión con AutoCAD**. Si AutoCAD está cerrado, el servidor intenta abrirlo (puede tardar). AutoCAD **LT no sirve**: no tiene la interfaz COM. |
 | Uso Claude Desktop de Microsoft Store | Se detecta solo. Si no, pulsa **Conectar con Claude Desktop** en el panel. |
 | No aparecen las herramientas 3D | Activa **3D** y usa el modo Completo o Búsqueda: Ligero no las incluye. |
@@ -189,16 +196,18 @@ mcpautocad/
   registrar.py        agrega/quita la entrada "autocad" en claude_desktop_config.json
   catalogo.py         estimación de herramientas y tokens (datos en catalogo.json)
   probar.py           "Probar conexión": arranca el servidor y llama a system_status
+  diagnostico.py      botón «Diagnóstico»: configuración de Claude, registro, registros de Claude y servidor
+  ventana.py          abre el panel en ventana propia (modo aplicación de Edge/Chrome)
   actualizaciones.py  aviso de versión nueva (último Release de GitHub)
   traducciones.json   descripciones cortas en español para el panel
-  __main__.py         mcpautocad [panel|servidor|registrar|quitar|probar]
+  __main__.py         mcpautocad [panel|servidor|registrar|quitar|probar|diagnostico]
 scripts/
   medir_tokens.py     regenera catalogo.json midiendo el servidor real
   generar_icono.py    genera los iconos (instalador/, mcpautocad/icono.png y mcpb/icon.png)
   empaquetar_mcpb.py  crea la extensión .mcpb (usa @anthropic-ai/mcpb)
   ilustraciones/      genera las imágenes de este README (ver abajo)
 mcpb/manifest.json    manifiesto de la extensión (la versión se pone al empaquetar)
-mcpautocad.spec       receta de PyInstaller
+mcpautocad.spec       receta de PyInstaller: mcpautocad.exe (consola, para Claude) y «MCP AutoCAD.exe» (ventana)
 construir.ps1         construye el .exe, el instalador, el .zip y el .mcpb en Windows
 instalador/           instalador de Inno Setup e iconos
 docs/                 plan del proyecto, notas de los Releases e imágenes

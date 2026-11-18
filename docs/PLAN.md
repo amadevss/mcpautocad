@@ -60,6 +60,16 @@ Las cifras sin paréntesis descuentan `system_run_command` y `system_run_lisp`, 
 - [x] Descripciones del panel en español (`traducciones.json`). Claude sigue viendo las originales en inglés. Un test
       avisa de las herramientas nuevas sin traducir al subir de versión el original.
 
+## Fase 2b: facilidad de uso (v0.1.1)
+
+- [x] Botón «Diagnóstico» en el panel (y `mcpautocad diagnostico`): configuración de Claude Desktop (normal y
+      Microsoft Store), registro, programa registrado, registros de Claude (`mcp-server-autocad.log`) y servidor.
+      Resumen en una frase e informe para copiar.
+- [x] El panel se abre en ventana propia (modo aplicación de Edge, que trae Windows) con «MCP AutoCAD.exe», un
+      segundo programa sin consola. Al cerrar la ventana se cierra el panel. Sin Edge ni Chrome, navegador normal.
+- [x] Registro en Microsoft Store aunque Claude aún no haya creado su subcarpeta de configuración.
+- [x] Botón «Publicar versión» en GitHub Actions (Run workflow → Publicar).
+
 ## Fase 3: servicio en el VPS (Docker)
 
 URL que se pega en Claude como **conector personalizado**.

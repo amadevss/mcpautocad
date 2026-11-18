@@ -92,3 +92,11 @@ def test_aviso_de_version_sin_internet(url, monkeypatch):
     monkeypatch.setattr(actualizaciones, "_ultimo_release", sin_red)
     r = json.loads(pedir(url, "/api/version")[1])
     assert r["hay_nueva"] is False and r["actual"]
+
+
+def test_diagnostico_y_latido(url):
+    configuracion.guardar({"motor": "ezdxf"})
+    assert json.loads(pedir(url, "/api/latido")[1]) == {"ok": True}
+    r = json.loads(pedir(url, "/api/diagnostico", {})[1])
+    assert {"ok", "resumen", "pasos", "informe"} <= set(r)
+    assert any(p["titulo"] == "El servidor responde" and p["estado"] == "ok" for p in r["pasos"])

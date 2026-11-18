@@ -36,10 +36,24 @@ def rutas_claude() -> list[Path]:
     return [Path.home() / ".config" / "Claude" / "claude_desktop_config.json"]
 
 
+#: Nombre del programa de consola: el que arranca Claude Desktop (habla por stdin/stdout).
+PROGRAMA_CONSOLA = "mcpautocad.exe" if sys.platform == "win32" else "mcpautocad"
+
+
+def es_tienda(ruta: Path) -> bool:
+    """¿Es la configuración de Claude Desktop instalado desde Microsoft Store (MSIX)?"""
+    return any(p.startswith("Claude_") for p in ruta.parts) and "Packages" in ruta.parts
+
+
 def comando() -> dict:
-    """Cómo debe arrancarnos Claude Desktop."""
+    """Cómo debe arrancarnos Claude Desktop.
+
+    Siempre el programa de consola, también cuando quien registra es la ventana
+    del panel («MCP AutoCAD.exe», sin consola, que no sirve para stdio).
+    """
     if getattr(sys, "frozen", False):  # .exe de PyInstaller
-        return {"command": sys.executable, "args": ["servidor"]}
+        consola = Path(sys.executable).with_name(PROGRAMA_CONSOLA)
+        return {"command": str(consola if consola.exists() else Path(sys.executable)), "args": ["servidor"]}
     return {"command": sys.executable, "args": ["-m", "mcpautocad", "servidor"]}
 
 
@@ -97,9 +111,14 @@ def esta_registrado(ruta: Path) -> bool:
 
 
 def destinos_para_agregar() -> list[Path]:
-    """Dónde registrar: las rutas cuya carpeta de Claude ya existe; si ninguna, la primera."""
+    """Dónde registrar.
+
+    Las rutas cuya carpeta de Claude ya existe y las de Microsoft Store (el paquete
+    existe aunque Claude aún no haya creado su subcarpeta); si no hay ninguna, la
+    primera (Claude Desktop normal, que la creará al arrancar).
+    """
     rutas = rutas_claude()
-    existentes = [r for r in rutas if r.parent.exists()]
+    existentes = [r for r in rutas if r.parent.exists() or es_tienda(r)]
     return existentes or rutas[:1]
 
 

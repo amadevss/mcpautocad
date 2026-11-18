@@ -1,7 +1,8 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" translate="no">
 <head>
 <meta charset="utf-8">
+<meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Panel MCP AutoCAD</title>
 <link rel="icon" type="image/png" href="/icono.png">
@@ -87,6 +88,16 @@
   .herr small { display: block; color: var(--suave); }
   .herr .tk { flex: none; color: var(--suave); font-size: 12px; white-space: nowrap; }
   .herr.fuera { opacity: .45; }
+  .diag { list-style: none; margin: 12px 0 0; padding: 0; }
+  .diag li { display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid var(--borde); }
+  .diag .ic { flex: none; width: 22px; height: 22px; border-radius: 50%; color: #fff; font-weight: 700;
+              display: grid; place-items: center; font-size: 13px; }
+  .diag .ok .ic { background: var(--ok); } .diag .aviso .ic { background: var(--aviso); } .diag .error .ic { background: var(--acento); }
+  .diag small { display: block; color: var(--suave); overflow-wrap: anywhere; }
+  .diag .que { color: var(--texto); }
+  .resumen-diag { padding: 10px 14px; border-radius: 8px; margin-top: 12px; font-weight: 600; }
+  .resumen-diag.ok { background: var(--ok-suave); color: var(--ok); }
+  .resumen-diag.error { background: var(--acento-suave); color: var(--acento); }
 </style>
 </head>
 <body>
@@ -109,6 +120,16 @@
       <div><span id="punto-acad" class="punto"></span><b id="acad-texto">AutoCAD: sin comprobar</b>
         <small id="acad-detalle" style="display:block;color:var(--suave)">Si AutoCAD está cerrado, la prueba lo abre (puede tardar un par de minutos).</small></div>
       <div><button id="btn-probar">Probar conexión con AutoCAD</button></div>
+    </div>
+    <div class="estado-claude separado">
+      <div><b>¿Claude no ve las herramientas?</b>
+        <small style="display:block;color:var(--suave)">El diagnóstico revisa la conexión con Claude Desktop y te dice qué falla.</small></div>
+      <div><button id="btn-diagnostico" class="principal">Diagnóstico</button></div>
+    </div>
+    <div id="diagnostico" hidden>
+      <div id="resumen-diag" class="resumen-diag" role="status"></div>
+      <ul id="pasos-diag" class="diag"></ul>
+      <button id="btn-copiar-diag">Copiar informe</button>
     </div>
   </section>
 
@@ -337,6 +358,35 @@ async function probarAutocad() {
   } finally { b.disabled = false; }
 }
 
+let informeDiag = "";
+async function diagnosticar() {
+  const b = $("btn-diagnostico");
+  b.disabled = true; b.textContent = "Revisando…";
+  $("diagnostico").hidden = false;
+  $("resumen-diag").className = "resumen-diag";
+  $("resumen-diag").textContent = "Revisando la conexión con Claude Desktop y AutoCAD… (puede tardar si AutoCAD se está abriendo)";
+  $("pasos-diag").innerHTML = "";
+  try {
+    const r = await api("/api/diagnostico", {});
+    informeDiag = r.informe;
+    $("resumen-diag").className = "resumen-diag " + (r.ok ? "ok" : "error");
+    $("resumen-diag").textContent = (r.ok ? "✓ " : "✗ ") + r.resumen;
+    const icono = {ok: "✓", aviso: "!", error: "✗"};
+    $("pasos-diag").innerHTML = r.pasos.map((p) => `
+      <li class="${p.estado}"><span class="ic" aria-label="${p.estado}">${icono[p.estado]}</span>
+        <div><b>${esc(p.titulo)}</b><small>${esc(p.detalle)}</small>
+        ${p.solucion ? `<small class="que">Qué hacer: ${esc(p.solucion)}</small>` : ""}</div></li>`).join("");
+  } catch (err) {
+    $("resumen-diag").className = "resumen-diag error";
+    $("resumen-diag").textContent = "No se pudo hacer el diagnóstico: " + err.message;
+  } finally { b.disabled = false; b.textContent = "Diagnóstico"; }
+}
+
+async function copiarInforme() {
+  try { await navigator.clipboard.writeText(informeDiag); aviso("Informe copiado. Pégalo en tu mensaje de soporte."); }
+  catch (err) { aviso("No se pudo copiar automáticamente: selecciona el texto del diagnóstico y cópialo.", "error"); }
+}
+
 async function accion(ruta, cuerpo = {}) {
   try { const r = await api(ruta, cuerpo); if (r.claude) pintarClaude(r.claude); aviso(r.mensaje); return r; }
   catch (err) { aviso(err.message, "error"); }
@@ -344,8 +394,12 @@ async function accion(ruta, cuerpo = {}) {
 $("btn-guardar").addEventListener("click", () => accion("/api/guardar", {config: cfg}));
 $("btn-registrar").addEventListener("click", () => accion("/api/registrar"));
 $("btn-quitar").addEventListener("click", () => accion("/api/quitar"));
-$("btn-cerrar").addEventListener("click", () => accion("/api/cerrar"));
+$("btn-cerrar").addEventListener("click", async () => { await accion("/api/cerrar"); window.close(); });
 $("btn-probar").addEventListener("click", probarAutocad);
+$("btn-diagnostico").addEventListener("click", diagnosticar);
+$("btn-copiar-diag").addEventListener("click", copiarInforme);
+// Mientras la página está abierta, avisa al panel de que sigue en uso.
+setInterval(() => fetch("/api/latido").catch(() => {}), 60000);
 $("det-herr").addEventListener("toggle", cargarLista);
 $("buscar").addEventListener("input", pintarLista);
 $("solo-incluidas").addEventListener("change", pintarLista);
