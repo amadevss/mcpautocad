@@ -50,7 +50,7 @@ def main(argv: list[str] | None = None) -> int:
 
     salida = Path(opciones.salida)
     carpeta = preparar(opciones.version, Path(opciones.servidor), salida / "mcpb")
-    destino = salida / f"MCP-AutoCAD-{opciones.version}.mcpb"
+    destino = salida / "MCP-AutoCAD.mcpb"  # nombre fijo: el README enlaza a la última versión
     subprocess.run([npx(), "-y", MCPB_CLI, "validate", str(carpeta / "manifest.json")], check=True)
     subprocess.run([npx(), "-y", MCPB_CLI, "pack", str(carpeta), str(destino)], check=True)
     shutil.rmtree(carpeta)

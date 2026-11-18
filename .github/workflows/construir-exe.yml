@@ -87,4 +87,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: salida/*
+          name: MCP AutoCAD ${{ steps.version.outputs.valor }}
+          body_path: docs/NOTAS_RELEASE.md
           generate_release_notes: true
