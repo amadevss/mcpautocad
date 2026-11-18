@@ -18,7 +18,7 @@
 > [!NOTE]
 > **Primera versión, en pruebas.** El servidor, el panel y el instalador pasan 72 pruebas automáticas en Windows,
 > pero sin AutoCAD instalado. Si algo falla con tu AutoCAD, [abre un aviso](https://github.com/amadevss/mcpautocad/issues)
-> y adjunta el archivo `%APPDATA%\Claude\logs\mcp-server-autocad.log`.
+> y pega el informe del botón **Diagnóstico** del panel (**Copiar informe**).
 
 ## ✨ Qué hace
 
@@ -151,7 +151,8 @@ versiones, sin enviar datos tuyos.
   LISP `startapp`, `command` o borrar archivos), pero él mismo avisa de que esa lista protege de accidentes y no es
   una barrera de seguridad. Si las necesitas, enciéndelas en el panel; **Valores por defecto** las vuelve a apagar.
 - El panel solo escucha en tu equipo y rechaza peticiones de otras páginas web.
-- Antes de tocar la configuración de Claude Desktop se guarda una copia (`.bak`), y tus otros servidores MCP no se tocan.
+- La configuración de Claude Desktop solo se cambia con Claude cerrado y se guarda antes una copia
+  (`.bak-mcpautocad`). Tus otros servidores MCP y ajustes no se tocan.
 
 ## 🩺 Problemas frecuentes
 
@@ -165,15 +166,17 @@ versiones, sin enviar datos tuyos.
 |---|---|
 | No aparece **autocad** en Claude | Pulsa **Diagnóstico**. Lo más habitual: Claude Desktop no se reinició del todo (sal desde la bandeja, no basta con cerrar la ventana), o estás en la web o en otra pestaña en lugar del chat de la app instalada. |
 | Claude no encuentra AutoCAD | Pulsa **Probar conexión con AutoCAD**. Si AutoCAD está cerrado, el servidor intenta abrirlo (puede tardar). AutoCAD **LT no sirve**: no tiene la interfaz COM. |
-| Uso Claude Desktop de Microsoft Store | Se detecta solo. Si no, pulsa **Conectar con Claude Desktop** en el panel. |
+| Uso Claude Desktop de Microsoft Store | Se detecta solo, también cuando Claude movió su configuración a `%LOCALAPPDATA%\Claude-Data`. Si no funciona, cierra Claude desde la bandeja y pulsa **Conectar con Claude Desktop** en el panel. |
+| «Conectar» dice que Claude está abierto | Claude reescribe su configuración mientras está abierto y borraría el cambio. Ciérralo desde la bandeja (clic derecho en su icono → *Salir*) y vuelve a pulsar **Conectar**. |
 | No aparecen las herramientas 3D | Activa **3D** y usa el modo Completo o Búsqueda: Ligero no las incluye. |
-| Quiero ver qué pasa por dentro | Abre `%APPDATA%\Claude\logs\mcp-server-autocad.log`. |
+| Quiero ver qué pasa por dentro | Abre `%LOCALAPPDATA%\Claude\logs\mcp-server-autocad.log` (o `%APPDATA%\Claude\logs\` con el instalador clásico de Claude). |
 
 **Desinstalar:** *Configuración de Windows → Aplicaciones → MCP AutoCAD → Desinstalar* (también se quita de Claude
 Desktop). La extensión se quita desde Claude Desktop → Configuración → Extensiones.
 
-**Archivos que usa:** la configuración del panel está en `%APPDATA%\mcpautocad\config.json`, y la de Claude
-Desktop en `%APPDATA%\Claude\claude_desktop_config.json`.
+**Archivos que usa:** la configuración del panel está en `%APPDATA%\mcpautocad\config.json`. La de Claude Desktop
+depende de cómo lo instalaste; el **Diagnóstico** te dice cuál usa. Antes de cambiarla se guarda una copia
+`claude_desktop_config.json.bak-mcpautocad`.
 
 ## 🙏 Créditos
 

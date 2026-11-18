@@ -25,7 +25,7 @@ def test_sin_registrar():
 def test_registrado_pero_claude_nunca_lo_arranco():
     registrar.agregar(claude())
     r = diagnostico.diagnosticar(probar_servidor=False)
-    assert estados(r)["Configuración de Claude Desktop"] == "ok"
+    assert estados(r)["MCP AutoCAD registrado en Claude"] == "ok"
     assert estados(r)["Claude intentó arrancar MCP AutoCAD"] == "error"
     assert "Salir" in r["resumen"]  # reiniciar Claude desde la bandeja
 
@@ -34,7 +34,8 @@ def test_programa_registrado_ya_no_existe():
     claude().parent.mkdir(parents=True)
     claude().write_text(json.dumps({"mcpServers": {"autocad": {"command": "C:/no/existe.exe", "args": []}}}))
     r = diagnostico.diagnosticar(probar_servidor=False)
-    assert "no existe" in r["pasos"][2]["detalle"]
+    paso = next(p for p in r["pasos"] if p["titulo"] == "MCP AutoCAD registrado en Claude")
+    assert paso["estado"] == "error" and "no existe" in paso["detalle"]
 
 
 def test_json_roto():

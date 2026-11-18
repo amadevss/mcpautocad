@@ -30,66 +30,76 @@ def _paso(titulo: str, estado: str, detalle: str, solucion: str = "") -> dict:
     return {"titulo": titulo, "estado": estado, "detalle": detalle, "solucion": solucion}
 
 
+TIPOS = {
+    "reubicada": "datos reubicados de Claude Desktop (Microsoft Store)",
+    "tienda": "Claude Desktop de Microsoft Store",
+    "clasica": "Claude Desktop (instalador clásico)",
+    "macos": "Claude Desktop para macOS",
+    "linux": "Claude Desktop",
+    "forzada": "ruta indicada en MCPAUTOCAD_CLAUDE_CONFIG",
+}
+
+
+def _version_claude() -> str:
+    """Versión y familia del paquete de Claude de Microsoft Store (vacío si no hay)."""
+    if sys.platform != "win32":
+        return ""
+    try:
+        salida = subprocess.run(
+            ["powershell", "-NoProfile", "-Command",
+             "Get-AppxPackage *Claude* | ForEach-Object { $_.Version + ' (' + $_.PackageFamilyName + ')' }"],
+            capture_output=True, text=True, timeout=20, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+        return " / ".join(l.strip() for l in salida.stdout.splitlines() if l.strip())
+    except Exception:
+        return ""
+
+
 def _claude_instalado() -> dict:
     if sys.platform != "win32":
         return _paso("Claude Desktop instalado", AVISO, "Este equipo no es Windows: no se comprueba la instalación.")
     local = Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local")
     formas = []
     if (local / "AnthropicClaude").exists():
-        formas.append("instalador normal")
-    if list((local / "Packages").glob("Claude_*")):
-        formas.append("Microsoft Store")
+        formas.append("instalador clásico")
+    version = _version_claude()
+    if version or list((local / "Packages").glob("Claude_*")):
+        formas.append("Microsoft Store" + (f" {version}" if version else ""))
     if formas:
-        return _paso("Claude Desktop instalado", OK, "Encontrado (" + " y ".join(formas) + ").")
+        return _paso("Claude Desktop instalado", OK, "Encontrado: " + "; ".join(formas) + ".")
     return _paso("Claude Desktop instalado", AVISO,
                  "No encontré Claude Desktop en las carpetas habituales.",
                  "Instálalo desde https://claude.ai/download. La web (claude.ai) no puede usar programas de tu PC.")
 
 
-def _claude_abierto() -> bool | None:
-    if sys.platform != "win32":
-        return None
+def _configuracion(u: dict) -> tuple[list[dict], bool]:
+    """La configuración que usa Claude: dónde está y si MCP AutoCAD está bien registrado ahí."""
+    activa = u["activa"]
+    pasos = [_paso("Carpeta de configuración de Claude", OK,
+                   f"Claude usa {activa} ({TIPOS.get(u['tipo'], u['tipo'])}).")]
+    titulo = "MCP AutoCAD registrado en Claude"
+    conectar = ("Cierra Claude Desktop por completo (clic derecho en su icono → Salir) y pulsa «Conectar con "
+                "Claude Desktop» en el panel.")
+    otras = [str(r) for r in u["candidatas"][1:] if registrar.esta_registrado(r)]
+    extra = f" Sí está en otra carpeta que Claude ya no lee: {', '.join(otras)}." if otras else ""
+    if not activa.exists():
+        pasos.append(_paso(titulo, ERROR, f"No existe {activa}.{extra}", conectar))
+        return pasos, False
     try:
-        salida = subprocess.run(["tasklist", "/FI", "IMAGENAME eq claude.exe", "/NH"], capture_output=True,
-                                text=True, timeout=10, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
-        return "claude.exe" in salida.stdout.lower()
-    except Exception:
-        return None
-
-
-def _configuraciones() -> tuple[list[dict], list[Path]]:
-    """Comprueba cada archivo de configuración de Claude. Devuelve los pasos y las carpetas con registro."""
-    pasos, registradas = [], []
-    for ruta in registrar.rutas_claude():
-        tipo = "Microsoft Store" if registrar.es_tienda(ruta) else "Claude Desktop"
-        titulo = f"Configuración de {tipo}"
-        if not ruta.exists():
-            if ruta.parent.exists() or registrar.es_tienda(ruta):
-                pasos.append(_paso(titulo, ERROR, f"No existe {ruta}.",
-                                   "Pulsa «Conectar con Claude Desktop» en el panel."))
-            continue
-        try:
-            datos = json.loads(ruta.read_text(encoding="utf-8-sig") or "{}")
-        except (OSError, ValueError) as error:
-            pasos.append(_paso(titulo, ERROR, f"{ruta} no es JSON válido ({error}).",
-                               "Claude Desktop no puede leerlo. Corrige el archivo o bórralo y pulsa «Conectar»."))
-            continue
-        entrada = (datos.get("mcpServers") or {}).get(registrar.NOMBRE) if isinstance(datos, dict) else None
-        if not entrada:
-            pasos.append(_paso(titulo, ERROR, f"{ruta} existe, pero MCP AutoCAD no está registrado ahí.",
-                               "Pulsa «Conectar con Claude Desktop» en el panel."))
-            continue
-        programa = Path(str(entrada.get("command", "")))
-        if not programa.exists():
-            pasos.append(_paso(titulo, ERROR, f"Registrado en {ruta}, pero apunta a un programa que no existe: "
-                               f"{programa}.", "Pulsa «Conectar con Claude Desktop» para actualizar la ruta."))
-            continue
-        registradas.append(ruta.parent)
-        pasos.append(_paso(titulo, OK, f"Registrado en {ruta}."))
-    if not pasos:
-        pasos.append(_paso("Configuración de Claude Desktop", ERROR, "No encontré ninguna configuración de Claude.",
-                           "Abre Claude Desktop una vez, ciérralo desde la bandeja y pulsa «Conectar»."))
-    return pasos, registradas
+        datos = json.loads(activa.read_text(encoding="utf-8-sig") or "{}")
+    except (OSError, ValueError) as error:
+        pasos.append(_paso(titulo, ERROR, f"{activa} no es JSON válido ({error}).",
+                           "Claude Desktop no puede leerlo. Corrige el archivo o bórralo y pulsa «Conectar»."))
+        return pasos, False
+    entrada = (datos.get("mcpServers") or {}).get(registrar.NOMBRE) if isinstance(datos, dict) else None
+    if not entrada:
+        pasos.append(_paso(titulo, ERROR, f"No está en {activa}.{extra}", conectar))
+        return pasos, False
+    programa = Path(str(entrada.get("command", "")))
+    if not programa.exists():
+        pasos.append(_paso(titulo, ERROR, f"Apunta a un programa que no existe: {programa}.", conectar))
+        return pasos, False
+    pasos.append(_paso(titulo, OK, f"Sí, con {programa}."))
+    return pasos, True
 
 
 def _ultimas_lineas(ruta: Path, cuantas: int = 60) -> list[str]:
@@ -99,19 +109,28 @@ def _ultimas_lineas(ruta: Path, cuantas: int = 60) -> list[str]:
         return []
 
 
-def _registros(carpetas: list[Path]) -> dict:
+def _datos_de_usuario(carpetas: list[Path]) -> str:
+    """Lo que dice main.log de dónde guarda Claude sus datos (p. ej. 'relocated_local')."""
+    for carpeta in carpetas:
+        for linea in reversed(_ultimas_lineas(carpeta / "main.log", 4000)):
+            m = re.search(r"user_data_location:\s*'([^']+)'", linea)
+            if m:
+                return m.group(1)
+    return ""
+
+
+def _registros(carpetas: list[Path], registrado: bool) -> dict:
     titulo = "Claude intentó arrancar MCP AutoCAD"
-    logs = [c / "logs" / LOG for c in carpetas if (c / "logs" / LOG).exists()]
-    if not carpetas:
-        return _paso(titulo, AVISO, "Sin registro en Claude no se puede comprobar.")
+    logs = [c / LOG for c in carpetas if (c / LOG).exists()]
     if not logs:
-        return _paso(titulo, ERROR, "Claude Desktop todavía no ha intentado arrancar MCP AutoCAD: no hay "
-                     f"registro {LOG}.",
+        if not registrado:
+            return _paso(titulo, AVISO, "Todavía no, porque no está registrado en la configuración que usa Claude.")
+        return _paso(titulo, ERROR, f"Todavía no: no hay registro {LOG} en "
+                     + ", ".join(str(c) for c in carpetas if c.exists()) + ".",
                      "Cierra Claude Desktop desde la bandeja (clic derecho en su icono → Salir) y vuelve a abrirlo. "
-                     "Usa el chat de la app instalada, no la web ni otras pestañas.")
+                     "Usa el modo Chat de la app instalada, no la web ni Cowork.")
     ultimo = max(logs, key=lambda p: p.stat().st_mtime)
-    lineas = _ultimas_lineas(ultimo)
-    errores = [l.strip() for l in lineas if len(l) < 2000 and _ERRORES.search(l)]
+    errores = [l.strip() for l in _ultimas_lineas(ultimo) if len(l) < 2000 and _ERRORES.search(l)]
     if errores:
         return _paso(titulo, ERROR, f"Claude lo intentó, pero hubo un error. Último mensaje en {ultimo}: "
                      f"{errores[-1][:300]}", "Mándale este informe a quien te da soporte.")
@@ -119,15 +138,23 @@ def _registros(carpetas: list[Path]) -> dict:
 
 
 def diagnosticar(probar_servidor: bool = True) -> dict:
+    u = registrar.ubicaciones()
     pasos = [_paso("MCP AutoCAD", OK, f"Versión {__version__} (servidor original {VERSION_ORIGINAL}).")]
     pasos.append(_claude_instalado())
-    config, registradas = _configuraciones()
+    config, registrado = _configuracion(u)
     pasos += config
-    pasos.append(_registros(registradas))
-    abierto = _claude_abierto()
-    if abierto:
+    ubicacion = _datos_de_usuario(u["logs"])
+    if ubicacion:
+        pasos.append(_paso("Datos de Claude según su registro", OK, f"user_data_location: {ubicacion}."))
+    pasos.append(_registros(u["logs"], registrado))
+    reglas = registrar.politicas()
+    if reglas:
+        pasos.append(_paso("Políticas de empresa", AVISO, "Hay políticas de Claude en el registro de Windows: "
+                           + ", ".join(reglas) + ".",
+                           "Pueden impedir los servidores locales. Consulta con el administrador de tu equipo."))
+    if registrar.claude_abierto():
         pasos.append(_paso("Claude Desktop abierto", AVISO, "Claude Desktop está abierto ahora.",
-                           "Si acabas de conectar o cambiar algo, ciérralo desde la bandeja y vuelve a abrirlo."))
+                           "Para conectar o cambiar algo, ciérralo antes desde la bandeja; después vuelve a abrirlo."))
     if probar_servidor:
         r = probar.probar()
         pasos.append(_paso("El servidor responde", OK if r["ok"] else ERROR, r["mensaje"],

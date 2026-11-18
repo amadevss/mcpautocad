@@ -32,7 +32,7 @@ def test_no_borra_otros_servidores_ni_ajustes():
     assert datos["mcpServers"]["filesystem"] == original["mcpServers"]["filesystem"]
     assert "autocad" in datos["mcpServers"]
     # Copia de seguridad del archivo anterior.
-    assert json.loads(ruta().with_name(ruta().name + ".bak").read_text(encoding="utf-8")) == original
+    assert json.loads(ruta().with_name(registrar.COPIA).read_text(encoding="utf-8")) == original
 
     assert registrar.quitar(ruta()) is True
     assert json.loads(ruta().read_text(encoding="utf-8")) == original
@@ -65,7 +65,16 @@ def test_json_invalido_no_se_sobrescribe():
 
 def test_main_registrar_y_quitar(capsys):
     assert registrar.main([]) == 0
-    assert "Reinicia Claude Desktop" in capsys.readouterr().out
+    assert "Abre Claude Desktop" in capsys.readouterr().out
     assert registrar.esta_registrado(ruta())
     assert registrar.main(["quitar"]) == 0
     assert not registrar.esta_registrado(ruta())
+
+
+def test_con_claude_abierto_no_se_escribe(monkeypatch, capsys):
+    monkeypatch.setenv("MCPAUTOCAD_CLAUDE_ABIERTO", "1")
+    with pytest.raises(registrar.ClaudeAbierto):
+        registrar.registrar_en_todas()
+    assert not ruta().exists()
+    assert registrar.main([]) == 2
+    assert "Salir" in capsys.readouterr().err

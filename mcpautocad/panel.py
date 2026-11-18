@@ -34,7 +34,7 @@ AVISO_REINICIO = "Reinicia Claude Desktop para aplicar los cambios."
 
 def estado() -> dict:
     cfg = configuracion.cargar()
-    rutas = registrar.rutas_claude()
+    activa = registrar.ruta_activa()
     return {
         "version": __version__,
         "version_original": VERSION_ORIGINAL,
@@ -47,8 +47,9 @@ def estado() -> dict:
         "presets": PRESETS,
         "siempre_activas": sorted(configuracion.SIEMPRE_ACTIVAS),
         "claude": {
-            "registrado": any(registrar.esta_registrado(r) for r in rutas),
-            "rutas": [str(r) for r in rutas],
+            # Solo cuenta la configuración que Claude usa de verdad.
+            "registrado": registrar.esta_registrado(activa),
+            "rutas": [str(activa)],
         },
     }
 
@@ -132,7 +133,7 @@ class Manejador(BaseHTTPRequestHandler):
                 self._json({"mensaje": "Panel cerrado. Ya puedes cerrar esta ventana."})
                 threading.Thread(target=self.server.shutdown, daemon=True).start()
                 return None
-        except registrar.ConfigInvalida as error:
+        except (registrar.ConfigInvalida, registrar.ClaudeAbierto) as error:
             return self._json({"error": str(error)}, 409)
         self._json({"error": "No encontrado"}, 404)
 

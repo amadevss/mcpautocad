@@ -1,4 +1,4 @@
-; Instalador de MCP AutoCAD (Inno Setup 6). Lo compila construir.ps1.
+﻿; Instalador de MCP AutoCAD (Inno Setup 6). Lo compila construir.ps1.
 ; Se instala para el usuario actual, sin pedir permisos de administrador.
 
 #ifndef Version
@@ -55,4 +55,45 @@ Filename: "{app}\MCP AutoCAD.exe"; Description: "Abrir MCP AutoCAD"; Flags: post
 Filename: "{app}\mcpautocad.exe"; Parameters: "quitar"; Flags: runhidden waituntilterminated; RunOnceId: "QuitarDeClaude"
 
 [Messages]
-es.FinishedLabel=MCP AutoCAD quedó instalado y conectado con Claude Desktop.%n%nCierra Claude Desktop por completo (también desde la bandeja del sistema) y vuelve a abrirlo.
+es.FinishedLabel=MCP AutoCAD quedó instalado y conectado con Claude Desktop.%n%nAbre Claude Desktop y, en el modo Chat, pídele algo a AutoCAD. Si no ve las herramientas, abre MCP AutoCAD y pulsa «Diagnóstico».
+
+[Code]
+{ Claude Desktop reescribe su configuración mientras está abierto: si se cambia
+  con Claude abierto, el cambio se pierde. Por eso se pide cerrarlo antes. }
+function ClaudeAbierto(): Boolean;
+var
+  Codigo: Integer;
+begin
+  Result := Exec(ExpandConstant('{cmd}'),
+    '/C tasklist /FI "IMAGENAME eq claude.exe" /NH | find /I "claude.exe" >nul',
+    '', SW_HIDE, ewWaitUntilTerminated, Codigo) and (Codigo = 0);
+end;
+
+function PedirCerrarClaude(): Boolean;
+begin
+  Result := True;
+  while ClaudeAbierto() do
+  begin
+    if SuppressibleMsgBox('Claude Desktop está abierto.' + #13#10#13#10 +
+      'Ciérralo por completo: clic derecho en su icono junto al reloj y «Salir» ' +
+      '(no basta con cerrar la ventana). Después pulsa Reintentar.',
+      mbError, MB_RETRYCANCEL, IDCANCEL) = IDCANCEL then
+    begin
+      Result := False;
+      Exit;
+    end;
+  end;
+end;
+
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+begin
+  if PedirCerrarClaude() then
+    Result := ''
+  else
+    Result := 'Cierra Claude Desktop por completo y vuelve a ejecutar el instalador.';
+end;
+
+function InitializeUninstall(): Boolean;
+begin
+  Result := PedirCerrarClaude();
+end;
