@@ -33,6 +33,7 @@ $exe = Join-Path $PSScriptRoot "dist\mcpautocad\mcpautocad.exe"
 Write-Host "3/5 Comprobando el ejecutable..."
 & $exe ayuda
 if ($LASTEXITCODE -ne 0) { throw "El ejecutable no arranca" }
+if (-not (Test-Path (Join-Path $PSScriptRoot "dist\mcpautocad\MCP AutoCAD.exe"))) { throw "Falta MCP AutoCAD.exe (la ventana)" }
 
 Write-Host "4/5 Creando instalador y portátil..."
 New-Item -ItemType Directory -Force salida | Out-Null

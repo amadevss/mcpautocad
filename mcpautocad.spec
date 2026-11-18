@@ -43,11 +43,9 @@ a = Analysis(
     noarchive=False,
 )
 pyz = PYZ(a.pure)
-exe = EXE(
-    pyz, a.scripts, [],
-    exclude_binaries=True,
-    name="mcpautocad",
-    console=True,          # Claude Desktop habla con el servidor por stdin/stdout
-    icon="instalador/icono.ico" if os.path.exists("instalador/icono.ico") else None,
-)
-coll = COLLECT(exe, a.binaries, a.datas, name="mcpautocad")
+ICONO = "instalador/icono.ico" if os.path.exists("instalador/icono.ico") else None
+# mcpautocad.exe: con consola, porque Claude Desktop habla con el servidor por stdin/stdout.
+consola = EXE(pyz, a.scripts, [], exclude_binaries=True, name="mcpautocad", console=True, icon=ICONO)
+# «MCP AutoCAD.exe»: sin consola, abre el panel en su propia ventana (accesos directos).
+ventana = EXE(pyz, a.scripts, [], exclude_binaries=True, name="MCP AutoCAD", console=False, icon=ICONO)
+coll = COLLECT(consola, ventana, a.binaries, a.datas, name="mcpautocad")

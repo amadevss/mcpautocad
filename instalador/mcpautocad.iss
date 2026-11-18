@@ -1,4 +1,4 @@
-; Instalador de MCP AutoCAD (Inno Setup 6). Lo compila construir.ps1.
+﻿; Instalador de MCP AutoCAD (Inno Setup 6). Lo compila construir.ps1.
 ; Se instala para el usuario actual, sin pedir permisos de administrador.
 
 #ifndef Version
@@ -25,29 +25,75 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 CloseApplications=yes
 UninstallDisplayName=MCP AutoCAD
-UninstallDisplayIcon={app}\mcpautocad.exe
+UninstallDisplayIcon={app}\MCP AutoCAD.exe
 
 [Languages]
 Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"
 
 [Tasks]
-Name: "escritorio"; Description: "Crear un acceso directo al panel en el escritorio"; Flags: unchecked
+Name: "escritorio"; Description: "Crear un acceso directo en el escritorio"
 
 [Files]
 Source: "..\dist\mcpautocad\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\LICENSE"; DestDir: "{app}"; DestName: "LICENSE.txt"
 
+[InstallDelete]
+; Accesos directos de la versión 0.1.0, que abrían el panel con consola.
+Type: files; Name: "{group}\Panel MCP AutoCAD.lnk"
+Type: files; Name: "{userdesktop}\Panel MCP AutoCAD.lnk"
+
 [Icons]
-Name: "{group}\Panel MCP AutoCAD"; Filename: "{app}\mcpautocad.exe"; Parameters: "panel"
+Name: "{group}\MCP AutoCAD"; Filename: "{app}\MCP AutoCAD.exe"
 Name: "{group}\Desinstalar MCP AutoCAD"; Filename: "{uninstallexe}"
-Name: "{userdesktop}\Panel MCP AutoCAD"; Filename: "{app}\mcpautocad.exe"; Parameters: "panel"; Tasks: escritorio
+Name: "{userdesktop}\MCP AutoCAD"; Filename: "{app}\MCP AutoCAD.exe"; Tasks: escritorio
 
 [Run]
 Filename: "{app}\mcpautocad.exe"; Parameters: "registrar"; Flags: runhidden waituntilterminated; StatusMsg: "Conectando con Claude Desktop..."
-Filename: "{app}\mcpautocad.exe"; Parameters: "panel"; Description: "Abrir el panel de configuración"; Flags: postinstall nowait skipifsilent
+Filename: "{app}\MCP AutoCAD.exe"; Description: "Abrir MCP AutoCAD"; Flags: postinstall nowait skipifsilent
 
 [UninstallRun]
 Filename: "{app}\mcpautocad.exe"; Parameters: "quitar"; Flags: runhidden waituntilterminated; RunOnceId: "QuitarDeClaude"
 
 [Messages]
-es.FinishedLabel=MCP AutoCAD quedó instalado y conectado con Claude Desktop.%n%nCierra Claude Desktop por completo (también desde la bandeja del sistema) y vuelve a abrirlo.
+es.FinishedLabel=MCP AutoCAD quedó instalado y conectado con Claude Desktop.%n%nAbre Claude Desktop y, en el modo Chat, pídele algo a AutoCAD. Si no ve las herramientas, abre MCP AutoCAD y pulsa «Diagnóstico».
+
+[Code]
+{ Claude Desktop reescribe su configuración mientras está abierto: si se cambia
+  con Claude abierto, el cambio se pierde. Por eso se pide cerrarlo antes. }
+function ClaudeAbierto(): Boolean;
+var
+  Codigo: Integer;
+begin
+  Result := Exec(ExpandConstant('{cmd}'),
+    '/C tasklist /FI "IMAGENAME eq claude.exe" /NH | find /I "claude.exe" >nul',
+    '', SW_HIDE, ewWaitUntilTerminated, Codigo) and (Codigo = 0);
+end;
+
+function PedirCerrarClaude(): Boolean;
+begin
+  Result := True;
+  while ClaudeAbierto() do
+  begin
+    if SuppressibleMsgBox('Claude Desktop está abierto.' + #13#10#13#10 +
+      'Ciérralo por completo: clic derecho en su icono junto al reloj y «Salir» ' +
+      '(no basta con cerrar la ventana). Después pulsa Reintentar.',
+      mbError, MB_RETRYCANCEL, IDCANCEL) = IDCANCEL then
+    begin
+      Result := False;
+      Exit;
+    end;
+  end;
+end;
+
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+begin
+  if PedirCerrarClaude() then
+    Result := ''
+  else
+    Result := 'Cierra Claude Desktop por completo y vuelve a ejecutar el instalador.';
+end;
+
+function InitializeUninstall(): Boolean;
+begin
+  Result := PedirCerrarClaude();
+end;

@@ -5,6 +5,7 @@ Sin argumentos (doble clic) abre el panel.
 
 from __future__ import annotations
 
+import os
 import sys
 
 AYUDA = """Uso: mcpautocad [orden]
@@ -14,10 +15,16 @@ AYUDA = """Uso: mcpautocad [orden]
   registrar   Agrega este MCP a Claude Desktop.
   quitar      Quita este MCP de Claude Desktop.
   probar      Comprueba que el servidor arranca y que AutoCAD responde.
+  diagnostico Revisa por qué Claude Desktop no ve MCP AutoCAD.
 """
 
 
 def main(argv: list[str] | None = None) -> int:
+    # El programa sin consola («MCP AutoCAD.exe») no tiene dónde escribir: se descarta.
+    if sys.stdout is None:
+        sys.stdout = open(os.devnull, "w")
+    if sys.stderr is None:
+        sys.stderr = open(os.devnull, "w")
     argv = sys.argv[1:] if argv is None else argv
     orden = argv[0].lower().lstrip("-") if argv else "panel"
     if orden == "servidor":
@@ -29,6 +36,10 @@ def main(argv: list[str] | None = None) -> int:
         from . import panel
 
         return panel.main(argv[1:])
+    if orden in ("diagnostico", "diagnóstico"):
+        from . import diagnostico
+
+        return diagnostico.main()
     if orden == "probar":
         from . import probar
 

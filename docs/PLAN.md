@@ -60,6 +60,35 @@ Las cifras sin paréntesis descuentan `system_run_command` y `system_run_lisp`, 
 - [x] Descripciones del panel en español (`traducciones.json`). Claude sigue viendo las originales en inglés. Un test
       avisa de las herramientas nuevas sin traducir al subir de versión el original.
 
+## Fase 2b: facilidad de uso (v0.1.1)
+
+- [x] Botón «Diagnóstico» en el panel (y `mcpautocad diagnostico`): configuración de Claude Desktop (normal y
+      Microsoft Store), registro, programa registrado, registros de Claude (`mcp-server-autocad.log`) y servidor.
+      Resumen en una frase e informe para copiar.
+- [x] El panel se abre en ventana propia (modo aplicación de Edge, que trae Windows) con «MCP AutoCAD.exe», un
+      segundo programa sin consola. Al cerrar la ventana se cierra el panel. Sin Edge ni Chrome, navegador normal.
+- [x] Registro en Microsoft Store aunque Claude aún no haya creado su subcarpeta de configuración.
+- [x] Botón «Publicar versión» en GitHub Actions (Run workflow → Publicar).
+
+## v0.1.2: dónde guarda Claude Desktop su configuración en Windows
+
+Comprobado en un equipo real (Windows 11, Claude Desktop 5.11492.5.0 de Microsoft Store, AutoCAD 2025):
+
+| Caso | Configuración que lee Claude |
+|---|---|
+| Microsoft Store, datos reubicados (`user_data_location: 'relocated_local'` en main.log; queda `%APPDATA%\Claude\.user-data-left.<familia>`) | `%LOCALAPPDATA%\Claude-Data\<familia del paquete en minúsculas>\claude_desktop_config.json` |
+| Microsoft Store, sin reubicar | `%LOCALAPPDATA%\Packages\Claude_*\LocalCache\Roaming\Claude\` (virtualización MSIX) |
+| Instalador clásico | `%APPDATA%\Claude\` |
+| macOS | `~/Library/Application Support/Claude/` |
+
+- Los registros están en `%LOCALAPPDATA%\Claude\logs\` (`main.log`, `mcp.log`, `mcp-server-<nombre>.log`).
+- Claude reescribe su configuración mientras está abierto: solo se escribe con Claude cerrado (el instalador y el
+  panel lo comprueban), se lee justo antes, se fusiona solo `mcpServers.autocad`, copia
+  `claude_desktop_config.json.bak-mcpautocad`, escritura atómica en UTF-8 sin BOM.
+- La regla de cuándo Claude reubica los datos no está documentada: se detecta (`registrar.ubicaciones_windows`)
+  en vez de suponer una ruta fija, y el diagnóstico avisa si la entrada está en una carpeta que Claude ya no lee.
+- Pendiente: si Claude cambia otra vez de carpeta, el diagnóstico lo mostrará (main.log y carpetas candidatas).
+
 ## Fase 3: servicio en el VPS (Docker)
 
 URL que se pega en Claude como **conector personalizado**.

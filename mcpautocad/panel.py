@@ -10,13 +10,17 @@ import json
 import socket
 import sys
 import threading
-import webbrowser
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from importlib import resources
 
-from . import __version__, VERSION_ORIGINAL, actualizaciones, catalogo, configuracion, probar, registrar
+from . import (__version__, VERSION_ORIGINAL, actualizaciones, catalogo, configuracion, diagnostico, probar,
+               registrar, ventana)
 
 PUERTO = 8765
+#: Sin ventana propia (navegador normal), el panel se cierra tras este tiempo sin
+#: peticiones. La página pide /api/latido cada minuto mientras está abierta.
+INACTIVIDAD_MAXIMA = 10 * 60
 
 PRESETS = {
     "solo2d": {"nombre": "Solo 2D", "paquetes": [], "3d": False},
@@ -30,7 +34,7 @@ AVISO_REINICIO = "Reinicia Claude Desktop para aplicar los cambios."
 
 def estado() -> dict:
     cfg = configuracion.cargar()
-    rutas = registrar.rutas_claude()
+    activa = registrar.ruta_activa()
     return {
         "version": __version__,
         "version_original": VERSION_ORIGINAL,
@@ -43,8 +47,9 @@ def estado() -> dict:
         "presets": PRESETS,
         "siempre_activas": sorted(configuracion.SIEMPRE_ACTIVAS),
         "claude": {
-            "registrado": any(registrar.esta_registrado(r) for r in rutas),
-            "rutas": [str(r) for r in rutas],
+            # Solo cuenta la configuración que Claude usa de verdad.
+            "registrado": registrar.esta_registrado(activa),
+            "rutas": [str(activa)],
         },
     }
 
@@ -77,6 +82,7 @@ class Manejador(BaseHTTPRequestHandler):
                         "application/json; charset=utf-8")
 
     def do_GET(self):
+        self.server.ultimo_uso = time.monotonic()
         if not self._permitido():
             return self._json({"error": "Prohibido"}, 403)
         if self.path in ("/", "/index.html"):
@@ -89,9 +95,12 @@ class Manejador(BaseHTTPRequestHandler):
             return self._json(estado())
         if self.path == "/api/version":
             return self._json(actualizaciones.comprobar())
+        if self.path == "/api/latido":
+            return self._json({"ok": True})
         self._json({"error": "No encontrado"}, 404)
 
     def do_POST(self):
+        self.server.ultimo_uso = time.monotonic()
         # Exigir JSON evita que otra web envíe formularios a este panel.
         if not self._permitido() or not self.headers.get("Content-Type", "").startswith("application/json"):
             return self._json({"error": "Prohibido"}, 403)
@@ -108,6 +117,8 @@ class Manejador(BaseHTTPRequestHandler):
                 return self._json({"herramientas": catalogo.herramientas(datos.get("config", {}))})
             if self.path == "/api/probar":
                 return self._json(probar.probar())
+            if self.path == "/api/diagnostico":
+                return self._json(diagnostico.diagnosticar())
             if self.path == "/api/guardar":
                 configuracion.guardar(datos.get("config", {}))
                 return self._json({**estado(), "mensaje": "Configuración guardada. " + AVISO_REINICIO})
@@ -119,10 +130,10 @@ class Manejador(BaseHTTPRequestHandler):
                 registrar.quitar_de_todas()
                 return self._json({**estado(), "mensaje": "Quitado de Claude Desktop. " + AVISO_REINICIO})
             if self.path == "/api/cerrar":
-                self._json({"mensaje": "Panel cerrado. Ya puedes cerrar esta pestaña."})
+                self._json({"mensaje": "Panel cerrado. Ya puedes cerrar esta ventana."})
                 threading.Thread(target=self.server.shutdown, daemon=True).start()
                 return None
-        except registrar.ConfigInvalida as error:
+        except (registrar.ConfigInvalida, registrar.ClaudeAbierto) as error:
             return self._json({"error": str(error)}, 409)
         self._json({"error": "No encontrado"}, 404)
 
@@ -139,9 +150,23 @@ def _ya_abierto(puerto: int) -> bool:
 
 def crear_servidor(puerto: int = PUERTO) -> ThreadingHTTPServer:
     try:
-        return ThreadingHTTPServer(("127.0.0.1", puerto), Manejador)
+        servidor = ThreadingHTTPServer(("127.0.0.1", puerto), Manejador)
     except OSError:
-        return ThreadingHTTPServer(("127.0.0.1", 0), Manejador)  # puerto ocupado: uno libre
+        servidor = ThreadingHTTPServer(("127.0.0.1", 0), Manejador)  # puerto ocupado: uno libre
+    servidor.ultimo_uso = time.monotonic()
+    return servidor
+
+
+def _cerrar(servidor: ThreadingHTTPServer) -> None:
+    threading.Thread(target=servidor.shutdown, daemon=True).start()
+
+
+def _vigilar_inactividad(servidor: ThreadingHTTPServer, limite: float) -> None:
+    while True:
+        time.sleep(min(30, limite / 4))
+        if time.monotonic() - servidor.ultimo_uso > limite:
+            _cerrar(servidor)
+            return
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -151,14 +176,18 @@ def main(argv: list[str] | None = None) -> int:
         url = f"http://localhost:{PUERTO}/"
         print(f"El panel ya está abierto en {url}")
         if abrir:
-            webbrowser.open(url)
+            ventana.abrir(url)
         return 0
     servidor = crear_servidor()
     url = f"http://localhost:{servidor.server_address[1]}/"
     print(f"Panel de MCP AutoCAD en {url}")
-    print("Deja esta ventana abierta mientras usas el panel. Para cerrarlo pulsa Ctrl+C o el botón 'Cerrar panel'.")
     if abrir:
-        threading.Timer(0.5, webbrowser.open, args=(url,)).start()
+        proceso = ventana.abrir(url)
+        if proceso is not None:  # ventana propia: al cerrarla se cierra el panel
+            threading.Thread(target=ventana.esperar_cierre, args=(proceso, lambda: _cerrar(servidor)),
+                             daemon=True).start()
+        # Siempre, por si la ventana pasó la página a otra ya abierta o se usó el navegador.
+        threading.Thread(target=_vigilar_inactividad, args=(servidor, INACTIVIDAD_MAXIMA), daemon=True).start()
     try:
         servidor.serve_forever()
     except KeyboardInterrupt:
