@@ -12,6 +12,8 @@ Usa **una sola** de las tres formas.
 Si Windows muestra «Windows protegió su PC», pulsa **Más información → Ejecutar de todas formas** (el programa aún no
 está firmado digitalmente).
 
-Guía completa con capturas: [README](https://github.com/amadevss/mcpautocad#readme).
+Guía paso a paso con capturas: [docs/GUIA.md](https://github.com/amadevss/mcpautocad/blob/main/docs/GUIA.md) ·
+[README](https://github.com/amadevss/mcpautocad#readme) ·
+[todos los cambios](https://github.com/amadevss/mcpautocad/blob/main/CHANGELOG.md).
 
 ---

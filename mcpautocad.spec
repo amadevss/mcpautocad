@@ -40,7 +40,10 @@ a = Analysis(
     datas=datas,
     hiddenimports=hiddenimports,
     excludes=["tkinter", "pytest", "IPython"],
-    noarchive=False,
+    # Los módulos van como archivos sueltos en _internal en vez de dentro de cada .exe:
+    # así los dos programas comparten el código (antes cada uno llevaba su copia de
+    # ~26 MB). Paquete comprimido: de 127 a 101 MB.
+    noarchive=True,
 )
 pyz = PYZ(a.pure)
 ICONO = "instalador/icono.ico" if os.path.exists("instalador/icono.ico") else None

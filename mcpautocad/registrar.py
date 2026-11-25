@@ -20,7 +20,6 @@ from __future__ import annotations
 import json
 import os
 import shutil
-import subprocess
 import sys
 from pathlib import Path
 
@@ -123,16 +122,9 @@ def es_tienda(ruta: Path) -> bool:
 
 def claude_abierto() -> bool:
     """¿Está Claude Desktop abierto? (solo Windows; en otros sistemas, no se comprueba)."""
-    if os.environ.get("MCPAUTOCAD_CLAUDE_ABIERTO"):  # para pruebas
-        return os.environ["MCPAUTOCAD_CLAUDE_ABIERTO"] == "1"
-    if sys.platform != "win32":
-        return False
-    try:
-        salida = subprocess.run(["tasklist", "/FI", "IMAGENAME eq claude.exe", "/NH"], capture_output=True,
-                                text=True, timeout=10, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
-        return "claude.exe" in salida.stdout.lower()
-    except Exception:
-        return False
+    from . import procesos
+
+    return bool(procesos.claude_abierto())
 
 
 def politicas() -> list[str]:

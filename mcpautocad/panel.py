@@ -15,7 +15,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from importlib import resources
 
 from . import (__version__, VERSION_ORIGINAL, actualizaciones, catalogo, configuracion, diagnostico, probar,
-               registrar, ventana)
+               procesos, registrar, ventana)
 
 PUERTO = 8765
 #: Sin ventana propia (navegador normal), el panel se cierra tras este tiempo sin
@@ -50,8 +50,27 @@ def estado() -> dict:
             # Solo cuenta la configuración que Claude usa de verdad.
             "registrado": registrar.esta_registrado(activa),
             "rutas": [str(activa)],
+            "abierto": procesos.claude_abierto(),  # None: no se puede saber (no es Windows)
         },
+        "autocad": {"abierto": procesos.autocad_abierto()},
+        "puede_reiniciar": sys.platform == "win32",
     }
+
+
+def reiniciar_claude(conectar: bool) -> dict:
+    """Cierra Claude Desktop, si hace falta conecta MCP AutoCAD y vuelve a abrir Claude."""
+    if sys.platform != "win32":
+        return {"ok": False, "error": "Reiniciar Claude Desktop solo funciona en Windows."}
+    if procesos.claude_abierto() and not procesos.cerrar_claude():
+        return {"ok": False, "error": "No se pudo cerrar Claude Desktop. Ciérralo desde la bandeja (clic derecho "
+                                      "en su icono → Salir) y vuelve a intentarlo."}
+    if conectar:
+        registrar.registrar_en_todas(comprobar_claude=False)  # ya está cerrado
+    if not procesos.abrir_claude():
+        return {"ok": True, "mensaje": ("Conectado. " if conectar else "") +
+                "Claude Desktop quedó cerrado: ábrelo tú desde el menú Inicio."}
+    return {"ok": True, "mensaje": ("Conectado con Claude Desktop. " if conectar else "") +
+            "Claude Desktop se está abriendo con los cambios aplicados."}
 
 
 class Manejador(BaseHTTPRequestHandler):
@@ -97,7 +116,31 @@ class Manejador(BaseHTTPRequestHandler):
             return self._json(actualizaciones.comprobar())
         if self.path == "/api/latido":
             return self._json({"ok": True})
+        if self.path == "/api/diagnostico/en-vivo":
+            return self._diagnostico_en_vivo()
         self._json({"error": "No encontrado"}, 404)
+
+    def _diagnostico_en_vivo(self) -> None:
+        """Envía cada paso del diagnóstico en cuanto termina (Server-Sent Events)."""
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Connection", "close")
+        self.end_headers()
+
+        def enviar(evento: str, datos: dict) -> None:
+            self.wfile.write(f"event: {evento}\ndata: {json.dumps(datos, ensure_ascii=False)}\n\n".encode())
+            self.wfile.flush()
+
+        lista = []
+        try:
+            for paso in diagnostico.pasos():
+                lista.append(paso)
+                enviar("paso", paso)
+            enviar("fin", diagnostico.conclusion(lista))
+        except (BrokenPipeError, ConnectionResetError):
+            pass  # el usuario cerró la ventana a mitad
+        self.close_connection = True
 
     def do_POST(self):
         self.server.ultimo_uso = time.monotonic()
@@ -129,11 +172,17 @@ class Manejador(BaseHTTPRequestHandler):
             if self.path == "/api/quitar":
                 registrar.quitar_de_todas()
                 return self._json({**estado(), "mensaje": "Quitado de Claude Desktop. " + AVISO_REINICIO})
+            if self.path == "/api/reiniciar-claude":
+                r = reiniciar_claude(bool(datos.get("conectar")))
+                return self._json({**estado(), **r}, 200 if r["ok"] else 409)
             if self.path == "/api/cerrar":
                 self._json({"mensaje": "Panel cerrado. Ya puedes cerrar esta ventana."})
                 threading.Thread(target=self.server.shutdown, daemon=True).start()
                 return None
-        except (registrar.ConfigInvalida, registrar.ClaudeAbierto) as error:
+        except registrar.ClaudeAbierto as error:
+            # El panel ofrece «Cerrar Claude y conectar» con este aviso.
+            return self._json({"error": str(error), "claude_abierto": True}, 409)
+        except registrar.ConfigInvalida as error:
             return self._json({"error": str(error)}, 409)
         self._json({"error": "No encontrado"}, 404)
 
