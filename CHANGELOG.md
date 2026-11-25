@@ -21,8 +21,8 @@ Todas las versiones de MCP AutoCAD, de la más nueva a la más antigua. Las desc
 - Documentación nueva: [guía paso a paso](docs/GUIA.md), este registro de cambios y capturas actualizadas.
 
 ### Mejorado
-- **Instalador más pequeño**: los dos programas comparten el código en lugar de llevar cada uno su copia. El paquete
-  comprimido baja de 127 a 101 MB.
+- **Instalador más pequeño**: los dos programas comparten el código en lugar de llevar cada uno su copia. El
+  instalador baja de 83 a 47 MB, y la versión portátil y la extensión `.mcpb`, de 101 a 76 MB.
 - Pulsar el indicador de AutoCAD ya no lanza la prueba (que abre AutoCAD si está cerrado): solo lleva a la tarjeta.
 - Si cierras la app con cambios sin guardar, te avisa antes.
 

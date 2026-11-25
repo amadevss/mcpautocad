@@ -17,7 +17,8 @@
 
 > [!NOTE]
 > **Novedades de la v0.2.0:** app rediseñada con pestañas e indicadores de estado, avisos visuales, botón para
-> **reiniciar Claude Desktop** con un clic, diagnóstico en vivo e instalador más pequeño. [Ver todos los cambios](CHANGELOG.md).
+> **reiniciar Claude Desktop** con un clic, diagnóstico en vivo e instalador más pequeño (de 83 a 47 MB).
+> [Ver todos los cambios](CHANGELOG.md).
 >
 > Probado con **AutoCAD 2025** y **Claude Desktop de Microsoft Store** en Windows 11, y con 103 pruebas automáticas.
 > Si algo falla, [abre un aviso](https://github.com/amadevss/mcpautocad/issues) y pega el informe del botón

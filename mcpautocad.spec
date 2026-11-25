@@ -42,7 +42,7 @@ a = Analysis(
     excludes=["tkinter", "pytest", "IPython"],
     # Los módulos van como archivos sueltos en _internal en vez de dentro de cada .exe:
     # así los dos programas comparten el código (antes cada uno llevaba su copia de
-    # ~26 MB). Paquete comprimido: de 127 a 101 MB.
+    # ~26 MB). Instalador: de 83 a 47 MB; .zip y .mcpb: de 101 a 76 MB (v0.2.0).
     noarchive=True,
 )
 pyz = PYZ(a.pure)

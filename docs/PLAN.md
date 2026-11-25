@@ -77,7 +77,7 @@ Las cifras sin paréntesis descuentan `system_run_command` y `system_run_lisp`, 
 - [x] «Reiniciar Claude Desktop» (`procesos.py`: `taskkill` y reabrir con `shell:AppsFolder\<AppID>` de Microsoft
       Store o `AnthropicClaude\claude.exe`) y «Cerrar, conectar y abrir» cuando Claude está abierto.
 - [x] Diagnóstico en vivo (Server-Sent Events en `/api/diagnostico/en-vivo`).
-- [x] Instalador más pequeño: `noarchive=True` para que los dos .exe compartan el código.
+- [x] Instalador más pequeño: `noarchive=True` para que los dos .exe compartan el código (instalador de 83 a 47 MB).
 - [x] CHANGELOG.md, docs/GUIA.md y notas de Release con las novedades de cada versión.
 - [ ] Probar en Windows real el botón de reinicio con Claude de Microsoft Store y con el instalador clásico.
 
