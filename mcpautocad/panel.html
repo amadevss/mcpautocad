@@ -8,70 +8,131 @@
 <link rel="icon" type="image/png" href="/icono.png">
 <style>
   :root {
-    --fondo: #f5f6f8; --tarjeta: #ffffff; --texto: #1d2330; --suave: #5c6577;
-    --borde: #dde1e8; --acento: #c8102e; --acento-suave: #fde8eb; --ok: #1a7f37; --ok-suave: #e6f4ea;
-    --aviso: #9a6700; --aviso-suave: #fff6dd;
+    --fondo: #f4f5f7; --tarjeta: #ffffff; --texto: #1d2330; --suave: #5c6577; --borde: #dde1e8;
+    --acento: #c8102e; --acento-hover: #a90d26; --acento-suave: #fde8eb;
+    --ok: #1a7f37; --ok-suave: #e6f4ea; --aviso: #9a6700; --aviso-suave: #fff6dd;
+    --neutro: #6e7781; --neutro-suave: #eef0f3; --sombra: 0 1px 2px rgba(16,24,40,.06), 0 4px 12px rgba(16,24,40,.06);
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --fondo: #15181e; --tarjeta: #1e222a; --texto: #e7eaf0; --suave: #9aa3b2;
-      --borde: #2e3440; --acento: #ff5a6e; --acento-suave: #3a1d23; --ok: #4ac26b; --ok-suave: #16301f;
-      --aviso: #e3b341; --aviso-suave: #352b10;
+      --fondo: #12151b; --tarjeta: #1b1f27; --texto: #e7eaf0; --suave: #9aa3b2; --borde: #2c323d;
+      --acento: #f2405a; --acento-hover: #ff5a70; --acento-suave: #3a1d23;
+      --ok: #4ac26b; --ok-suave: #16301f; --aviso: #e3b341; --aviso-suave: #352b10;
+      --neutro: #8b949e; --neutro-suave: #242a33; --sombra: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
     }
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--fondo); color: var(--texto);
-         font: 15px/1.5 system-ui, "Segoe UI", Roboto, sans-serif; }
-  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 120px; }
-  h1 { font-size: 24px; margin: 0 0 4px; }
-  h2 { font-size: 17px; margin: 0 0 12px; }
-  .sub { color: var(--suave); margin: 0 0 20px; }
-  .tarjeta { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 12px;
-             padding: 18px; margin-bottom: 16px; }
-  .modos { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
-  .modo { border: 2px solid var(--borde); border-radius: 10px; padding: 12px; cursor: pointer; display: block; }
+  [hidden] { display: none !important; }
+  html { scroll-padding-top: 130px; }
+  body { margin: 0; background: var(--fondo); color: var(--texto); font: 15px/1.5 system-ui, "Segoe UI", Roboto, sans-serif; }
+  a { color: var(--acento); }
+  code { font-size: 13px; overflow-wrap: anywhere; }
+  .contenedor { max-width: 820px; margin: 0 auto; padding: 0 16px; }
+
+  /* ── cabecera fija con estado y pestañas ── */
+  header { position: sticky; top: 0; z-index: 10; background: var(--tarjeta); border-bottom: 1px solid var(--borde); }
+  .barra-sup { display: flex; align-items: center; gap: 12px; padding: 12px 0 8px; flex-wrap: wrap; }
+  .marca { display: flex; align-items: center; gap: 10px; margin-right: auto; }
+  .marca img { width: 30px; height: 30px; }
+  .marca b { font-size: 18px; }
+  .marca small { color: var(--suave); }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 13px;
+          font-weight: 600; border: 1px solid transparent; background: var(--neutro-suave); color: var(--neutro);
+          cursor: pointer; white-space: nowrap; }
+  .chip:hover { border-color: currentColor; }
+  .chip .p { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .chip.ok { background: var(--ok-suave); color: var(--ok); }
+  .chip.aviso { background: var(--aviso-suave); color: var(--aviso); }
+  .chip.error { background: var(--acento-suave); color: var(--acento); }
+  .chip.cargando .p { animation: latir 1s infinite; }
+  nav { display: flex; gap: 4px; }
+  nav button { border: 0; background: none; padding: 10px 14px; border-bottom: 3px solid transparent; border-radius: 0;
+               color: var(--suave); font-weight: 600; }
+  nav button[aria-selected="true"] { color: var(--texto); border-bottom-color: var(--acento); }
+  nav button:hover { color: var(--texto); border-color: transparent; }
+  nav button[aria-selected="true"]:hover { border-bottom-color: var(--acento); }
+
+  main { padding: 20px 0 130px; }
+  section[role="tabpanel"][hidden] { display: none; }
+  .tarjeta { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 14px; padding: 20px;
+             margin-bottom: 16px; box-shadow: var(--sombra); }
+  h2 { font-size: 17px; margin: 0 0 4px; }
+  .ayuda { color: var(--suave); margin: 0 0 14px; font-size: 14px; }
+
+  /* ── botones ── */
+  button { font: inherit; border-radius: 8px; border: 1px solid var(--borde); background: var(--tarjeta); color: var(--texto);
+           padding: 8px 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: .15s; }
+  button:hover { border-color: var(--acento); }
+  button:focus-visible, .chip:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+  button.principal { background: var(--acento); border-color: var(--acento); color: #fff; font-weight: 600; }
+  button.principal:hover { background: var(--acento-hover); }
+  button:disabled { opacity: .55; cursor: not-allowed; }
+  button.cargando { pointer-events: none; opacity: .85; }
+  button.cargando::before { content: ""; width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent;
+                            border-radius: 50%; animation: girar .7s linear infinite; }
+  .acciones { display: flex; gap: 8px; flex-wrap: wrap; }
+  svg.ic { width: 16px; height: 16px; flex: none; }
+
+  /* ── filas de estado ── */
+  .estado { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-top: 1px solid var(--borde); flex-wrap: wrap; }
+  .estado:first-of-type { border-top: 0; padding-top: 4px; }
+  .estado .icono { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; flex: none;
+                   background: var(--neutro-suave); color: var(--neutro); }
+  .estado .icono svg { width: 22px; height: 22px; }
+  .estado.ok .icono { background: var(--ok-suave); color: var(--ok); }
+  .estado.aviso .icono { background: var(--aviso-suave); color: var(--aviso); }
+  .estado.error .icono { background: var(--acento-suave); color: var(--acento); }
+  .estado .texto { flex: 1; min-width: 200px; }
+  .estado .texto small { display: block; color: var(--suave); overflow-wrap: anywhere; }
+
+  /* ── pasos e indicaciones ── */
+  .pasos { list-style: none; margin: 0; padding: 0; counter-reset: paso; }
+  .pasos li { display: flex; gap: 12px; padding: 8px 0; align-items: flex-start; }
+  .pasos .n { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; flex: none; font-size: 13px;
+              font-weight: 700; background: var(--neutro-suave); color: var(--neutro); }
+  .pasos li.hecho .n { background: var(--ok); color: #fff; }
+  .pasos small { display: block; color: var(--suave); }
+  .ejemplos { display: grid; gap: 8px; }
+  .ejemplo { display: flex; gap: 10px; align-items: center; justify-content: space-between; padding: 10px 12px;
+             border: 1px solid var(--borde); border-radius: 10px; background: var(--fondo); }
+  .ejemplo span { font-style: italic; }
+  .ejemplo button { padding: 6px 10px; font-size: 13px; flex: none; }
+  .banda { display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 12px 16px;
+           border-radius: 10px; margin-bottom: 16px; font-weight: 600; }
+  .banda.aviso { background: var(--aviso-suave); color: var(--aviso); }
+  .banda[hidden] { display: none; }
+
+  /* ── modos, paquetes, herramientas ── */
+  .modos { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+  .modo { border: 2px solid var(--borde); border-radius: 12px; padding: 14px; cursor: pointer; display: flex; flex-direction: column;
+          gap: 4px; transition: .15s; position: relative; }
+  .modo:hover { border-color: var(--suave); }
   .modo input { position: absolute; opacity: 0; pointer-events: none; }
   .modo:has(input:checked) { border-color: var(--acento); background: var(--acento-suave); }
   .modo:has(input:focus-visible) { outline: 2px solid var(--acento); outline-offset: 2px; }
-  .modo b { display: block; font-size: 16px; }
-  .modo span { color: var(--suave); font-size: 13px; }
-  .fila { display: flex; align-items: center; justify-content: space-between; gap: 12px;
-          padding: 10px 0; border-top: 1px solid var(--borde); }
+  .modo .cab { display: flex; align-items: center; gap: 8px; }
+  .modo .cab svg { width: 20px; height: 20px; color: var(--acento); }
+  .modo b { font-size: 16px; }
+  .modo .etiqueta { margin-left: auto; font-size: 11px; font-weight: 700; color: var(--ok); background: var(--ok-suave);
+                    padding: 2px 8px; border-radius: 999px; }
+  .modo .desc { color: var(--suave); font-size: 13px; }
+  .modo .coste { margin-top: 6px; font-weight: 700; font-size: 14px; }
+  .modo .coste small { font-weight: 400; color: var(--suave); }
+  .fila { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--borde); }
   .fila:first-of-type { border-top: 0; }
   .fila small { display: block; color: var(--suave); }
   .interruptor { position: relative; width: 46px; height: 26px; flex: none; }
   .interruptor input { opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; position: relative; z-index: 1; }
   .interruptor i { position: absolute; inset: 0; background: var(--borde); border-radius: 13px; transition: .15s; }
-  .interruptor i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px;
-                          background: #fff; border-radius: 50%; transition: .15s; }
+  .interruptor i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: #fff;
+                          border-radius: 50%; transition: .15s; box-shadow: 0 1px 2px rgba(0,0,0,.2); }
   .interruptor input:checked + i { background: var(--acento); }
   .interruptor input:checked + i::after { left: 23px; }
   .interruptor input:disabled + i { opacity: .5; }
   .interruptor input:focus-visible + i { outline: 2px solid var(--acento); outline-offset: 2px; }
-  .presets { display: flex; flex-wrap: wrap; gap: 8px; }
-  button { font: inherit; border-radius: 8px; border: 1px solid var(--borde); background: var(--tarjeta);
-           color: var(--texto); padding: 8px 14px; cursor: pointer; }
-  button:hover { border-color: var(--acento); }
-  button.principal { background: var(--acento); border-color: var(--acento); color: #fff; font-weight: 600; }
-  .contador { position: fixed; left: 0; right: 0; bottom: 0; background: var(--tarjeta);
-              border-top: 1px solid var(--borde); padding: 12px 16px; }
-  .contador > div { max-width: 760px; margin: 0 auto; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-  .cifra { font-size: 22px; font-weight: 700; }
-  .barra { flex: 1; min-width: 140px; height: 8px; background: var(--borde); border-radius: 4px; overflow: hidden; }
-  .barra i { display: block; height: 100%; background: var(--acento); width: 0; transition: width .2s; }
-  .mensaje { padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; display: none; }
-  .mensaje.ok { display: block; background: var(--ok-suave); color: var(--ok); }
-  .mensaje.error { display: block; background: var(--acento-suave); color: var(--acento); }
-  .estado-claude { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  .punto { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; background: var(--suave); }
-  .punto.si { background: var(--ok); }
-  .nota { background: var(--aviso-suave); color: var(--aviso); border-radius: 8px; padding: 8px 12px; font-size: 13px; margin-top: 10px; }
-  footer { color: var(--suave); font-size: 13px; margin-top: 24px; }
-  footer a { color: inherit; }
-  #estado-ruta, code { overflow-wrap: anywhere; }
-  .separado { border-top: 1px solid var(--borde); margin-top: 14px; padding-top: 14px; }
-  .punto.no { background: var(--acento); }
-  .punto.esperando { background: var(--aviso); }
+  .presets { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .nota { background: var(--aviso-suave); color: var(--aviso); border-radius: 8px; padding: 8px 12px; font-size: 13px; margin: 10px 0 0; }
   details > summary { cursor: pointer; list-style: none; }
   details > summary::-webkit-details-marker { display: none; }
   details > summary h2 { display: inline; }
@@ -84,112 +145,266 @@
   .herr { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; border-top: 1px solid var(--borde); }
   .herr input { margin-top: 4px; flex: none; }
   .herr div { flex: 1; min-width: 0; }
-  .herr code { font-size: 13px; overflow-wrap: anywhere; }
   .herr small { display: block; color: var(--suave); }
   .herr .tk { flex: none; color: var(--suave); font-size: 12px; white-space: nowrap; }
   .herr.fuera { opacity: .45; }
+
+  /* ── diagnóstico ── */
   .diag { list-style: none; margin: 12px 0 0; padding: 0; }
-  .diag li { display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid var(--borde); }
-  .diag .ic { flex: none; width: 22px; height: 22px; border-radius: 50%; color: #fff; font-weight: 700;
-              display: grid; place-items: center; font-size: 13px; }
-  .diag .ok .ic { background: var(--ok); } .diag .aviso .ic { background: var(--aviso); } .diag .error .ic { background: var(--acento); }
+  .diag li { display: flex; gap: 10px; padding: 9px 0; border-top: 1px solid var(--borde); animation: entrar .25s ease-out; }
+  .diag .ic2 { flex: none; width: 22px; height: 22px; border-radius: 50%; color: #fff; font-weight: 700; display: grid;
+               place-items: center; font-size: 13px; }
+  .diag .ok .ic2 { background: var(--ok); } .diag .aviso .ic2 { background: var(--aviso); } .diag .error .ic2 { background: var(--acento); }
   .diag small { display: block; color: var(--suave); overflow-wrap: anywhere; }
-  .diag .que { color: var(--texto); }
-  .resumen-diag { padding: 10px 14px; border-radius: 8px; margin-top: 12px; font-weight: 600; }
+  .diag .que { color: var(--texto); font-weight: 600; }
+  .resumen-diag { padding: 12px 14px; border-radius: 10px; margin-top: 12px; font-weight: 600; display: flex; gap: 8px; align-items: center; }
   .resumen-diag.ok { background: var(--ok-suave); color: var(--ok); }
   .resumen-diag.error { background: var(--acento-suave); color: var(--acento); }
+  .resumen-diag.trabajando { background: var(--neutro-suave); color: var(--neutro); }
+  .resumen-diag.trabajando::before { content: ""; width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent;
+                                     border-radius: 50%; animation: girar .7s linear infinite; flex: none; }
+  .faq details { border-top: 1px solid var(--borde); padding: 10px 0; }
+  .faq details:first-child { border-top: 0; }
+  .faq summary { font-weight: 600; }
+  .faq p { margin: 8px 0 0; color: var(--suave); }
+  footer { color: var(--suave); font-size: 13px; margin-top: 8px; }
+  footer a { color: inherit; }
+
+  /* ── barra inferior: tokens y guardar ── */
+  .inferior { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; background: var(--tarjeta); border-top: 1px solid var(--borde);
+              box-shadow: 0 -4px 16px rgba(16,24,40,.06); }
+  .inferior .contenedor { display: flex; align-items: center; gap: 16px; padding: 12px 16px; flex-wrap: wrap; }
+  .cifra { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .medidor { flex: 1; min-width: 140px; }
+  .barra { height: 8px; background: var(--borde); border-radius: 4px; overflow: hidden; margin-top: 4px; }
+  .barra i { display: block; height: 100%; background: var(--acento); width: 0; transition: width .35s ease; }
+  .pendiente { font-size: 13px; font-weight: 700; color: var(--aviso); background: var(--aviso-suave); padding: 4px 10px; border-radius: 999px; }
+  .pendiente[hidden] { display: none; }
+
+  /* ── avisos flotantes y diálogo ── */
+  #avisos { position: fixed; bottom: 92px; right: 16px; z-index: 30; display: grid; gap: 8px; width: min(380px, calc(100vw - 32px)); }
+  .toast { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 10px; background: var(--tarjeta);
+           border: 1px solid var(--borde); border-left: 4px solid var(--ok); box-shadow: var(--sombra); animation: entrar .2s ease-out; }
+  .toast.error { border-left-color: var(--acento); }
+  .toast.aviso { border-left-color: var(--aviso); }
+  .toast svg { width: 20px; height: 20px; flex: none; color: var(--ok); }
+  .toast.error svg { color: var(--acento); } .toast.aviso svg { color: var(--aviso); }
+  .toast p { margin: 0; flex: 1; }
+  .toast button { border: 0; padding: 0 4px; background: none; color: var(--suave); }
+  .toast.saliendo { opacity: 0; transform: translateY(-6px); transition: .2s; }
+  dialog { border: 1px solid var(--borde); border-radius: 14px; padding: 22px; max-width: 440px; background: var(--tarjeta);
+           color: var(--texto); box-shadow: 0 10px 40px rgba(0,0,0,.25); }
+  dialog::backdrop { background: rgba(10,12,16,.45); }
+  dialog h3 { margin: 0 0 8px; font-size: 18px; }
+  dialog p { margin: 0 0 18px; color: var(--suave); }
+  dialog .acciones { justify-content: flex-end; }
+
+  @keyframes girar { to { transform: rotate(360deg); } }
+  @keyframes latir { 50% { opacity: .3; } }
+  @keyframes entrar { from { opacity: 0; transform: translateY(-4px); } }
+  @media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; transition: none !important; } }
+  @media (max-width: 560px) {
+    .barra-sup { padding-bottom: 4px; } .marca small { display: none; }
+    nav button { padding: 10px; flex: 1; }
+    #avisos { bottom: 150px; }
+    main { padding-bottom: 190px; }
+  }
 </style>
 </head>
 <body>
-<main>
-  <h1><img src="/icono.png" alt="" width="32" height="32" style="vertical-align:-6px;margin-right:8px">Panel MCP AutoCAD</h1>
-  <p class="sub">Elige qué herramientas de AutoCAD ve Claude. Menos herramientas = menos tokens gastados en cada conversación.</p>
+<!-- Iconos -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></symbol>
+  <symbol id="i-error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></symbol>
+  <symbol id="i-aviso" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></symbol>
+  <symbol id="i-claude" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+  <symbol id="i-cad" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><rect x="8.5" y="8.5" width="7" height="7"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></symbol>
+  <symbol id="i-recargar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></symbol>
+  <symbol id="i-copiar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></symbol>
+  <symbol id="i-rayo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="i-capas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
+  <symbol id="i-lupa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+  <symbol id="i-guardar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></symbol>
+</svg>
 
-  <div id="nueva-version" class="nota" hidden style="margin:0 0 16px;font-size:15px"></div>
-
-  <div id="mensaje" class="mensaje" role="status"></div>
-
-  <section class="tarjeta">
-    <div class="estado-claude">
-      <div><span id="punto" class="punto"></span><b id="estado-texto">Comprobando Claude Desktop…</b>
-        <small id="estado-ruta" style="display:block;color:var(--suave)"></small></div>
-      <div><button id="btn-registrar" class="principal">Conectar con Claude Desktop</button>
-        <button id="btn-quitar" hidden>Desconectar</button></div>
-    </div>
-    <div class="estado-claude separado">
-      <div><span id="punto-acad" class="punto"></span><b id="acad-texto">AutoCAD: sin comprobar</b>
-        <small id="acad-detalle" style="display:block;color:var(--suave)">Si AutoCAD está cerrado, la prueba lo abre (puede tardar un par de minutos).</small></div>
-      <div><button id="btn-probar">Probar conexión con AutoCAD</button></div>
-    </div>
-    <div class="estado-claude separado">
-      <div><b>¿Claude no ve las herramientas?</b>
-        <small style="display:block;color:var(--suave)">El diagnóstico revisa la conexión con Claude Desktop y te dice qué falla.</small></div>
-      <div><button id="btn-diagnostico" class="principal">Diagnóstico</button></div>
-    </div>
-    <div id="diagnostico" hidden>
-      <div id="resumen-diag" class="resumen-diag" role="status"></div>
-      <ul id="pasos-diag" class="diag"></ul>
-      <button id="btn-copiar-diag">Copiar informe</button>
-    </div>
-  </section>
-
-  <section class="tarjeta">
-    <h2>1. Modo</h2>
-    <div class="modos">
-      <label class="modo"><input type="radio" name="modo" value="completo">
-        <b>Completo</b><span>Todas las herramientas. Máxima potencia, más tokens.</span></label>
-      <label class="modo"><input type="radio" name="modo" value="ligero">
-        <b>Ligero</b><span>66 herramientas esenciales de dibujo e inspección. Recomendado.</span></label>
-      <label class="modo"><input type="radio" name="modo" value="busqueda">
-        <b>Búsqueda</b><span>Claude ve 3 herramientas y busca las demás cuando las necesita. Mínimo gasto.</span></label>
-    </div>
-  </section>
-
-  <section class="tarjeta">
-    <h2>2. Paquetes</h2>
-    <div class="presets" style="margin-bottom:12px" id="presets"></div>
-    <div id="paquetes"></div>
-    <div id="nota-3d" class="nota" hidden></div>
-  </section>
-
-  <section class="tarjeta">
-    <details id="det-herr">
-      <summary><h2>3. Herramientas una por una <small style="font-weight:400;color:var(--suave)">(opcional)</small></h2></summary>
-      <p style="margin:10px 0 0;color:var(--suave)">Apaga herramientas concretas que no usas para ahorrar aún más.
-        Las que no trae el modo o los paquetes elegidos salen en gris. Claude ve las descripciones originales en inglés; aquí están traducidas.</p>
-      <div class="herr-barra">
-        <input type="search" id="buscar" placeholder="Buscar por nombre o descripción…" aria-label="Buscar herramientas">
-        <label><input type="checkbox" id="solo-incluidas" checked> Solo las de este modo</label>
-        <button id="btn-todas">Valores por defecto</button>
+<header>
+  <div class="contenedor">
+    <div class="barra-sup">
+      <div class="marca"><img src="/icono.png" alt=""><b>MCP AutoCAD</b><small id="version"></small></div>
+      <div class="chips" aria-label="Estado">
+        <button class="chip cargando" id="chip-claude" title="Conexión con Claude Desktop"><span class="p"></span><span>Claude…</span></button>
+        <button class="chip cargando" id="chip-autocad" title="AutoCAD"><span class="p"></span><span>AutoCAD…</span></button>
+        <button class="chip cargando" id="chip-version" title="Versión"><span class="p"></span><span>Versión…</span></button>
       </div>
-      <p class="nota" style="margin:0 0 10px">Por seguridad, <code>system_run_command</code> y <code>system_run_lisp</code>
-        (ejecutan comandos y LISP de AutoCAD) vienen apagadas. Enciéndelas solo si las necesitas.</p>
-      <b id="resumen-herr"></b>
-      <div id="lista-herr"></div>
-    </details>
+    </div>
+    <nav role="tablist" aria-label="Secciones">
+      <button role="tab" id="tab-inicio" aria-controls="inicio" aria-selected="true">Inicio</button>
+      <button role="tab" id="tab-herramientas" aria-controls="herramientas" aria-selected="false">Herramientas</button>
+      <button role="tab" id="tab-ayuda" aria-controls="ayuda" aria-selected="false">Ayuda</button>
+    </nav>
+  </div>
+</header>
+
+<div id="avisos" aria-live="polite"></div>
+
+<main class="contenedor">
+  <div class="banda aviso" id="banda-reinicio" hidden>
+    <span>Hay cambios guardados que Claude todavía no usa: reinicia Claude Desktop para aplicarlos.</span>
+    <button class="principal" data-reiniciar><svg class="ic"><use href="#i-recargar"/></svg>Reiniciar Claude Desktop</button>
+  </div>
+  <div class="banda aviso" id="banda-version" hidden></div>
+
+  <!-- ═════════ INICIO ═════════ -->
+  <section role="tabpanel" id="inicio" aria-labelledby="tab-inicio">
+    <div class="tarjeta">
+      <h2>Conexión</h2>
+      <p class="ayuda">MCP AutoCAD une Claude Desktop con el AutoCAD de este equipo.</p>
+      <div class="estado" id="fila-claude">
+        <div class="icono"><svg><use href="#i-claude"/></svg></div>
+        <div class="texto"><b id="claude-titulo">Comprobando Claude Desktop…</b><small id="claude-detalle"></small></div>
+        <div class="acciones">
+          <button class="principal" id="btn-registrar">Conectar con Claude Desktop</button>
+          <button id="btn-reiniciar" data-reiniciar hidden><svg class="ic"><use href="#i-recargar"/></svg>Reiniciar Claude</button>
+          <button id="btn-quitar" hidden>Desconectar</button>
+        </div>
+      </div>
+      <div class="estado" id="fila-autocad">
+        <div class="icono"><svg><use href="#i-cad"/></svg></div>
+        <div class="texto"><b id="acad-titulo">AutoCAD: sin comprobar</b>
+          <small id="acad-detalle">Si AutoCAD está cerrado, la prueba lo abre (puede tardar un par de minutos).</small></div>
+        <div class="acciones"><button id="btn-probar">Probar conexión</button></div>
+      </div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Primeros pasos</h2>
+      <ol class="pasos">
+        <li id="paso-1"><span class="n">1</span><div><b>Conecta con Claude Desktop</b><small>Un clic en «Conectar» (arriba).</small></div></li>
+        <li id="paso-2"><span class="n">2</span><div><b>Abre AutoCAD con un dibujo</b><small>AutoCAD completo; la versión LT no sirve.</small></div></li>
+        <li id="paso-3"><span class="n">3</span><div><b>Abre Claude Desktop en modo Chat</b><small>No en la web ni en Cowork: ahí no se ven los programas de tu PC.</small></div></li>
+        <li id="paso-4"><span class="n">4</span><div><b>Pídele algo</b><small>Prueba con uno de los ejemplos de abajo.</small></div></li>
+      </ol>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Qué pedirle a Claude</h2>
+      <p class="ayuda">Copia un ejemplo y pégalo en Claude Desktop.</p>
+      <div class="ejemplos" id="ejemplos"></div>
+    </div>
   </section>
 
-  <section class="tarjeta">
-    <h2>4. Guardar</h2>
-    <p style="margin:0 0 12px;color:var(--suave)">Después de guardar, cierra Claude Desktop por completo (también desde la bandeja del sistema) y vuelve a abrirlo.</p>
-    <button id="btn-guardar" class="principal">Guardar configuración</button>
-    <button id="btn-cerrar">Cerrar panel</button>
+  <!-- ═════════ HERRAMIENTAS ═════════ -->
+  <section role="tabpanel" id="herramientas" aria-labelledby="tab-herramientas" hidden>
+    <div class="tarjeta">
+      <h2>Modo</h2>
+      <p class="ayuda">Cada herramienta que Claude ve ocupa espacio (tokens) en cada conversación. Es lo que más cambia el consumo.</p>
+      <div class="modos">
+        <label class="modo"><input type="radio" name="modo" value="ligero">
+          <span class="cab"><svg><use href="#i-rayo"/></svg><b>Ligero</b><span class="etiqueta">Recomendado</span></span>
+          <span class="desc">Las 66 herramientas esenciales de dibujo, cotas, capas e inspección.</span>
+          <span class="coste" id="coste-ligero"></span></label>
+        <label class="modo"><input type="radio" name="modo" value="busqueda">
+          <span class="cab"><svg><use href="#i-lupa"/></svg><b>Búsqueda</b></span>
+          <span class="desc">Claude ve 3 herramientas y busca las demás cuando las necesita. Mínimo gasto.</span>
+          <span class="coste" id="coste-busqueda"></span></label>
+        <label class="modo"><input type="radio" name="modo" value="completo">
+          <span class="cab"><svg><use href="#i-capas"/></svg><b>Completo</b></span>
+          <span class="desc">Todas las herramientas a la vista. Máxima potencia, más tokens.</span>
+          <span class="coste" id="coste-completo"></span></label>
+      </div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Paquetes</h2>
+      <p class="ayuda">Activa solo lo que usas.</p>
+      <div class="presets" id="presets"></div>
+      <div id="paquetes"></div>
+      <div id="nota-3d" class="nota" hidden></div>
+    </div>
+
+    <div class="tarjeta">
+      <details id="det-herr">
+        <summary><h2>Herramientas una por una <small style="font-weight:400;color:var(--suave)">(opcional)</small></h2></summary>
+        <p class="ayuda" style="margin-top:10px">Apaga herramientas concretas para ahorrar aún más. Las que no trae el modo o
+          los paquetes elegidos salen en gris. Claude ve las descripciones originales en inglés; aquí están traducidas.</p>
+        <div class="herr-barra">
+          <input type="search" id="buscar" placeholder="Buscar por nombre o descripción…" aria-label="Buscar herramientas">
+          <label><input type="checkbox" id="solo-incluidas" checked> Solo las de este modo</label>
+          <button id="btn-todas">Valores por defecto</button>
+        </div>
+        <p class="nota" style="margin:0 0 10px">Por seguridad, <code>system_run_command</code> y <code>system_run_lisp</code>
+          (ejecutan comandos y LISP de AutoCAD) vienen apagadas. Enciéndelas solo si las necesitas.</p>
+        <b id="resumen-herr"></b>
+        <div id="lista-herr"></div>
+      </details>
+    </div>
   </section>
 
-  <footer>
-    MCP AutoCAD <span id="version"></span>. Usa
-    <a href="https://github.com/U-C4N/Autocad-MCP" target="_blank" rel="noopener">AutoCAD MCP Pro</a>
-    <span id="version-original"></span> de Umutcan Edizsalan (licencia MIT).<br>
-    Configuración: <code id="ruta-config"></code>
-  </footer>
+  <!-- ═════════ AYUDA ═════════ -->
+  <section role="tabpanel" id="ayuda" aria-labelledby="tab-ayuda" hidden>
+    <div class="tarjeta">
+      <h2>Diagnóstico</h2>
+      <p class="ayuda">¿Claude no ve las herramientas? El diagnóstico revisa la conexión paso a paso y te dice qué hacer.</p>
+      <div class="acciones">
+        <button class="principal" id="btn-diagnostico">Hacer diagnóstico</button>
+        <button id="btn-copiar-diag" hidden><svg class="ic"><use href="#i-copiar"/></svg>Copiar informe</button>
+      </div>
+      <div id="resumen-diag" class="resumen-diag" role="status" hidden></div>
+      <ul id="pasos-diag" class="diag"></ul>
+    </div>
+
+    <div class="tarjeta faq">
+      <h2>Problemas frecuentes</h2>
+      <details><summary>Claude no ve las herramientas de AutoCAD</summary>
+        <p>Haz el diagnóstico. Lo más habitual: Claude Desktop no se reinició después de conectar (usa «Reiniciar Claude»),
+          o estás en la web o en Cowork en lugar del modo Chat de la app instalada.</p></details>
+      <details><summary>«Conectar» dice que Claude está abierto</summary>
+        <p>Claude reescribe su configuración mientras está abierto y borraría el cambio. El panel te ofrece cerrarlo,
+          conectar y volver a abrirlo solo. Tus conversaciones se guardan en la nube.</p></details>
+      <details><summary>Claude no encuentra AutoCAD</summary>
+        <p>Pulsa «Probar conexión» en Inicio. Si AutoCAD está cerrado, el servidor intenta abrirlo (puede tardar).
+          AutoCAD LT no sirve: no tiene la interfaz COM.</p></details>
+      <details><summary>No aparecen las herramientas 3D</summary>
+        <p>Activa el paquete 3D y usa el modo Completo o Búsqueda: el modo Ligero no las incluye.</p></details>
+      <details><summary>Quiero ver qué pasa por dentro</summary>
+        <p>El registro de Claude para MCP AutoCAD está en <code>%LOCALAPPDATA%\Claude\logs\mcp-server-autocad.log</code>.
+          El informe del diagnóstico ya incluye lo importante.</p></details>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Más información</h2>
+      <div class="acciones">
+        <a href="https://github.com/amadevss/mcpautocad#readme" target="_blank" rel="noopener"><button>Guía en GitHub</button></a>
+        <a href="https://github.com/amadevss/mcpautocad/issues" target="_blank" rel="noopener"><button>Informar de un problema</button></a>
+        <button id="btn-cerrar">Cerrar panel</button>
+      </div>
+      <footer style="margin-top:16px">
+        MCP AutoCAD <span id="version-pie"></span>. Usa
+        <a href="https://github.com/U-C4N/Autocad-MCP" target="_blank" rel="noopener">AutoCAD MCP Pro</a>
+        <span id="version-original"></span> de Umutcan Edizsalan (licencia MIT).<br>
+        Configuración del panel: <code id="ruta-config"></code>
+      </footer>
+    </div>
+  </section>
 </main>
 
-<div class="contador" aria-live="polite">
-  <div>
-    <div><div class="cifra" id="tokens">—</div><small id="herramientas" style="color:var(--suave)"></small></div>
-    <div class="barra"><i id="barra"></i></div>
+<div class="inferior" aria-live="polite">
+  <div class="contenedor">
+    <div><div class="cifra" id="tokens">—</div><small id="herramientas-n" style="color:var(--suave)"></small></div>
+    <div class="medidor"><small style="color:var(--suave)">Tokens por conversación (aprox.)</small><div class="barra"><i id="barra"></i></div></div>
+    <span class="pendiente" id="sin-guardar" hidden>Cambios sin guardar</span>
+    <button class="principal" id="btn-guardar" disabled><svg class="ic"><use href="#i-guardar"/></svg>Guardar</button>
   </div>
 </div>
+
+<dialog id="dialogo">
+  <h3 id="dialogo-titulo"></h3>
+  <p id="dialogo-texto"></p>
+  <div class="acciones">
+    <button id="dialogo-no">Cancelar</button>
+    <button class="principal" id="dialogo-si"></button>
+  </div>
+</dialog>
 
 <script>
 const PAQUETES = [
@@ -201,32 +416,240 @@ const PAQUETES = [
   ["configuracion", "Configuración", "Varios dibujos abiertos, estados de capas, SCP, vistas guardadas, variables de AutoCAD y elegir puntos u objetos en pantalla."],
   ["3d", "3D", "Sólidos 3D (cajas, cilindros, extrusiones). Solo con AutoCAD real."],
 ];
-const NOMBRE_PAQUETE = Object.fromEntries(PAQUETES.map(([id, nombre]) => [id, nombre]));
-let cfg = null;
-let lista = [];
-const sinTildes = (t) => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const EJEMPLOS = [
+  "Dime el estado de AutoCAD y qué dibujo tengo abierto.",
+  "Dibuja un rectángulo de 100 × 50 y un círculo de radio 20 en su centro.",
+  "Crea las capas ISO para un plano mecánico y pon la capa de contornos como actual.",
+  "Dibuja una planta de 9 × 6,5 m con sala, cocina y dormitorio, con puertas, ventanas y cotas.",
+  "Revisa la calidad de este plano y dime qué corregirías.",
+];
+let cfg = null, guardado = "", lista = [], maximo = 1, porDefecto = [], puedeReiniciar = false;
+let reinicioPendiente = false, ultimoEstado = null, pruebaAcad = null;
 const $ = (id) => document.getElementById(id);
-const fmt = (n) => n.toLocaleString("es-ES");
+const fmt = (n) => Math.round(n).toLocaleString("es-ES");
+const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const sinTildes = (t) => t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+const icono = (id) => `<svg class="ic"><use href="#i-${id}"/></svg>`;
 
 async function api(ruta, cuerpo) {
   const r = await fetch(ruta, cuerpo === undefined ? {} : {
     method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(cuerpo)});
   const datos = await r.json();
-  if (!r.ok) throw new Error(datos.error || "Error");
+  if (!r.ok) { const e = new Error(datos.error || "Error"); e.datos = datos; throw e; }
   return datos;
 }
 
-function aviso(texto, tipo = "ok") {
-  const m = $("mensaje"); m.textContent = texto; m.className = "mensaje " + tipo;
-  m.scrollIntoView({behavior: "smooth", block: "nearest"});
+/* ── avisos flotantes ── */
+function aviso(texto, tipo = "ok", duracion = 5000) {
+  const t = document.createElement("div");
+  t.className = "toast " + tipo;
+  t.innerHTML = `<svg><use href="#i-${tipo === "ok" ? "ok" : tipo === "error" ? "error" : "aviso"}"/></svg>
+    <p>${esc(texto)}</p><button aria-label="Cerrar aviso">✕</button>`;
+  const quitar = () => { t.classList.add("saliendo"); setTimeout(() => t.remove(), 200); };
+  t.querySelector("button").addEventListener("click", quitar);
+  $("avisos").appendChild(t);
+  if (duracion) setTimeout(quitar, tipo === "error" ? duracion * 2 : duracion);
 }
 
+/* ── botones que trabajan ── */
+async function conCarga(boton, tarea) {
+  boton.classList.add("cargando"); boton.disabled = true;
+  try { return await tarea(); } finally { boton.classList.remove("cargando"); boton.disabled = false; }
+}
+
+/* ── diálogo de confirmación ── */
+function confirmar(titulo, texto, si) {
+  return new Promise((resolver) => {
+    $("dialogo-titulo").textContent = titulo; $("dialogo-texto").textContent = texto; $("dialogo-si").textContent = si;
+    const d = $("dialogo");
+    const fin = (v) => { d.close(); resolver(v); };
+    $("dialogo-si").onclick = () => fin(true); $("dialogo-no").onclick = () => fin(false);
+    d.oncancel = () => resolver(false);
+    d.showModal();
+  });
+}
+
+/* ── pestañas ── */
+function irA(id) {
+  for (const t of document.querySelectorAll("[role=tab]")) {
+    const activa = t.getAttribute("aria-controls") === id;
+    t.setAttribute("aria-selected", activa);
+    $(t.getAttribute("aria-controls")).hidden = !activa;
+  }
+  history.replaceState(null, "", "#" + id);
+  window.scrollTo({top: 0});
+}
+document.querySelectorAll("[role=tab]").forEach((t) => t.addEventListener("click", () => irA(t.getAttribute("aria-controls"))));
+
+/* ── estado: indicadores de la cabecera y tarjeta de conexión ── */
+function chip(id, clase, texto, titulo) {
+  const c = $(id); c.className = "chip " + clase; c.querySelector("span:last-child").textContent = texto;
+  if (titulo) c.title = titulo;
+}
+
+function pintarEstado(e) {
+  ultimoEstado = e;
+  const c = e.claude, reg = c.registrado;
+  chip("chip-claude", !reg ? "error" : reinicioPendiente ? "aviso" : "ok",
+       !reg ? "Claude: no conectado" : reinicioPendiente ? "Claude: reinicio pendiente" : "Claude: conectado",
+       "Configuración que usa Claude: " + c.rutas.join(", "));
+  $("fila-claude").className = "estado " + (!reg ? "error" : reinicioPendiente ? "aviso" : "ok");
+  $("claude-titulo").textContent = !reg ? "Todavía no está conectado con Claude Desktop" : "Conectado con Claude Desktop";
+  $("claude-detalle").textContent = (c.abierto === true ? "Claude Desktop está abierto. " : c.abierto === false ? "Claude Desktop está cerrado. " : "")
+    + "Configuración: " + c.rutas.join(", ");
+  $("btn-registrar").hidden = reg; $("btn-quitar").hidden = !reg;
+  $("btn-reiniciar").hidden = !(reg && puedeReiniciar);
+  $("banda-reinicio").hidden = !(reinicioPendiente && puedeReiniciar);
+
+  if (!pruebaAcad) {
+    const ab = e.autocad.abierto;
+    chip("chip-autocad", ab ? "ok" : "", ab ? "AutoCAD: abierto" : ab === false ? "AutoCAD: cerrado" : "AutoCAD: sin comprobar");
+    $("fila-autocad").className = "estado " + (ab ? "ok" : "");
+    $("acad-titulo").textContent = ab ? "AutoCAD está abierto" : ab === false ? "AutoCAD está cerrado" : "AutoCAD: sin comprobar";
+  }
+  marcarPaso("paso-1", reg);
+  marcarPaso("paso-2", pruebaAcad ? pruebaAcad.ok && pruebaAcad.motor === "com" : e.autocad.abierto);
+}
+function marcarPaso(id, hecho) {
+  const li = $(id); li.classList.toggle("hecho", !!hecho);
+  li.querySelector(".n").innerHTML = hecho ? "✓" : id.slice(-1);
+}
+
+async function refrescarEstado() {
+  try { pintarEstado(await api("/api/estado")); } catch (err) { /* el panel se está cerrando */ }
+}
+
+async function comprobarVersion() {
+  try {
+    const v = await api("/api/version");
+    if (v.hay_nueva) {
+      chip("chip-version", "aviso", "Nueva versión: " + v.ultima, "Tienes la " + v.actual);
+      $("chip-version").onclick = () => window.open(v.url, "_blank");
+      $("banda-version").innerHTML = `<span>Hay una versión nueva: ${esc(v.ultima)} (tienes la ${esc(v.actual)}).</span>
+        <a href="${esc(v.url)}" target="_blank" rel="noopener"><button class="principal">Descargar</button></a>`;
+      $("banda-version").hidden = false;
+    } else {
+      chip("chip-version", v.ultima ? "ok" : "", v.ultima ? "v" + v.actual + " · al día" : "v" + v.actual,
+           v.ultima ? "Última versión publicada: " + v.ultima : "No se pudo comprobar si hay versiones nuevas");
+    }
+  } catch (err) { chip("chip-version", "", "Versión"); }
+}
+
+/* ── acciones de Claude Desktop ── */
+async function conectar(boton) {
+  await conCarga(boton, async () => {
+    try {
+      const r = await api("/api/registrar", {});
+      reinicioPendiente = true; pintarEstado(r);
+      aviso("Conectado con Claude Desktop. Ábrelo (o reinícialo) para usar MCP AutoCAD.");
+    } catch (err) {
+      if (err.datos && err.datos.claude_abierto && puedeReiniciar) {
+        if (await confirmar("Claude Desktop está abierto",
+            "Para conectar hay que cerrarlo un momento: si no, Claude borraría el cambio. Se cerrará, se conectará MCP AutoCAD y se volverá a abrir. Tus conversaciones se guardan en la nube.",
+            "Cerrar, conectar y abrir")) await reiniciar(boton, true);
+      } else aviso(err.message, "error");
+    }
+  });
+}
+
+async function reiniciar(boton, conectarTambien = false) {
+  if (!conectarTambien && !await confirmar("Reiniciar Claude Desktop",
+      "Se cerrará Claude Desktop y se volverá a abrir con los cambios aplicados. Tus conversaciones se guardan en la nube.",
+      "Reiniciar")) return;
+  await conCarga(boton, async () => {
+    aviso("Reiniciando Claude Desktop…", "aviso", 3000);
+    try {
+      const r = await api("/api/reiniciar-claude", {conectar: conectarTambien});
+      reinicioPendiente = false; pintarEstado(r); aviso(r.mensaje);
+    } catch (err) { aviso(err.message, "error"); }
+  });
+}
+
+/* ── AutoCAD ── */
+async function probarAutocad() {
+  const b = $("btn-probar");
+  chip("chip-autocad", "cargando", "AutoCAD: probando…");
+  $("fila-autocad").className = "estado"; $("acad-titulo").textContent = "Probando conexión con AutoCAD…";
+  await conCarga(b, async () => {
+    try {
+      const r = await api("/api/probar", {});
+      pruebaAcad = r;
+      const real = r.ok && r.motor === "com";
+      chip("chip-autocad", r.ok ? "ok" : "error", real ? "AutoCAD: responde" : r.ok ? "Sin AutoCAD (ezdxf)" : "AutoCAD: sin conexión");
+      $("fila-autocad").className = "estado " + (r.ok ? "ok" : "error");
+      $("acad-titulo").textContent = real ? "AutoCAD responde" : r.ok ? "El servidor funciona sin AutoCAD" : "AutoCAD no responde";
+      $("acad-detalle").textContent = r.mensaje;
+      aviso(r.mensaje, r.ok ? "ok" : "error");
+      if (ultimoEstado) pintarEstado(ultimoEstado);
+    } catch (err) {
+      chip("chip-autocad", "error", "AutoCAD: error"); $("acad-detalle").textContent = err.message; aviso(err.message, "error");
+    }
+  });
+}
+
+/* ── herramientas: modo, paquetes y una por una ── */
 function pintarPaquetes() {
   $("paquetes").innerHTML = PAQUETES.map(([id, nombre, desc]) => `
     <div class="fila"><div><b>${nombre}</b> <small>${desc} <span id="n-${id}"></span></small></div>
       <label class="interruptor"><input type="checkbox" data-paquete="${id}" aria-label="${nombre}"><i></i></label></div>`).join("");
   document.querySelectorAll("[data-paquete]").forEach((c) => c.addEventListener("change", leer));
+}
+
+function aplicar() {
+  document.querySelectorAll('[name="modo"]').forEach((r) => r.checked = r.value === cfg.modo);
+  document.querySelectorAll("[data-paquete]").forEach((c) => {
+    const id = c.dataset.paquete;
+    c.checked = id === "basico" ? true : id === "3d" ? cfg["3d"] : cfg.paquetes.includes(id);
+    c.disabled = id === "basico";
+  });
+  actualizar();
+}
+
+function leer() {
+  cfg.modo = document.querySelector('[name="modo"]:checked').value;
+  cfg.paquetes = [...document.querySelectorAll("[data-paquete]")]
+    .filter((c) => c.checked && !["basico", "3d"].includes(c.dataset.paquete)).map((c) => c.dataset.paquete);
+  cfg["3d"] = document.querySelector('[data-paquete="3d"]').checked;
+  actualizar();
+}
+
+let mostrado = 0, animacion = null;
+function animarCifra(destino) {
+  cancelAnimationFrame(animacion);
+  const inicio = mostrado, t0 = performance.now(), dur = matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 450;
+  const paso = (t) => {
+    const k = dur ? Math.min(1, (t - t0) / dur) : 1;
+    mostrado = inicio + (destino - inicio) * (1 - Math.pow(1 - k, 3));
+    $("tokens").textContent = "≈ " + fmt(mostrado) + " tokens";
+    if (k < 1) animacion = requestAnimationFrame(paso);
+  };
+  animacion = requestAnimationFrame(paso);
+}
+
+function marcarCambios() {
+  const cambiado = JSON.stringify(cfg) !== guardado;
+  $("sin-guardar").hidden = !cambiado;
+  $("btn-guardar").disabled = !cambiado;
+}
+
+async function actualizar(recargarLista = true) {
+  marcarCambios();
+  if (recargarLista) cargarLista();
+  const [e, ...costes] = await Promise.all([api("/api/estimar", {config: cfg}),
+    ...["ligero", "busqueda", "completo"].map((m) => api("/api/estimar", {config: {...cfg, modo: m}}))]);
+  animarCifra(e.tokens);
+  $("herramientas-n").textContent = cfg.modo === "busqueda"
+    ? `Claude ve ${e.herramientas} herramientas y puede buscar entre ${e.disponibles}` : `Claude ve ${e.herramientas} herramientas`;
+  $("barra").style.width = Math.max(1, 100 * e.tokens / maximo) + "%";
+  ["ligero", "busqueda", "completo"].forEach((m, i) => {
+    $("coste-" + m).innerHTML = `≈ ${fmt(costes[i].tokens)} tokens <small>· ${costes[i].herramientas} herramientas</small>`;
+  });
+  for (const [id, n] of Object.entries(e.por_paquete))
+    $("n-" + id).textContent = n ? `(${n} herramientas)` : "(no añade herramientas en este modo)";
+  const nota = $("nota-3d");
+  if (cfg["3d"] && cfg.modo === "ligero") { nota.hidden = false; nota.textContent = "El modo Ligero no incluye las herramientas 3D. Usa Completo o Búsqueda para tenerlas."; }
+  else if (cfg["3d"]) { nota.hidden = false; nota.textContent = "Las herramientas 3D solo funcionan con AutoCAD abierto (no con el motor sin AutoCAD)."; }
+  else nota.hidden = true;
 }
 
 async function cargarLista() {
@@ -266,145 +689,121 @@ function resumenLista() {
   $("resumen-herr").textContent = n ? `${n} herramienta${n === 1 ? "" : "s"} apagada${n === 1 ? "" : "s"}.` : "Ninguna herramienta apagada.";
 }
 
-function aplicar() {
-  document.querySelectorAll('[name="modo"]').forEach((r) => r.checked = r.value === cfg.modo);
-  document.querySelectorAll("[data-paquete]").forEach((c) => {
-    const id = c.dataset.paquete;
-    c.checked = id === "basico" ? true : id === "3d" ? cfg["3d"] : cfg.paquetes.includes(id);
-    c.disabled = id === "basico";
+async function guardar() {
+  await conCarga($("btn-guardar"), async () => {
+    try {
+      const r = await api("/api/guardar", {config: cfg});
+      cfg = r.config; guardado = JSON.stringify(cfg); reinicioPendiente = r.claude.registrado;
+      pintarEstado(r); marcarCambios();
+      aviso(puedeReiniciar && r.claude.registrado ? "Configuración guardada. Reinicia Claude Desktop para aplicarla."
+            : "Configuración guardada. " + (r.claude.registrado ? "Reinicia Claude Desktop para aplicarla." : "Conecta con Claude Desktop para usarla."));
+    } catch (err) { aviso(err.message, "error"); }
   });
-  actualizar();
+  $("btn-guardar").disabled = JSON.stringify(cfg) === guardado;
 }
 
-function leer() {
-  cfg.modo = document.querySelector('[name="modo"]:checked').value;
-  cfg.paquetes = [...document.querySelectorAll("[data-paquete]")]
-    .filter((c) => c.checked && !["basico", "3d"].includes(c.dataset.paquete)).map((c) => c.dataset.paquete);
-  cfg["3d"] = document.querySelector('[data-paquete="3d"]').checked;
-  actualizar();
-}
-
-let maximo = 1;
-let porDefecto = [];
-async function actualizar(recargarLista = true) {
-  if (recargarLista) cargarLista();
-  const e = await api("/api/estimar", {config: cfg});
-  $("tokens").textContent = "≈ " + fmt(e.tokens) + " tokens";
-  $("herramientas").textContent = cfg.modo === "busqueda"
-    ? `Claude ve ${e.herramientas} herramientas y puede buscar entre ${e.disponibles}`
-    : `Claude ve ${e.herramientas} herramientas`;
-  $("barra").style.width = Math.max(1, 100 * e.tokens / maximo) + "%";
-  for (const [id, n] of Object.entries(e.por_paquete))
-    $("n-" + id).textContent = n ? `(${n} herramientas)` : "(no añade herramientas en este modo)";
-  const nota = $("nota-3d");
-  if (cfg["3d"] && cfg.modo === "ligero") { nota.hidden = false; nota.textContent = "El modo Ligero no incluye las herramientas 3D. Usa Completo o Búsqueda para tenerlas."; }
-  else if (cfg["3d"]) { nota.hidden = false; nota.textContent = "Las herramientas 3D solo funcionan con AutoCAD abierto (no con el motor sin AutoCAD)."; }
-  else nota.hidden = true;
-}
-
-function pintarClaude(c) {
-  $("punto").className = "punto" + (c.registrado ? " si" : "");
-  $("estado-texto").textContent = c.registrado ? "Conectado con Claude Desktop" : "Todavía no está conectado con Claude Desktop";
-  $("estado-ruta").textContent = c.rutas.join(" · ");
-  $("btn-registrar").hidden = c.registrado;
-  $("btn-quitar").hidden = !c.registrado;
-}
-
-async function iniciar() {
-  pintarPaquetes();
-  const e = await api("/api/estado");
-  cfg = e.config; maximo = e.maximo.tokens; porDefecto = e.apagadas_por_defecto;
-  $("version").textContent = e.version; $("version-original").textContent = e.version_original;
-  $("ruta-config").textContent = e.ruta_config;
-  $("presets").innerHTML = "<b style='align-self:center'>Atajos:</b>" + Object.entries(e.presets)
-    .map(([id, p]) => `<button data-preset="${id}">${p.nombre}</button>`).join("");
-  document.querySelectorAll("[data-preset]").forEach((b) => b.addEventListener("click", () => {
-    const p = e.presets[b.dataset.preset];
-    cfg = {...cfg, ...(p.modo ? {modo: p.modo} : {}), paquetes: p.paquetes, "3d": p["3d"]};
-    aplicar();
-  }));
-  document.querySelectorAll('[name="modo"]').forEach((r) => r.addEventListener("change", leer));
-  pintarClaude(e.claude);
-  aplicar();
-  comprobarVersion();
-}
-
-async function comprobarVersion() {
-  try {
-    const v = await api("/api/version");
-    if (!v.hay_nueva) return;
-    const caja = $("nueva-version");
-    caja.innerHTML = `<b>Hay una versión nueva: ${esc(v.ultima)}</b> (tienes la ${esc(v.actual)}).
-      <a href="${esc(v.url)}" target="_blank" rel="noopener">Descargar</a>`;
-    caja.hidden = false;
-  } catch (err) { /* sin internet: no se avisa */ }
-}
-
-async function probarAutocad() {
-  const b = $("btn-probar");
-  b.disabled = true;
-  $("punto-acad").className = "punto esperando";
-  $("acad-texto").textContent = "Probando conexión con AutoCAD…";
-  try {
-    const r = await api("/api/probar", {});
-    $("punto-acad").className = "punto " + (r.ok ? "si" : "no");
-    $("acad-texto").textContent = !r.ok ? "AutoCAD: sin conexión"
-      : r.motor === "com" ? "AutoCAD: conectado" : "Servidor: funciona (sin AutoCAD)";
-    $("acad-detalle").textContent = r.mensaje;
-  } catch (err) {
-    $("punto-acad").className = "punto no";
-    $("acad-texto").textContent = "AutoCAD: error en la prueba";
-    $("acad-detalle").textContent = err.message;
-  } finally { b.disabled = false; }
-}
-
+/* ── diagnóstico en vivo ── */
 let informeDiag = "";
-async function diagnosticar() {
+function diagnosticar() {
   const b = $("btn-diagnostico");
-  b.disabled = true; b.textContent = "Revisando…";
-  $("diagnostico").hidden = false;
-  $("resumen-diag").className = "resumen-diag";
-  $("resumen-diag").textContent = "Revisando la conexión con Claude Desktop y AutoCAD… (puede tardar si AutoCAD se está abriendo)";
+  b.classList.add("cargando"); b.disabled = true; b.textContent = "Revisando…";
+  $("btn-copiar-diag").hidden = true;
+  const res = $("resumen-diag");
+  res.hidden = false; res.className = "resumen-diag trabajando";
+  res.textContent = "Revisando la conexión con Claude Desktop y AutoCAD… (puede tardar si AutoCAD se está abriendo)";
   $("pasos-diag").innerHTML = "";
-  try {
-    const r = await api("/api/diagnostico", {});
-    informeDiag = r.informe;
-    $("resumen-diag").className = "resumen-diag " + (r.ok ? "ok" : "error");
-    $("resumen-diag").textContent = (r.ok ? "✓ " : "✗ ") + r.resumen;
-    const icono = {ok: "✓", aviso: "!", error: "✗"};
-    $("pasos-diag").innerHTML = r.pasos.map((p) => `
-      <li class="${p.estado}"><span class="ic" aria-label="${p.estado}">${icono[p.estado]}</span>
+  const simbolo = {ok: "✓", aviso: "!", error: "✗"};
+  const fin = () => { fuente.close(); b.classList.remove("cargando"); b.disabled = false; b.textContent = "Repetir diagnóstico"; };
+  const fuente = new EventSource("/api/diagnostico/en-vivo");
+  fuente.addEventListener("paso", (ev) => {
+    const p = JSON.parse(ev.data);
+    $("pasos-diag").insertAdjacentHTML("beforeend", `
+      <li class="${p.estado}"><span class="ic2" aria-label="${p.estado}">${simbolo[p.estado]}</span>
         <div><b>${esc(p.titulo)}</b><small>${esc(p.detalle)}</small>
-        ${p.solucion ? `<small class="que">Qué hacer: ${esc(p.solucion)}</small>` : ""}</div></li>`).join("");
-  } catch (err) {
-    $("resumen-diag").className = "resumen-diag error";
-    $("resumen-diag").textContent = "No se pudo hacer el diagnóstico: " + err.message;
-  } finally { b.disabled = false; b.textContent = "Diagnóstico"; }
+        ${p.solucion ? `<small class="que">Qué hacer: ${esc(p.solucion)}</small>` : ""}</div></li>`);
+  });
+  fuente.addEventListener("fin", (ev) => {
+    const r = JSON.parse(ev.data);
+    informeDiag = r.informe;
+    res.className = "resumen-diag " + (r.ok ? "ok" : "error");
+    res.innerHTML = icono(r.ok ? "ok" : "error") + esc(r.resumen);
+    $("btn-copiar-diag").hidden = false;
+    aviso(r.ok ? "Diagnóstico: todo está bien." : "Diagnóstico: hay algo que revisar.", r.ok ? "ok" : "aviso");
+    fin(); refrescarEstado();
+  });
+  fuente.onerror = () => {
+    if (!informeDiag || res.classList.contains("trabajando")) {
+      res.className = "resumen-diag error"; res.textContent = "Se cortó el diagnóstico. Vuelve a intentarlo.";
+    }
+    fin();
+  };
 }
 
 async function copiarInforme() {
   try { await navigator.clipboard.writeText(informeDiag); aviso("Informe copiado. Pégalo en tu mensaje de soporte."); }
-  catch (err) { aviso("No se pudo copiar automáticamente: selecciona el texto del diagnóstico y cópialo.", "error"); }
+  catch (err) { aviso("No se pudo copiar: selecciona el texto del diagnóstico y cópialo.", "error"); }
 }
 
-async function accion(ruta, cuerpo = {}) {
-  try { const r = await api(ruta, cuerpo); if (r.claude) pintarClaude(r.claude); aviso(r.mensaje); return r; }
-  catch (err) { aviso(err.message, "error"); }
+/* ── inicio ── */
+function pintarEjemplos() {
+  $("ejemplos").innerHTML = EJEMPLOS.map((t, i) => `<div class="ejemplo"><span>«${esc(t)}»</span>
+    <button data-copiar="${i}">${icono("copiar")}Copiar</button></div>`).join("");
+  document.querySelectorAll("[data-copiar]").forEach((b) => b.addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(EJEMPLOS[b.dataset.copiar]); b.innerHTML = icono("ok") + "Copiado";
+          setTimeout(() => b.innerHTML = icono("copiar") + "Copiar", 1800); }
+    catch (err) { aviso("No se pudo copiar automáticamente.", "error"); }
+  }));
 }
-$("btn-guardar").addEventListener("click", () => accion("/api/guardar", {config: cfg}));
-$("btn-registrar").addEventListener("click", () => accion("/api/registrar"));
-$("btn-quitar").addEventListener("click", () => accion("/api/quitar"));
-$("btn-cerrar").addEventListener("click", async () => { await accion("/api/cerrar"); window.close(); });
+
+async function iniciar() {
+  pintarPaquetes(); pintarEjemplos();
+  const e = await api("/api/estado");
+  cfg = e.config; guardado = JSON.stringify(cfg); maximo = e.maximo.tokens; porDefecto = e.apagadas_por_defecto;
+  puedeReiniciar = e.puede_reiniciar;
+  $("version").textContent = "v" + e.version; $("version-pie").textContent = e.version;
+  $("version-original").textContent = e.version_original; $("ruta-config").textContent = e.ruta_config;
+  $("presets").innerHTML = "<b>Atajos:</b>" + Object.entries(e.presets)
+    .map(([id, p]) => `<button data-preset="${id}">${p.nombre}</button>`).join("");
+  document.querySelectorAll("[data-preset]").forEach((b) => b.addEventListener("click", () => {
+    const p = e.presets[b.dataset.preset];
+    cfg = {...cfg, ...(p.modo ? {modo: p.modo} : {}), paquetes: p.paquetes, "3d": p["3d"]};
+    aplicar(); aviso("Atajo «" + p.nombre + "» aplicado. Recuerda guardar.", "aviso", 3000);
+  }));
+  document.querySelectorAll('[name="modo"]').forEach((r) => r.addEventListener("change", leer));
+  pintarEstado(e); aplicar(); comprobarVersion();
+  const hash = location.hash.slice(1);
+  if (["inicio", "herramientas", "ayuda"].includes(hash)) irA(hash);
+}
+
+$("chip-claude").addEventListener("click", () => irA("inicio"));
+// Solo lleva a la tarjeta: la prueba abre AutoCAD si está cerrado, mejor que la pida el usuario.
+$("chip-autocad").addEventListener("click", () => { irA("inicio"); $("btn-probar").focus(); });
+$("chip-version").addEventListener("click", () => irA("ayuda"));
+$("btn-registrar").addEventListener("click", (ev) => conectar(ev.currentTarget));
+$("btn-quitar").addEventListener("click", (ev) => conCarga(ev.currentTarget, async () => {
+  try { const r = await api("/api/quitar", {}); reinicioPendiente = true; pintarEstado(r); aviso(r.mensaje); }
+  catch (err) { aviso(err.message, "error"); }
+}));
+document.querySelectorAll("[data-reiniciar]").forEach((b) => b.addEventListener("click", () => reiniciar(b)));
 $("btn-probar").addEventListener("click", probarAutocad);
+$("btn-guardar").addEventListener("click", guardar);
 $("btn-diagnostico").addEventListener("click", diagnosticar);
 $("btn-copiar-diag").addEventListener("click", copiarInforme);
-// Mientras la página está abierta, avisa al panel de que sigue en uso.
-setInterval(() => fetch("/api/latido").catch(() => {}), 60000);
+$("btn-cerrar").addEventListener("click", async () => {
+  if (JSON.stringify(cfg) !== guardado && !await confirmar("Hay cambios sin guardar", "Si cierras ahora, se perderán.", "Cerrar sin guardar")) return;
+  try { await api("/api/cerrar", {}); } catch (err) {}
+  aviso("Panel cerrado. Ya puedes cerrar esta ventana.", "ok", 0); window.close();
+});
 $("det-herr").addEventListener("toggle", cargarLista);
 $("buscar").addEventListener("input", pintarLista);
 $("solo-incluidas").addEventListener("change", pintarLista);
 $("btn-todas").addEventListener("click", () => { cfg.desactivadas = [...porDefecto]; actualizar(); });
-iniciar().catch((err) => aviso("No se pudo cargar el panel: " + err.message, "error"));
+window.addEventListener("beforeunload", (ev) => { if (cfg && JSON.stringify(cfg) !== guardado) ev.preventDefault(); });
+// Mientras la página está abierta: avisa al panel de que sigue en uso y refresca el estado.
+setInterval(() => fetch("/api/latido").catch(() => {}), 60000);
+setInterval(() => { if (!document.hidden) refrescarEstado(); }, 15000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) refrescarEstado(); });
+iniciar().catch((err) => aviso("No se pudo cargar el panel: " + err.message, "error", 0));
 </script>
 </body>
 </html>

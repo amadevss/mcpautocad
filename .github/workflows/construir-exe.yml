@@ -91,6 +91,11 @@ jobs:
 
       # Se publica al subir una etiqueta v*, o desde Actions → Construir .exe → Run workflow
       # marcando «Publicar». En ese caso GitHub crea la etiqueta v<versión del código>.
+      - name: Notas del Release (novedades del CHANGELOG)
+        if: github.ref_type == 'tag' || inputs.publicar
+        shell: pwsh
+        run: python scripts/notas_release.py "${{ steps.version.outputs.valor }}" notas-release.md
+
       - name: Publicar el Release
         if: github.ref_type == 'tag' || inputs.publicar
         uses: softprops/action-gh-release@v2
@@ -100,5 +105,5 @@ jobs:
           make_latest: true
           files: salida/*
           name: MCP AutoCAD ${{ steps.version.outputs.valor }}
-          body_path: docs/NOTAS_RELEASE.md
+          body_path: notas-release.md
           generate_release_notes: true

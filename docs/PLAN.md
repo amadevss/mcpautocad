@@ -70,6 +70,17 @@ Las cifras sin paréntesis descuentan `system_run_command` y `system_run_lisp`, 
 - [x] Registro en Microsoft Store aunque Claude aún no haya creado su subcarpeta de configuración.
 - [x] Botón «Publicar versión» en GitHub Actions (Run workflow → Publicar).
 
+## v0.2.0: app más clara (hecho)
+
+- [x] Pestañas (Inicio, Herramientas, Ayuda), indicadores de estado (Claude, AutoCAD, versión) que se refrescan solos,
+      avisos flotantes, botones con indicador de carga, «Cambios sin guardar» y contador de tokens animado.
+- [x] «Reiniciar Claude Desktop» (`procesos.py`: `taskkill` y reabrir con `shell:AppsFolder\<AppID>` de Microsoft
+      Store o `AnthropicClaude\claude.exe`) y «Cerrar, conectar y abrir» cuando Claude está abierto.
+- [x] Diagnóstico en vivo (Server-Sent Events en `/api/diagnostico/en-vivo`).
+- [x] Instalador más pequeño: `noarchive=True` para que los dos .exe compartan el código.
+- [x] CHANGELOG.md, docs/GUIA.md y notas de Release con las novedades de cada versión.
+- [ ] Probar en Windows real el botón de reinicio con Claude de Microsoft Store y con el instalador clásico.
+
 ## v0.1.2: dónde guarda Claude Desktop su configuración en Windows
 
 Comprobado en un equipo real (Windows 11, Claude Desktop 5.11492.5.0 de Microsoft Store, AutoCAD 2025):

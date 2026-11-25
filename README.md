@@ -11,14 +11,17 @@
 <a href="https://github.com/amadevss/mcpautocad/releases/latest/download/MCP-AutoCAD.mcpb"><img src="docs/img/boton-extension.svg" alt="Descargar extensión .mcpb para Claude Desktop" width="260"></a>
 <a href="https://github.com/amadevss/mcpautocad/releases/latest/download/MCP-AutoCAD-portatil.zip"><img src="docs/img/boton-portatil.svg" alt="Descargar versión portátil .zip" width="260"></a>
 
-**[Instalar](#-instalar-en-3-pasos)** · **[El panel](#-el-panel-elige-qué-ve-claude)** · **[Problemas frecuentes](#-problemas-frecuentes)** · **[Todas las versiones](https://github.com/amadevss/mcpautocad/releases)**
+**[Instalar](#-instalar-en-3-pasos)** · **[La app](#-la-app-mcp-autocad)** · **[Guía paso a paso](docs/GUIA.md)** · **[Problemas frecuentes](#-problemas-frecuentes)** · **[Novedades](CHANGELOG.md)** · **[Todas las versiones](https://github.com/amadevss/mcpautocad/releases)**
 
 </div>
 
 > [!NOTE]
-> **Primera versión, en pruebas.** El servidor, el panel y el instalador pasan 72 pruebas automáticas en Windows,
-> pero sin AutoCAD instalado. Si algo falla con tu AutoCAD, [abre un aviso](https://github.com/amadevss/mcpautocad/issues)
-> y pega el informe del botón **Diagnóstico** del panel (**Copiar informe**).
+> **Novedades de la v0.2.0:** app rediseñada con pestañas e indicadores de estado, avisos visuales, botón para
+> **reiniciar Claude Desktop** con un clic, diagnóstico en vivo e instalador más pequeño. [Ver todos los cambios](CHANGELOG.md).
+>
+> Probado con **AutoCAD 2025** y **Claude Desktop de Microsoft Store** en Windows 11, y con 103 pruebas automáticas.
+> Si algo falla, [abre un aviso](https://github.com/amadevss/mcpautocad/issues) y pega el informe del botón
+> **Diagnóstico** de la app (**Copiar informe**).
 
 ## ✨ Qué hace
 
@@ -47,7 +50,8 @@ No hace falta instalar Python: va incluido.
 
 <a href="https://github.com/amadevss/mcpautocad/releases/latest/download/Instalar-MCP-AutoCAD.exe"><img src="docs/img/boton-instalador.svg" alt="Descargar instalador para Windows" width="260"></a>
 
-Antes de abrirlo, cierra Claude Desktop **por completo**: clic derecho en su icono junto al reloj → *Salir*.
+Si Claude Desktop está abierto, el instalador te pedirá cerrarlo **por completo** (clic derecho en su icono junto al
+reloj → *Salir*): Claude reescribe su configuración mientras está abierto y borraría la conexión.
 
 ### 2️⃣ Instálalo
 
@@ -57,21 +61,26 @@ Antes de abrirlo, cierra Claude Desktop **por completo**: clic derecho en su ico
 > Si Windows muestra **«Windows protegió su PC»**, pulsa **Más información → Ejecutar de todas formas**.
 > Sale porque el programa todavía no está firmado digitalmente.
 
-Al terminar, MCP AutoCAD queda **conectado con Claude Desktop** y se abre el **panel** en su propia ventana
-(también desde **Inicio → MCP AutoCAD** o el acceso directo del escritorio). Debe mostrar el punto verde:
+Al terminar, MCP AutoCAD queda **conectado con Claude Desktop** y se abre la app **MCP AutoCAD** en su propia
+ventana (también desde **Inicio → MCP AutoCAD** o el acceso directo del escritorio). Arriba verás los indicadores
+de estado; **Claude: conectado** debe salir en verde:
 
-<img src="docs/img/panel-claro.png" alt="Panel con el mensaje «Conectado con Claude Desktop» en verde" width="560">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/panel-oscuro.png">
+  <img src="docs/img/panel-claro.png" alt="App MCP AutoCAD, pestaña Inicio: indicadores de estado arriba, conexión con Claude Desktop, primeros pasos y ejemplos para copiar" width="640">
+</picture>
 
 ### 3️⃣ Pruébalo
 
-1. Abre **AutoCAD** con un dibujo y después **Claude Desktop**.
+1. Abre **AutoCAD** con un dibujo y después **Claude Desktop** en modo **Chat** (no la web ni Cowork).
 2. En una conversación nueva, el botón de herramientas (debajo del cuadro de texto) debe mostrar **autocad**.
-3. Escribe:
-   - *«Dime el estado de AutoCAD»*
+3. Escribe, o copia uno de los ejemplos de la pestaña **Inicio** de la app:
+   - *«Dime el estado de AutoCAD y qué dibujo tengo abierto»*
    - *«Dibuja un rectángulo de 100 × 50 y un círculo de radio 20 en su centro»*
 
 > [!TIP]
-> En el panel, el botón **Probar conexión con AutoCAD** te dice si AutoCAD responde, su versión y el dibujo activo.
+> En la app, **Probar conexión** te dice si AutoCAD responde, su versión y el dibujo activo. Si Claude no ve las
+> herramientas, ve a **Ayuda → Hacer diagnóstico**.
 
 <details>
 <summary><b>Otras formas de instalarlo: extensión .mcpb o versión portátil</b></summary>
@@ -99,14 +108,30 @@ descomprímelo en una carpeta fija (por ejemplo `C:\MCP-AutoCAD`), haz doble cli
 
 </details>
 
-## 🎛️ El panel: elige qué ve Claude
+## 🎛️ La app MCP AutoCAD
 
-Cada herramienta que Claude ve ocupa espacio (tokens) en **cada** conversación. Con menos herramientas, las
-conversaciones duran más y gastan menos. Ábrelo desde **Inicio → MCP AutoCAD**: se abre en su propia ventana
-(usa Microsoft Edge, que viene con Windows, sin barra de direcciones) y funciona solo en tu equipo. Al cerrar la
-ventana, el panel se cierra.
+Ábrela desde **Inicio → MCP AutoCAD**. Se abre en su propia ventana (usa Microsoft Edge, que viene con Windows, sin
+barra de direcciones), funciona solo en tu equipo y se cierra al cerrar la ventana. Tiene tres pestañas:
 
-<img src="docs/img/panel-demo.gif" alt="Animación: al cambiar de modo y de atajo, el contador de tokens del panel cambia al instante" width="100%">
+| Pestaña | Qué hay |
+|---|---|
+| **Inicio** | Conexión con Claude Desktop y AutoCAD, primeros pasos y ejemplos de qué pedirle a Claude, con botón para copiarlos. |
+| **Herramientas** | Modo, paquetes y herramientas una por una, con el coste en tokens de cada opción. |
+| **Ayuda** | Diagnóstico en vivo, problemas frecuentes y enlaces. |
+
+Arriba de todo, tres **indicadores** te dicen siempre cómo va todo: **Claude** (conectado, reinicio pendiente o no
+conectado), **AutoCAD** (abierto, responde o cerrado) y **Versión** (al día o hay una nueva). Las acciones se
+confirman con **avisos** en la esquina, los botones muestran cuándo están trabajando, y la barra de abajo indica
+**«Cambios sin guardar»** y los tokens de tu elección.
+
+<img src="docs/img/panel-demo.gif" alt="Animación: en la pestaña Herramientas el contador de tokens cambia al elegir modo, aparece «Cambios sin guardar», se guarda con un aviso, y en Ayuda el diagnóstico aparece paso a paso" width="100%">
+
+### Reiniciar Claude Desktop con un clic
+
+Claude solo lee los cambios al arrancar. Después de conectar o guardar, el indicador pasa a **«reinicio pendiente»**
+y aparece el botón **Reiniciar Claude Desktop**: cierra Claude (también el icono de la bandeja) y lo vuelve a abrir,
+siempre preguntando antes. Si pulsas **Conectar** con Claude abierto, la app te ofrece **cerrarlo, conectar y volver
+a abrirlo** sola. Tus conversaciones no se pierden: se guardan en la nube.
 
 ### Modo: lo que más cambia el consumo
 
@@ -127,18 +152,19 @@ Interruptores para **Básico** (siempre activo), **Mecánica**, **Arquitectura**
 **Configuración** y **3D**, más los atajos *Solo 2D*, *Arquitectura*, *Mecánica* y *Todo*. El contador de abajo
 muestra en vivo cuántas herramientas y tokens supone tu elección.
 
-### Herramientas una por una
-
-En la sección 3 puedes apagar herramientas concretas. Puedes buscarlas en español (con o sin tildes) o en inglés,
-y cada una muestra lo que cuesta. Una herramienta apagada no la ve Claude ni puede usarla.
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/img/panel-herramientas-oscuro.png">
-  <img src="docs/img/panel-herramientas-claro.png" alt="Sección «Herramientas una por una» buscando «capa», con la descripción en español y los tokens de cada herramienta" width="640">
+  <img src="docs/img/panel-herramientas-claro.png" alt="Pestaña Herramientas: tarjetas de modo con sus tokens, paquetes con interruptores y la barra inferior con «Cambios sin guardar» y Guardar" width="640">
 </picture>
 
+### Herramientas una por una
+
+En **Herramientas → Herramientas una por una** puedes apagar herramientas concretas. Puedes buscarlas en español
+(con o sin tildes) o en inglés, y cada una muestra lo que cuesta. Una herramienta apagada no la ve Claude ni puede
+usarla.
+
 > [!IMPORTANT]
-> Al pulsar **Guardar**, **reinicia Claude Desktop** (*Salir* desde la bandeja y volver a abrir) para aplicar los cambios.
+> Después de **Guardar**, pulsa **Reiniciar Claude Desktop** para aplicar los cambios.
 
 El panel también te avisa cuando hay una **versión nueva** en GitHub. Para eso solo lee la página pública de
 versiones, sin enviar datos tuyos.
@@ -157,17 +183,23 @@ versiones, sin enviar datos tuyos.
 ## 🩺 Problemas frecuentes
 
 > [!TIP]
-> **Empieza por el botón «Diagnóstico» del panel.** Revisa dónde guarda Claude Desktop su configuración, si MCP
-> AutoCAD está registrado, si Claude intentó arrancarlo (y con qué error) y si el servidor responde, y te dice en
-> una frase qué hacer. Con **Copiar informe** puedes mandarlo a soporte. También funciona desde una consola:
-> `mcpautocad.exe diagnostico`.
+> **Empieza por Ayuda → Hacer diagnóstico.** Revisa, paso a paso y en vivo, dónde guarda Claude Desktop su
+> configuración, si MCP AutoCAD está registrado, si Claude intentó arrancarlo (y con qué error) y si el servidor
+> responde, y te dice en una frase qué hacer. Con **Copiar informe** puedes mandarlo a soporte. También funciona
+> desde una consola: `mcpautocad.exe diagnostico`.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/panel-diagnostico-oscuro.png">
+  <img src="docs/img/panel-diagnostico-claro.png" alt="Diagnóstico terminado: «Todo está bien» y la lista de comprobaciones con su estado" width="560">
+</picture>
 
 | Problema | Solución |
 |---|---|
 | No aparece **autocad** en Claude | Pulsa **Diagnóstico**. Lo más habitual: Claude Desktop no se reinició del todo (sal desde la bandeja, no basta con cerrar la ventana), o estás en la web o en otra pestaña en lugar del chat de la app instalada. |
 | Claude no encuentra AutoCAD | Pulsa **Probar conexión con AutoCAD**. Si AutoCAD está cerrado, el servidor intenta abrirlo (puede tardar). AutoCAD **LT no sirve**: no tiene la interfaz COM. |
 | Uso Claude Desktop de Microsoft Store | Se detecta solo, también cuando Claude movió su configuración a `%LOCALAPPDATA%\Claude-Data`. Si no funciona, cierra Claude desde la bandeja y pulsa **Conectar con Claude Desktop** en el panel. |
-| «Conectar» dice que Claude está abierto | Claude reescribe su configuración mientras está abierto y borraría el cambio. Ciérralo desde la bandeja (clic derecho en su icono → *Salir*) y vuelve a pulsar **Conectar**. |
+| «Conectar» dice que Claude está abierto | Claude reescribe su configuración mientras está abierto y borraría el cambio. Acepta **Cerrar, conectar y abrir** y la app lo hace sola. |
+| El botón «Reiniciar Claude» no lo vuelve a abrir | Ábrelo tú desde el menú Inicio: los cambios ya están aplicados. |
 | No aparecen las herramientas 3D | Activa **3D** y usa el modo Completo o Búsqueda: Ligero no las incluye. |
 | Quiero ver qué pasa por dentro | Abre `%LOCALAPPDATA%\Claude\logs\mcp-server-autocad.log` (o `%APPDATA%\Claude\logs\` con el instalador clásico de Claude). |
 
@@ -201,6 +233,7 @@ mcpautocad/
   probar.py           "Probar conexión": arranca el servidor y llama a system_status
   diagnostico.py      botón «Diagnóstico»: configuración de Claude, registro, registros de Claude y servidor
   ventana.py          abre el panel en ventana propia (modo aplicación de Edge/Chrome)
+  procesos.py         si Claude/AutoCAD están abiertos; cerrar y volver a abrir Claude Desktop
   actualizaciones.py  aviso de versión nueva (último Release de GitHub)
   traducciones.json   descripciones cortas en español para el panel
   __main__.py         mcpautocad [panel|servidor|registrar|quitar|probar|diagnostico]
@@ -210,7 +243,8 @@ scripts/
   empaquetar_mcpb.py  crea la extensión .mcpb (usa @anthropic-ai/mcpb)
   ilustraciones/      genera las imágenes de este README (ver abajo)
 mcpb/manifest.json    manifiesto de la extensión (la versión se pone al empaquetar)
-mcpautocad.spec       receta de PyInstaller: mcpautocad.exe (consola, para Claude) y «MCP AutoCAD.exe» (ventana)
+mcpautocad.spec       receta de PyInstaller: mcpautocad.exe (consola, para Claude) y «MCP AutoCAD.exe» (ventana),
+                      que comparten el código (noarchive) para no duplicar 26 MB
 construir.ps1         construye el .exe, el instalador, el .zip y el .mcpb en Windows
 instalador/           instalador de Inno Setup e iconos
 docs/                 plan del proyecto, notas de los Releases e imágenes
@@ -300,8 +334,10 @@ como artefacto.
 **Publicar una versión nueva, sin usar git:**
 1. Sube el número en `pyproject.toml` y `mcpautocad/__init__.py` (por ejemplo a `0.1.1`) y fusiónalo en `main`.
 2. Ve a **Actions → Construir .exe → Run workflow**, elige la rama `main`, marca **Publicar** y pulsa **Run workflow**.
-3. En unos 6 minutos aparece el **Release** `v0.1.1` con los tres archivos y las notas de `docs/NOTAS_RELEASE.md`,
-   y los botones de descarga de este README pasan a esa versión.
+3. En unos 6 minutos aparece el **Release** `v0.1.1` con los tres archivos y los botones de descarga de este README
+   pasan a esa versión. Sus notas se arman solas (`scripts/notas_release.py`): el apartado de esa versión en
+   [CHANGELOG.md](CHANGELOG.md) más las instrucciones de `docs/NOTAS_RELEASE.md`. Antes de publicar, añade el
+   apartado al CHANGELOG (un test lo exige).
 
 También se publica al subir una etiqueta `v*`, que debe coincidir con la versión del código:
 

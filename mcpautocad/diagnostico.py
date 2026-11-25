@@ -125,8 +125,9 @@ def _registros(carpetas: list[Path], registrado: bool) -> dict:
     if not logs:
         if not registrado:
             return _paso(titulo, AVISO, "Todavía no, porque no está registrado en la configuración que usa Claude.")
-        return _paso(titulo, ERROR, f"Todavía no: no hay registro {LOG} en "
-                     + ", ".join(str(c) for c in carpetas if c.exists()) + ".",
+        existentes = [str(c) for c in carpetas if c.exists()]
+        donde = ", ".join(existentes) if existentes else "las carpetas de registros de Claude (aún no existen)"
+        return _paso(titulo, ERROR, f"Todavía no: no hay registro {LOG} en {donde}.",
                      "Cierra Claude Desktop desde la bandeja (clic derecho en su icono → Salir) y vuelve a abrirlo. "
                      "Usa el modo Chat de la app instalada, no la web ni Cowork.")
     ultimo = max(logs, key=lambda p: p.stat().st_mtime)
@@ -137,36 +138,46 @@ def _registros(carpetas: list[Path], registrado: bool) -> dict:
     return _paso(titulo, OK, f"Sí, sin errores recientes ({ultimo}).")
 
 
-def diagnosticar(probar_servidor: bool = True) -> dict:
+def pasos(probar_servidor: bool = True):
+    """Cada comprobación en cuanto termina (el panel las muestra en vivo)."""
     u = registrar.ubicaciones()
-    pasos = [_paso("MCP AutoCAD", OK, f"Versión {__version__} (servidor original {VERSION_ORIGINAL}).")]
-    pasos.append(_claude_instalado())
+    yield _paso("MCP AutoCAD", OK, f"Versión {__version__} (servidor original {VERSION_ORIGINAL}).")
+    yield _claude_instalado()
     config, registrado = _configuracion(u)
-    pasos += config
+    yield from config
     ubicacion = _datos_de_usuario(u["logs"])
     if ubicacion:
-        pasos.append(_paso("Datos de Claude según su registro", OK, f"user_data_location: {ubicacion}."))
-    pasos.append(_registros(u["logs"], registrado))
+        yield _paso("Datos de Claude según su registro", OK, f"user_data_location: {ubicacion}.")
+    yield _registros(u["logs"], registrado)
     reglas = registrar.politicas()
     if reglas:
-        pasos.append(_paso("Políticas de empresa", AVISO, "Hay políticas de Claude en el registro de Windows: "
-                           + ", ".join(reglas) + ".",
-                           "Pueden impedir los servidores locales. Consulta con el administrador de tu equipo."))
+        yield _paso("Políticas de empresa", AVISO, "Hay políticas de Claude en el registro de Windows: "
+                    + ", ".join(reglas) + ".",
+                    "Pueden impedir los servidores locales. Consulta con el administrador de tu equipo.")
     if registrar.claude_abierto():
-        pasos.append(_paso("Claude Desktop abierto", AVISO, "Claude Desktop está abierto ahora.",
-                           "Para conectar o cambiar algo, ciérralo antes desde la bandeja; después vuelve a abrirlo."))
+        yield _paso("Claude Desktop abierto", AVISO, "Claude Desktop está abierto ahora.",
+                    "Para conectar o cambiar algo, usa «Reiniciar Claude Desktop» o ciérralo antes desde la "
+                    "bandeja.")
     if probar_servidor:
         r = probar.probar()
-        pasos.append(_paso("El servidor responde", OK if r["ok"] else ERROR, r["mensaje"],
-                           "" if r["ok"] else "Abre AutoCAD (no LT) con un dibujo y vuelve a probar."))
-    primero = next((p for p in pasos if p["estado"] == ERROR), None) or next(
-        (p for p in pasos if p["estado"] == AVISO and p["solucion"]), None)
+        yield _paso("El servidor responde", OK if r["ok"] else ERROR, r["mensaje"],
+                    "" if r["ok"] else "Abre AutoCAD (no LT) con un dibujo y vuelve a probar.")
+
+
+def conclusion(lista: list[dict]) -> dict:
+    """Resumen en una frase, si todo va bien e informe para copiar."""
+    primero = next((p for p in lista if p["estado"] == ERROR), None) or next(
+        (p for p in lista if p["estado"] == AVISO and p["solucion"]), None)
     if primero is None:
         resumen = "Todo está bien. Si Claude aún no ve las herramientas, reinicia Claude Desktop."
     else:
         resumen = f"{primero['titulo']}: {primero['solucion'] or primero['detalle']}"
-    return {"ok": not any(p["estado"] == ERROR for p in pasos), "resumen": resumen, "pasos": pasos,
-            "informe": informe(pasos)}
+    return {"ok": not any(p["estado"] == ERROR for p in lista), "resumen": resumen, "informe": informe(lista)}
+
+
+def diagnosticar(probar_servidor: bool = True) -> dict:
+    lista = list(pasos(probar_servidor))
+    return {**conclusion(lista), "pasos": lista}
 
 
 def informe(pasos: list[dict]) -> str:

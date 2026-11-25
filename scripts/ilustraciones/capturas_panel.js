@@ -18,13 +18,17 @@ const DESTINO = path.join(RAIZ, "docs", "img");
 const PYTHON = process.argv[2] || "python";
 const URL = "http://localhost:8765/";
 // Las rutas de archivos de este equipo no aportan nada en una captura.
-const OCULTAR = "#estado-ruta, footer { display: none !important; }";
+const OCULTAR = "#claude-detalle, footer, .diag small:not(.que) { display: none !important; }";
 
 const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function abrirPanel(temporal) {
   fs.mkdirSync(path.join(temporal, "cfg"), { recursive: true });
   fs.writeFileSync(path.join(temporal, "cfg", "config.json"), JSON.stringify({ motor: "ezdxf" }));
+  // Un registro de Claude sin errores, para que el diagnóstico de ejemplo salga en verde.
+  fs.mkdirSync(path.join(temporal, "Claude", "logs"), { recursive: true });
+  fs.writeFileSync(path.join(temporal, "Claude", "logs", "mcp-server-autocad.log"),
+    "[autocad] [info] Server started and connected successfully\n");
   const env = {
     ...process.env,
     MCPAUTOCAD_CONFIG: path.join(temporal, "cfg", "config.json"),
@@ -50,29 +54,36 @@ async function pagina(navegador, tema, extra = {}) {
   return { contexto, p };
 }
 
+// La interfaz de Windows: el botón «Reiniciar Claude» solo existe allí.
+const COMO_EN_WINDOWS = () => { puedeReiniciar = true; if (ultimoEstado) pintarEstado(ultimoEstado); };
+
 async function capturas(navegador) {
   for (const tema of ["light", "dark"]) {
     const nombre = tema === "light" ? "claro" : "oscuro";
     const { contexto, p } = await pagina(navegador, tema);
-    // Principal: conectado con Claude Desktop y el aviso de "reinicia" a la vista.
+    await p.evaluate(COMO_EN_WINDOWS);
+
+    // Inicio: conectado con Claude Desktop, con el aviso flotante y el de reinicio.
     if (await p.isVisible("#btn-registrar")) await p.click("#btn-registrar");
-    await esperar(600);
+    await esperar(900);
     await p.evaluate(() => window.scrollTo(0, 0));
-    await esperar(300);
     await p.screenshot({ path: path.join(DESTINO, `panel-${nombre}.png`) });
 
-    // Herramientas una por una, con una búsqueda en español.
-    await p.click("#det-herr summary");
-    await esperar(600);
-    await p.fill("#buscar", "capa");
+    // Herramientas: tarjetas de modo con su coste y «Cambios sin guardar».
+    await p.click("#tab-herramientas");
+    await p.click("label.modo:has(input[value=completo])");
+    await esperar(1200);
+    await p.screenshot({ path: path.join(DESTINO, `panel-herramientas-${nombre}.png`) });
+    await p.click("label.modo:has(input[value=ligero])");
+    await esperar(500);
+
+    // Ayuda: diagnóstico terminado.
+    await p.click("#tab-ayuda");
+    await p.click("#btn-diagnostico");
+    await p.waitForSelector("#btn-copiar-diag:not([hidden])", { timeout: 60000 });
     await esperar(400);
-    await p.addStyleTag({ content: ".contador { display: none !important; }" });
-    const seccion = p.locator("section:has(#det-herr)");
-    await seccion.evaluate((e) => {
-      e.querySelector("#lista-herr").style.maxHeight = "430px";
-      e.querySelector("#lista-herr").style.overflow = "hidden";
-    });
-    await seccion.screenshot({ path: path.join(DESTINO, `panel-herramientas-${nombre}.png`) });
+    await p.evaluate(() => document.getElementById("avisos").replaceChildren());
+    await p.locator("#ayuda .tarjeta").first().screenshot({ path: path.join(DESTINO, `panel-diagnostico-${nombre}.png`) });
     await contexto.close();
   }
 }
@@ -83,22 +94,25 @@ async function animacion(navegador, temporal) {
     viewport: { width: 1000, height: 760 }, deviceScaleFactor: 1,
     recordVideo: { dir: videos, size: { width: 1000, height: 760 } },
   });
-  // Ir a la tarjeta de modos y recorrerlos: el contador de abajo cambia.
-  await p.evaluate(() => document.querySelector(".modos").scrollIntoView({ block: "start" }));
-  await p.evaluate(() => window.scrollBy(0, -24));
+  await p.evaluate(COMO_EN_WINDOWS);
+  await esperar(1500);
+  // Herramientas: el contador cambia con cada modo y aparece «Cambios sin guardar».
+  await p.click("#tab-herramientas");
   await esperar(1200);
   for (const modo of ["completo", "busqueda", "ligero"]) {
     await p.click(`label.modo:has(input[value=${modo}])`);
     await esperar(1500);
   }
-  for (const atajo of ["solo2d", "arquitectura", "todo"]) {
-    await p.click(`[data-preset=${atajo}]`);
-    await esperar(1300);
-  }
-  await p.click(`label.modo:has(input[value=ligero])`);
-  await esperar(1000);
+  await p.click("[data-preset=solo2d]");
+  await esperar(1500);
   await p.click("#btn-guardar");
-  await esperar(1800);
+  await esperar(2200);
+  // Ayuda: el diagnóstico aparece paso a paso.
+  await p.click("#tab-ayuda");
+  await esperar(600);
+  await p.click("#btn-diagnostico");
+  await p.waitForSelector("#btn-copiar-diag:not([hidden])", { timeout: 60000 });
+  await esperar(2500);
   const video = await p.video().path();
   await contexto.close();
 
